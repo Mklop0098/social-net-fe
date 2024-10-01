@@ -7,7 +7,9 @@ export const haveUnreadNotify = (notifies: NotifyType[]) => {
 
 
   
+  
   export const timeAgo = (date: Date) => {
+    const t = Date.now()
     const intervals = [
         { label: 'year', seconds: 31536000 },
         { label: 'month', seconds: 2592000 },
@@ -16,7 +18,11 @@ export const haveUnreadNotify = (notifies: NotifyType[]) => {
         { label: 'minute', seconds: 60 },
         { label: 'second', seconds: 1 }
       ];
-    const seconds = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
+
+      const b = new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" })
+      const c = new Date(date).toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" })
+    
+    const seconds = Math.floor((new Date(b).getTime() - new Date(c).getTime()) / 1000);
     const interval = intervals.find(i => i.seconds < seconds);
     if(interval) {
         const count = Math.floor(seconds / interval.seconds);
