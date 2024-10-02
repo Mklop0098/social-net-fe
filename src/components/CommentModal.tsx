@@ -52,15 +52,14 @@ export const CommentModal: React.FC<CommentModalProps> = (props) => {
     const getCurrentFriend = (userId: string) => {
         const test = users.find(user => user._id === userId)
         if (test) {
-            return test
+            return test?.firstName + ' ' + test?.lastName
         }
-        return {} as UserType
+        return ''
     }
 
     const getUserData = (userId: string) => {
         const test = users.find(user => user._id === userId)
 
-        console.log(test)
         if (test) {
             return test
         }
@@ -160,7 +159,7 @@ export const CommentModal: React.FC<CommentModalProps> = (props) => {
         <div className="xs:w-full xs:max-w-[680px] max-h-[90%] h-fit flex flex-col justify-between m-auto top-0 left-0 bottom-0 right-0 absolute bg-white rounded-lg">
             <div className=" flex flex-col" >
                 <div className="flex flex-row relative items-center justify-center h-[4rem] mx-4">
-                    <div className="font-bold text-xl">Bài viết của {post.owner !== currentUser._id ? getCurrentFriend(post.owner).firstName + " " + getCurrentFriend(post.owner).lastName : currentUser.firstName + " " + currentUser.lastName}</div>
+                    <div className="font-bold text-xl">Bài viết của {getCurrentFriend(post.owner) !== '' ? getCurrentFriend(post.owner) : currentUser.firstName + " " + currentUser.lastName}</div>
                     <div
                         className="absolute right-0 w-10 h-10 flex items-center justify-center hover:bg-gray-200 bg-gray-100 rounded-full"
                         onClick={handleClick}
@@ -173,11 +172,11 @@ export const CommentModal: React.FC<CommentModalProps> = (props) => {
             <div className="w-full max-h-[700px] overflow-y-auto flex flex-col justify-start">
                 <div className="bg-white relative px-4">
                     <div className="py-3 flex flex-row items-center rounded-lg cursor-pointer">
-                        <div className="w-10 h-10 bg-blue-200 rounded-full mr-4 overflow-hidden" style={{ backgroundImage: `url(${post.owner !== currentUser._id ? getCurrentFriend(post.owner).avatar : currentUser.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+                        <div className="w-10 h-10 bg-blue-200 rounded-full mr-4 overflow-hidden" style={{ backgroundImage: `url(${post.owner !== currentUser._id ? getUserData(post.owner).avatar : currentUser.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
 
                         </div>
                         <div className="flex flex-col items-start">
-                            <div className="font-semibold pb-1">{post.owner !== currentUser._id ? getCurrentFriend(post.owner).firstName + " " + getCurrentFriend(post.owner).lastName : currentUser.firstName + " " + currentUser.lastName} </div>
+                            <div className="font-semibold pb-1">{post.owner !== currentUser._id ? getCurrentFriend(post.owner) : currentUser.firstName + " " + currentUser.lastName} </div>
                             <div className="flex flex-row items-center">
                                 <FaEarthAsia />
                                 <span className="text-sm ml-2">{timeAgo(post.createAt)}</span>
@@ -246,7 +245,7 @@ export const CommentModal: React.FC<CommentModalProps> = (props) => {
                                             <div className="flex flex-row items-center">
                                                 <div
                                                     className="font-semibold text-sm">
-                                                    {getCurrentFriend(com.userId) !== '' ? getCurrentFriend(post.owner).firstName + " " + getCurrentFriend(post.owner).lastName : currentUser.firstName + " " + currentUser.lastName}
+                                                    {getCurrentFriend(com.userId) !== '' ? getCurrentFriend(com.userId) : currentUser.firstName + " " + currentUser.lastName}
                                                 </div>
                                                 {
                                                     com.userId === post.owner && <div className="pl-4 text-sm text-blue-500">Tác giả</div>
