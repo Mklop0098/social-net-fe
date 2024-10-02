@@ -9,7 +9,6 @@ export const haveUnreadNotify = (notifies: NotifyType[]) => {
   
   
   export const timeAgo = (date: Date) => {
-    const t = Date.now()
     const intervals = [
         { label: 'year', seconds: 31536000 },
         { label: 'month', seconds: 2592000 },
