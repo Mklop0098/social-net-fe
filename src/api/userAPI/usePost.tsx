@@ -63,7 +63,7 @@ export const sharePost = async (userId: string, postId: string, comment: string)
 
 export const upload = async (files: FormData) => {
 
-    const res = await axios.post(`http://localhost:5000/api/post/upload`,
+    const res = await axios.post(`https://social-test-be.onrender.com/api/post/upload`,
         files,
         {
             headers: { "Content-Type": "multipart/form-data" },
