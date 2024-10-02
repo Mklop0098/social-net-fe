@@ -160,7 +160,7 @@ export const CommentModal: React.FC<CommentModalProps> = (props) => {
         <div className="xs:w-full xs:max-w-[680px] max-h-[90%] h-fit flex flex-col justify-between m-auto top-0 left-0 bottom-0 right-0 absolute bg-white rounded-lg">
             <div className=" flex flex-col" >
                 <div className="flex flex-row relative items-center justify-center h-[4rem] mx-4">
-                    <div className="font-bold text-xl">Bài viết của {getCurrentFriend(post.owner) !== '' ? getCurrentFriend(post.owner) : currentUser.firstName + " " + currentUser.lastName}</div>
+                    <div className="font-bold text-xl">Bài viết của {post.owner !== currentUser._id ? getCurrentFriend(post.owner) : currentUser.firstName + " " + currentUser.lastName}</div>
                     <div
                         className="absolute right-0 w-10 h-10 flex items-center justify-center hover:bg-gray-200 bg-gray-100 rounded-full"
                         onClick={handleClick}
