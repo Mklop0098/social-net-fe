@@ -9,7 +9,7 @@ import  UserPageLayout from "./Layouts/UserPageLayout";
 import {FriendRequestLayout} from './Layouts/FriendRequestLayout'
 import SearchFriend from "../pages/friendPage/SearchFriend";
 import { FriendPageLayout } from "./Layouts/FriendPageLayout";
-import FriendPage from '../pages/friendPage/friendPage'
+import FriendPage from '../pages/friendPage/FriendPage'
 import FriendPageEmpty from '../pages/friendPage/FriendPageEmpty'
 
 export const publicRoutes = [
