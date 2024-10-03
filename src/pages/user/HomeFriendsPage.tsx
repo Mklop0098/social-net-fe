@@ -7,6 +7,9 @@ import { useFriend } from "../../components/Context/friendContext"
 import { createNotify } from "../../api/userAPI/userNotify"
 import { addFriendList, addRequestList } from "../../api/userAPI/useFriend"
 import { Snackbar } from "@mui/material"
+import { FaUserPlus, FaUserClock } from "react-icons/fa6";
+import { HiUsers } from "react-icons/hi2";
+import { Link } from 'react-router-dom'
 
 function HomeFriendsPage() {
 
@@ -71,8 +74,41 @@ function HomeFriendsPage() {
     return (
         <div className="grid md:grid-cols-5 xs:grid-cols-1 gap-1">
             <div className="shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
-                <div className="sticky top-20 shadow-l-md xs:hidden md:block">
-                    1
+                <div className="sticky top-5 shadow-l-md xs:hidden md:block flex flex-col">
+                    <div className="text-2xl font-bold py-2 px-4">Bạn bè</div>
+                    <Link to={'/friends'}>
+                        <div className="grid grid-cols-9 py-2 hover:bg-gray-200 py-2 px-4 mx-2 rounded-lg cursor-pointer">
+                            <div className="flex -items-center col-span-1 ">
+                                <div className="bg-[--primary-color] p-1.5 rounded-full">
+                                    <HiUsers size={20} className="text-white" />
+                                </div>
+                            </div>
+                            <div className="col-span-7 flex items-center text-lg font-semibold">Trang chủ</div>
+                        </div>
+                    </Link>
+                    <Link to={'/friends/requests'}>
+                        <div className="grid grid-cols-9 py-2 hover:bg-gray-200 py-2 px-4 mx-2 rounded-lg cursor-pointer">
+                            <div className="flex -items-center col-span-1">
+                                <FaUserPlus size={24} />
+                            </div>
+                            <div className="col-span-7 flex items-center text-lg font-semibold">Lời mời kết bạn</div>
+                        </div>
+                    </Link>
+                    <div className="grid grid-cols-9 py-2 hover:bg-gray-200 py-2 px-4 mx-2 rounded-lg cursor-pointer">
+                        <div className="flex -items-center col-span-1">
+                            <FaUserPlus size={24} />
+                        </div>
+                        <div className="col-span-7 flex items-center text-lg font-semibold">Gợi ý</div>
+                    </div>
+                    <Link to={"/friends/list"}>
+                        <div className="grid grid-cols-9 py-2 hover:bg-gray-200 py-2 px-4 mx-2 rounded-lg cursor-pointer">
+                            <div className="flex -items-center col-span-1">
+                                <FaUserClock size={24} />
+                            </div>
+                            <div className="col-span-7 flex items-center text-lg font-semibold">Tất cả bạn bè</div>
+                        </div>
+                    </Link>
+
                 </div>
             </div>
             <div className="col-span-4 min-h-[100vh] bg-gray-100 flex flex-col">

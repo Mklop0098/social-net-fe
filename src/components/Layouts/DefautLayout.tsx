@@ -7,8 +7,8 @@ import MiniChatBox from '../MiniChatBox'
 
 export const DefautLayout: React.FC<PropsWithChildren> = ({ children }) => {
 
-    const navigate = useNavigate()
     const { activeChatList, minimizeChatBoxList } = useMsg()
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (!localStorage.getItem('chat-app-current-user')) {

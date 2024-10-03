@@ -28,11 +28,11 @@ function Homepage() {
     const [value, setValue] = useState("")
     const [flag, setFlag] = useState<boolean>(false)
     const [postList, setPostList] = useState<PostListType[]>([])
-    const [users, setUsers] = useState<UserType[]>([])
 
     const newFeedRef = useRef<HTMLDivElement>(null)
     const [postLoader, setPostLoader] = useState(false)
 
+    const [users, setUsers] = useState<UserType[]>([])
     useEffect(() => {
         if (currentUser._id) {
             const getAllUserInfo = async () => {
@@ -157,6 +157,20 @@ function Homepage() {
                                         <Post post={post} setToast={setToast} />
                                     </div>
                                 ))
+                            }
+                            {
+                                postList.length < 1 && <div>
+                                    <div className="xs:w-full md:w-[500px] lg:w-[680px] xs:max-w-[500px] lg:max-w-[680px] mx-auto bg-white rounded-lg mb-4" >
+                                        <div className="p-4 flex flex-col items-center">
+                                            <span className="text-xl">Hãy kết bạn để xem nhiều tin hơn nhé</span>
+                                            <Link to={'/friends'} className="mt-4">
+                                                <div className="bg-[--primary-color] text-white px-10 py-2 rounded-lg">
+                                                    Tìm bạn bè
+                                                </div>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
                             }
                             {
                                 postLoader && <Skeletons />
