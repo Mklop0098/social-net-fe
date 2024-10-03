@@ -16,7 +16,6 @@ import Snackbar from "@mui/material/Snackbar";
 import { HiUserGroup } from "react-icons/hi2";
 import { Link } from "react-router-dom"
 
-
 function Homepage() {
 
     const { addChatList } = useMsg()
@@ -131,6 +130,7 @@ function Homepage() {
                             </Link>
                         </div>
                     </div>
+
                     <div className="bg-gray-100 col-span-3 ">
                         <div className="h-[93vh] overflow-y-auto flex flex-col" ref={newFeedRef} onScroll={handleScroll}>
                             <div className="flex flex-col items-center justify-center md:w-[500px] lg:w-[680px] xs:w-full xs:max-w-[500px] lg:max-w-[680px] mx-auto bg-white rounded-lg my-4">

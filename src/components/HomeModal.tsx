@@ -6,7 +6,9 @@ import { IoMdClose } from "react-icons/io";
 import { FaEarthAsia } from "react-icons/fa6";
 import { useRef, useState } from 'react'
 import { ImageUploadType, UploadImage } from '../components/UploadImage'
-import { upload } from '../api/userAPI/usePost'
+import { imageDb } from '../components/FirebaseImg/Config'
+import { ref, uploadBytes, StorageReference, getDownloadURL } from 'firebase/storage'
+import { v4 } from 'uuid'
 
 type HomeModalProps = {
     setFlag?: (flag: boolean) => void
@@ -25,20 +27,29 @@ export const HomeModal: React.FC<HomeModalProps> = (props) => {
     const [selectImage, setSelectImage] = useState<ImageUploadType[]>([])
     const [uploadImages, setUploadImages] = useState<ImageUploadType[]>([])
 
+
     const handleClick = () => {
         setFlag(false)
         hideModal()
     }
 
-    const handleSubmit = async () => {
-        const formData = new FormData()
-        uploadImages.forEach((images) => {
-            console.log(images)
-            formData.append(`images`, images.file);
+    const handleUpload = async () => {
+
+        const uploadPromises = uploadImages.map(async (image) => {
+            const storageRef: StorageReference = ref(imageDb, `files/${v4()}`)
+            await uploadBytes(storageRef, image.file);
+            return getDownloadURL(storageRef);
         });
-        const uploadImage = await upload(formData)
-        onSubmit(valueRef.current, uploadImage.data.data)
-        hideModal()
+
+        try {
+            const linksReturn: string[] = await Promise.all(uploadPromises);
+            console.log('All images uploaded successfully', linksReturn);
+            onSubmit(valueRef.current, linksReturn)
+            hideModal()
+        } catch (error) {
+            console.error('Error uploading images:', error);
+        }
+
     }
 
     return (
@@ -92,7 +103,7 @@ export const HomeModal: React.FC<HomeModalProps> = (props) => {
             <div className="flex flex-row relative items-center justify-center h-[2.5rem]">
                 <button
                     className="w-full h-full bg-gray-100 text-lg font-semibold rounded-lg"
-                    onClick={handleSubmit}
+                    onClick={handleUpload}
                 >
                     Đăng
                 </button>

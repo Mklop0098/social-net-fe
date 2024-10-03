@@ -60,7 +60,6 @@ export const CommentModal: React.FC<CommentModalProps> = (props) => {
     const getUserData = (userId: string) => {
         const test = users.find(user => user._id === userId)
 
-        console.log(test)
         if (test) {
             return test
         }
@@ -173,7 +172,7 @@ export const CommentModal: React.FC<CommentModalProps> = (props) => {
             <div className="w-full max-h-[700px] overflow-y-auto flex flex-col justify-start">
                 <div className="bg-white relative px-4">
                     <div className="py-3 flex flex-row items-center rounded-lg cursor-pointer">
-                        <div className="w-10 h-10 bg-blue-200 rounded-full mr-4 overflow-hidden" style={{ backgroundImage: `url(${currentUser.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+                        <div className="w-10 h-10 bg-blue-200 rounded-full mr-4 overflow-hidden" style={{ backgroundImage: `url(${post.owner !== currentUser._id ? getUserData(post.owner).avatar : currentUser.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
 
                         </div>
                         <div className="flex flex-col items-start">

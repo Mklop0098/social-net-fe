@@ -4,9 +4,11 @@ import { useModal } from "../components/Context/modalContext"
 import { IoMdClose } from "react-icons/io";
 import { useState } from 'react'
 import { ImageUploadType, UploadImage } from '../components/UploadImage'
-import { upload } from '../api/userAPI/usePost'
 import { setBgImage, setAvatar } from '../api/userAPI/userAuth'
 import { ToastType, UserType } from '../type'
+import { imageDb } from '../components/FirebaseImg/Config'
+import { ref, uploadBytes, StorageReference, getDownloadURL } from 'firebase/storage'
+import { v4 } from 'uuid'
 
 type ChangeImageProps = {
     onChange: (toast: ToastType) => void
@@ -27,26 +29,34 @@ export const ChangeImage: React.FC<ChangeImageProps> = ({ userInfo, state, onCha
     }
 
     const handleSubmit = async () => {
-        const formData = new FormData()
-        uploadImages.forEach((images) => {
-            formData.append(`images`, images.file);
+        const uploadPromises = uploadImages.map(async (image) => {
+            const storageRef: StorageReference = ref(imageDb, `files/${v4()}`)
+            await uploadBytes(storageRef, image.file);
+            return getDownloadURL(storageRef);
         });
-        const uploadImage = await upload(formData)
-        if (state === "background") {
-            const res = await setBgImage(currentUser._id, uploadImage.data.data[0])
-            if (res.data.status) {
-                onChange({ open: true, msg: res.data.msg })
-                setUserInfo({ ...userInfo, 'backgroundImage': uploadImage.data.data[0] })
+
+        try {
+            const linksReturn: string[] = await Promise.all(uploadPromises);
+            console.log('All images uploaded successfully', linksReturn);
+            if (state === "background") {
+                const res = await setBgImage(currentUser._id, linksReturn[0])
+                if (res.data.status) {
+                    onChange({ open: true, msg: res.data.msg })
+                    setUserInfo({ ...userInfo, 'backgroundImage': linksReturn[0] })
+                }
             }
-        }
-        else if (state === "avatar") {
-            const res = await setAvatar(currentUser._id, uploadImage.data.data[0])
-            if (res.data.status) {
-                onChange({ open: true, msg: res.data.msg })
-                setUserInfo({ ...userInfo, 'avatar': uploadImage.data.data[0] })
+            else if (state === "avatar") {
+                const res = await setAvatar(currentUser._id, linksReturn[0])
+                if (res.data.status) {
+                    onChange({ open: true, msg: res.data.msg })
+                    setUserInfo({ ...userInfo, 'avatar': linksReturn[0] })
+                }
             }
+            hideModal()
+        } catch (error) {
+            console.error('Error uploading images:', error);
         }
-        hideModal()
+
     }
 
     return (
