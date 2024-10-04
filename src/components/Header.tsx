@@ -20,8 +20,6 @@ import { useSocket } from "./Context/socketIOContext";
 import { GetReceiveMessage } from '../api/userAPI/useMessage'
 import { IoSearchOutline } from "react-icons/io5";
 
-
-
 type HeaderProps = {
     defaultStatus?: string
 }
@@ -40,7 +38,6 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
     const messRef = useRef(null);
     const infoRef = useRef(null);
     const notifyRef = useRef(null);
-
 
     const [showMess, setShowMess] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
@@ -193,7 +190,7 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
             }
             getCurrentUser(currentUserId._id)
         }
-        else navigate("/login");
+        else { navigate("/login") };
     }, [])
 
     const handleClick = async () => {
@@ -238,6 +235,8 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
         setShowMess(true)
         setNewMessage(false)
     }
+
+
 
 
     return (

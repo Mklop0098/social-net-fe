@@ -14,6 +14,8 @@ import { ChangeImage } from '../ChangeImage'
 import Snackbar from "@mui/material/Snackbar";
 import { useUser } from '../Context/userContext'
 import { getAllUser } from '../../api/userAPI/userAuth'
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
 
 export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
 
@@ -26,7 +28,6 @@ export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
     const { activeChatList, minimizeChatBoxList } = useMsg()
     const { showModal } = useModal()
     const [toast, setToast] = useState<ToastType>({ open: false, msg: '' });
-
     const [users, setUsers] = useState<UserType[]>([])
 
     useEffect(() => {
@@ -90,7 +91,7 @@ export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
     };
 
     return (
-        <div className='h-[100vh] flex flex-col relative'>
+        <div className='h-[93vh] flex flex-col relative'>
             <div className='sticky top-0 w-full'>
                 <Header />
             </div>
@@ -114,19 +115,34 @@ export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
                                             <FaCamera />
                                         </div>
                                     </div>
-                                    <div className="lg:pl-6 xs:pl-0 flex flex-col xs:items-center lg:items-start">
-                                        <span className="text-2xl font-semibold mb-2">{userInfo.firstName + " " + userInfo.lastName}</span>
-                                        <span className="text-gray-500 font-semibold mb-2">{friendList.length} người bạn</span>
-                                        <div className="flex flex-row">
-                                            {
-                                                friendList.map((user, key) => (
-                                                    <div key={key} className="flex mr-1 items-center justify-center w-8 h-8 bg-gray-300 rounded-full cursor-pointer hover:bg-gray-200 border border-2 border-white" style={{ backgroundImage: `url(${getCurrentFriend(user.friendId).avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+                                    {
+                                        userInfo._id ?
+                                            <div className="lg:pl-6 xs:pl-0 flex flex-col xs:items-center lg:items-start">
+                                                <span className="text-2xl font-semibold mb-2">{userInfo.firstName + " " + userInfo.lastName}</span>
+                                                <span className="text-gray-500 font-semibold mb-2">{friendList.length} người bạn</span>
+                                                <div className="flex flex-row">
+                                                    {
+                                                        friendList.map((user, key) => (
+                                                            <div key={key} className="flex mr-1 items-center justify-center w-8 h-8 bg-gray-300 rounded-full cursor-pointer hover:bg-gray-200 border border-2 border-white" style={{ backgroundImage: `url(${getCurrentFriend(user.friendId).avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
 
+                                                            </div>
+                                                        ))
+                                                    }
+                                                </div>
+                                            </div> :
+                                            <Stack>
+                                                <div className="lg:pl-6 xs:pl-0 flex flex-col xs:items-center lg:items-start">
+                                                    <Skeleton variant="text" width={200} height={50} />
+                                                    <Skeleton variant="text" width={100} height={20} />
+                                                    <div className="flex flex-row">
+                                                        <div className="flex mr-1 items-center justify-center w-8 h-8 bg-gray-300 rounded-full cursor-pointer hover:bg-gray-200 border border-2 border-white">
+
+                                                        </div>
                                                     </div>
-                                                ))
-                                            }
-                                        </div>
-                                    </div>
+                                                </div>
+                                            </Stack>
+
+                                    }
                                 </div>
                             </div>
                             <Divider />
@@ -148,9 +164,12 @@ export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
                             </div>
                         </div>
                     </div>
-                    <div className='mt-1 bg-gray-100'>
-                        <div className=' xs:w-full md:max-w-[660px] mx-auto xl:max-w-[80%] 2xl:w-3/5'>{children}</div>
-                    </div>
+                    {
+                        userInfo._id &&
+                        <div className='mt-1 bg-gray-100'>
+                            <div className=' xs:w-full md:max-w-[660px] mx-auto xl:max-w-[80%] 2xl:w-3/5'>{children}</div>
+                        </div>
+                    }
                 </div>
             </div>
             <div className='m-w-[1050px] h-[420px] z-10 bottom-0 right-10 absolute flex flex-row'>
@@ -185,7 +204,7 @@ export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
                 autoHideDuration={6000}
                 message={toast.msg}
             />
-        </div>
+        </div >
     )
 }
 

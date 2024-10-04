@@ -71,6 +71,7 @@ function HomeFriendsPage() {
     }
 
 
+
     return (
         <div className="grid md:grid-cols-5 xs:grid-cols-1 gap-1">
             <div className="shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
@@ -111,7 +112,7 @@ function HomeFriendsPage() {
 
                 </div>
             </div>
-            <div className="col-span-4 min-h-[100vh] bg-gray-100 flex flex-col">
+            <div className="col-span-4 min-h-[93vh] bg-gray-100 flex flex-col">
                 {requests.length > 0 && <div className="w-full h-full pt-8 px-8">
                     <span className="text-xl font-semibold">Lời mời kết bạn</span>
                     <div className="grid lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 xs:grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
@@ -132,6 +133,13 @@ function HomeFriendsPage() {
                         }
                     </div>
                 </div>}
+                {
+                    (requests.length < 1 && getUserList().length < 1) && <div className="col-span-4 min-h-[93vh] bg-gray-100 flex flex-col">
+                        {
+                            <div className="flex items-center justify-center h-[90vh] text-2xl text-gray-500 font-semibold">Lời mời kết bạn và gợi ý kết bạn sẽ hiển thị ở đây</div>
+                        }
+                    </div>
+                }
             </div>
             <Snackbar
                 open={toast.open}

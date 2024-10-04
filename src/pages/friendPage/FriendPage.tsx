@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { UserType, ToastType, PostListType, FriendArrayType } from '../../type'
 import { useMsg } from '../../components/Context/msgContext'
-import ChatBox from '../../components/ChatBox'
-import MiniChatBox from '../../components/MiniChatBox'
 import Snackbar from "@mui/material/Snackbar";
 import { getAllUser, getUser } from '../../api/userAPI/userAuth'
 import Skeleton from '../../components/Skeleton'
@@ -19,13 +17,13 @@ export const FriendPage = () => {
 
     const match = useParams<{ id: string }>();
     const [userInfo, setUserInfo] = useState<UserType>({} as UserType)
-    const { activeChatList, minimizeChatBoxList, addChatList } = useMsg()
+    const { addChatList } = useMsg()
     const [toast, setToast] = useState<ToastType>({ open: false, msg: '' });
     const [post, setPost] = useState<PostListType[]>([])
     const [loading, setLoading] = useState(true)
     const [friend, setFriend] = useState<FriendArrayType[]>([])
-
     const [users, setUsers] = useState<UserType[]>([])
+
     useEffect(() => {
 
         const getAllUserInfo = async () => {
@@ -123,11 +121,11 @@ export const FriendPage = () => {
     }
 
     return (
-        <div className='h-[93vh] flex flex-col relative'>
+        <div className='h-[93vh] flex flex-col'>
             <div className='w-full'>
                 <div className="h-[93vh] overflow-y-auto flex flex-col">
                     <div className='shadow-md'>
-                        <div className="2xl:w-2/3 xl:w-[80%] xs:w-full mx-auto flex flex-col">
+                        <div className="2xl:w-[80%] xl:w-[80%] xs:w-full mx-auto flex flex-col">
                             <div className="w-full h-[460px] xs:h-[40vw] xl:h-[30vw] bg-gray-300 rounded-lg relative" style={{ backgroundImage: `url(${userInfo.backgroundImage})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
 
                             </div>
@@ -156,7 +154,7 @@ export const FriendPage = () => {
                         </div>
                     </div>
                     <div className='mt-1 bg-gray-100'>
-                        <div className='2xl:w-2/3  m-auto'>
+                        <div className='2xl:w-[80%]  m-auto'>
                             <div className="w-full">
                                 <div className="py-4 grid grid-cols-7 xs:grid-cols-1 xl:grid-cols-7 lg:gap-4 relative">
                                     <div className="shadow-sm rounded-lg  py-4 col-span-3">
@@ -170,7 +168,7 @@ export const FriendPage = () => {
                                                                 <div key={key} >
                                                                     {
                                                                         po.imgaes.map((img, key) => (
-                                                                            <div style={{ backgroundImage: `url(${img})`, backgroundPosition: 'center', backgroundSize: 'cover' }} key={key} className='h-[120px]'>
+                                                                            <div style={{ backgroundImage: `url(${img})`, backgroundPosition: 'center', backgroundSize: 'cover' }} key={key} className='h-[150px]'>
                                                                             </div>
                                                                         ))
                                                                     }
@@ -188,7 +186,7 @@ export const FriendPage = () => {
                                                     getFriendList().map((friend, key) => (
                                                         <div className="flex flex-row items-center w-full" key={key}>
                                                             <div className="flex flex-col items-center w-full">
-                                                                <div className="w-full h-[120px] rounded-lg bg-gray-200 overflow-hidden" style={{ backgroundImage: `url(${friend.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>
+                                                                <div className="w-full h-[150px] rounded-lg bg-gray-200 overflow-hidden" style={{ backgroundImage: `url(${friend.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>
                                                                 <div className='text-sm mt-1'>{friend.firstName + ' ' + friend.lastName}</div>
                                                             </div>
 
@@ -250,30 +248,6 @@ export const FriendPage = () => {
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div className='m-w-[1050px] h-[420px] z-10 bottom-0 right-10 absolute flex flex-row'>
-                <div className='flex flex-row h-full'>
-                    {
-                        activeChatList.slice(0, 3).map((user, key) => (
-                            <ChatBox key={key} user={user} />
-                        ))
-                    }
-                </div>
-                <div className='w-20 h-full flex flex-col items-center justify-end pb-8'>
-                    {
-                        minimizeChatBoxList.slice(0, 3).map((user, key) => (
-                            <MiniChatBox key={key} user={user} />
-                        ))
-                    }
-                    {
-                        minimizeChatBoxList.length > 3 && (
-                            <div className="w-14 h-14 bg-gray-200 mt-4 rounded-full flex items-center justify-center">
-                                {'+' + minimizeChatBoxList.slice(3).length}
-                            </div>
-                        )
-                    }
-
                 </div>
             </div>
             <Snackbar

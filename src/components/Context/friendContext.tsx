@@ -16,6 +16,7 @@ export const FriendContextProvider: React.FC<PropsWithChildren> = (props) => {
 
     const [requestList, setRequestList] = useState<FriendArrayType[]>([])
     const [friendList, setFriendList] = useState<FriendArrayType[]>([])
+    const [friendLoading, setFriendLoading] = useState(true)
 
     const { currentUser } = useUser()
 
@@ -34,13 +35,14 @@ export const FriendContextProvider: React.FC<PropsWithChildren> = (props) => {
                     setRequestList(requestList)
                     setFriendList(friendList)
                 }
+                setFriendLoading(false)
             }
             getFriendList(currentUser._id)
         }
     }, [currentUser])
 
     return (
-        <FriendContext.Provider value={{ friendList, requestList, resetFriendContext }}>
+        <FriendContext.Provider value={{ friendList, requestList, friendLoading, resetFriendContext }}>
             {props.children}
         </FriendContext.Provider>
     );

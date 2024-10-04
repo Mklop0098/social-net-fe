@@ -52,7 +52,7 @@ function SearchFriend() {
 
     return (
         <div>
-            <div className="col-span-4 min-h-[100vh] bg-gray-100 flex flex-col">
+            <div className="col-span-4 min-h-[93vh] bg-gray-100 flex flex-col">
                 {
                     requests.length > 0 ? <div className="w-full h-full pt-8 px-8">
                         <span className="text-xl font-semibold">Lời mời kết bạn</span>

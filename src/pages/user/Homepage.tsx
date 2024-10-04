@@ -2,7 +2,7 @@ import { IoSearchOutline } from "react-icons/io5"
 import { useMsg } from "../../components/Context/msgContext"
 import { useFriend } from "../../components/Context/friendContext"
 import { useUser } from "../../components/Context/userContext"
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useLayoutEffect } from 'react'
 import { UserType, FriendArrayType, ModalType, PostListType, ToastType } from "../../type"
 import { getAllUser } from "../../api/userAPI/userAuth"
 import { Divider } from "@mui/material"
@@ -15,23 +15,23 @@ import Skeletons from '../../components/Skeleton'
 import Snackbar from "@mui/material/Snackbar";
 import { HiUserGroup } from "react-icons/hi2";
 import { Link } from "react-router-dom"
+import { LoadingModal } from "../../components/LoadingModal"
 
 function Homepage() {
 
     const { addChatList } = useMsg()
     const { friendList } = useFriend()
     const { currentUser } = useUser()
-    const { showModal } = useModal()
+    const { showModal, hideModal } = useModal()
     const [toast, setToast] = useState<ToastType>({ open: false, msg: '' });
-
     const [value, setValue] = useState("")
     const [flag, setFlag] = useState<boolean>(false)
     const [postList, setPostList] = useState<PostListType[]>([])
-
     const newFeedRef = useRef<HTMLDivElement>(null)
     const [postLoader, setPostLoader] = useState(false)
-
     const [users, setUsers] = useState<UserType[]>([])
+
+
     useEffect(() => {
         if (currentUser._id) {
             const getAllUserInfo = async () => {
@@ -110,6 +110,25 @@ function Homepage() {
         return () => clearTimeout(timeoutId);
 
     }
+
+    useLayoutEffect(() => {
+        if (!currentUser._id) {
+            const handleClick = () => {
+                const test: ModalType = {
+                    toggle: true,
+                    root: 'modal-root',
+                    width: 30,
+                    height: 50,
+                    body: <LoadingModal />
+                }
+                showModal(test);
+            };
+            handleClick()
+        }
+        else {
+            hideModal()
+        }
+    }, [currentUser._id])
 
     return (
         <div>

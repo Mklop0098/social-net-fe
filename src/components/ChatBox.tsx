@@ -9,6 +9,8 @@ import ChatInput from "./ChatInput"
 import MessageBox from "./MessageBox"
 import { useUser } from "./Context/userContext"
 import { GetAllMessage } from '../api/userAPI/useMessage'
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
 
 type ChatBoxProps = {
     user: ChatListType
@@ -91,13 +93,24 @@ const ChatBox: React.FC<ChatBoxProps> = (props) => {
         <div className="w-[320px] h-full mx-2 bg-white shadow-2xl rounded-lg flex flex-col">
 
             <div className="p-2 flex flex-row items-center justify-between rounded-lg rounded-b-none shadow-md">
-                <div className="flex flex-row items-center">
-                    <div className="w-10 h-10 bg-blue-200 rounded-full mr-2" style={{ backgroundImage: `url(${currentFriend.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>
-                    <div className="flex flex-col">
-                        <span>{currentFriend.firstName + ' ' + currentFriend.lastName}</span>
-                        {/* <span>{user.userId}</span> */}
-                    </div>
-                </div>
+                {
+                    currentFriend._id ?
+                        <div className="flex flex-row items-center">
+                            <div className="w-10 h-10 bg-blue-200 rounded-full mr-2" style={{ backgroundImage: `url(${currentFriend.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>
+                            <div className="flex flex-col">
+                                <span>{currentFriend.firstName + ' ' + currentFriend.lastName}</span>
+                            </div>
+                        </div> :
+                        <Stack>
+                            <div className="flex flex-row items-center">
+                                <Skeleton variant="circular" width={40} height={40} />
+                                <div className="flex flex-col ml-2">
+                                    <Skeleton variant="text" width={120} height={30} />
+                                </div>
+                            </div>
+                        </Stack>
+
+                }
                 <div className="flex flex-row items-center">
                     <div className="mr-2 cursor-pointer" onClick={() => minimizeChatBox(user.userId)}>
                         <FaWindowMinimize />

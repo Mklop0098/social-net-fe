@@ -52,6 +52,7 @@ export type NotifyHookReturn = {
 export type FriendHookReturn = {
     friendList: FriendArrayType[],
     requestList: FriendArrayType[],
+    friendLoading: boolean,
     resetFriendContext: () => void
 }
 
