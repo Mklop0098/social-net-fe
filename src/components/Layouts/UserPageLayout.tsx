@@ -6,9 +6,6 @@ import { FaCamera } from 'react-icons/fa6'
 import { UserType, ModalType, ToastType } from '../../type'
 import { getUser } from '../../api/userAPI/userAuth'
 import { useFriend } from '../Context/friendContext'
-import { useMsg } from '../Context/msgContext'
-import ChatBox from '../ChatBox'
-import MiniChatBox from '../MiniChatBox'
 import { useModal } from '../Context/modalContext'
 import { ChangeImage } from '../ChangeImage'
 import Snackbar from "@mui/material/Snackbar";
@@ -16,6 +13,7 @@ import { useUser } from '../Context/userContext'
 import { getAllUser } from '../../api/userAPI/userAuth'
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
+import { ChatMonitor } from '../ChatMonitor'
 
 export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
 
@@ -25,7 +23,6 @@ export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
     const [userInfo, setUserInfo] = useState<UserType>({} as UserType)
     const [status, setStatus] = useState("")
     const { friendList } = useFriend()
-    const { activeChatList, minimizeChatBoxList } = useMsg()
     const { showModal } = useModal()
     const [toast, setToast] = useState<ToastType>({ open: false, msg: '' });
     const [users, setUsers] = useState<UserType[]>([])
@@ -91,7 +88,7 @@ export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
     };
 
     return (
-        <div className='h-[93vh] flex flex-col relative'>
+        <div className='h-[100vh] flex flex-col relative'>
             <div className='sticky top-0 w-full'>
                 <Header />
             </div>
@@ -172,32 +169,7 @@ export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
                     }
                 </div>
             </div>
-            <div className='m-w-[1050px] h-[420px] z-10 bottom-0 right-10 absolute flex flex-row'>
-                <div className='flex flex-row h-full'>
-                    {
-                        activeChatList.slice(0, 3).map((user, key) => (
-                            <ChatBox key={key} user={user} />
-                        ))
-                    }
-                </div>
-                <div className='w-20 h-full flex flex-col items-center justify-end pb-8'>
-                    {
-                        minimizeChatBoxList.slice(0, 3).map((user, key) => (
-                            <MiniChatBox key={key} user={user} />
-                        ))
-                    }
-                    {
-                        minimizeChatBoxList.length > 3 && (
-                            <div className="w-14 h-14 bg-gray-200 mt-4 rounded-full flex items-center justify-center">
-                                {'+' + minimizeChatBoxList.slice(3).length}
-                            </div>
-                        )
-                    }
-                    <div className="w-14 h-14 bg-gray-200 mt-4 rounded-full">
-
-                    </div>
-                </div>
-            </div>
+            <ChatMonitor />
             <Snackbar
                 open={toast.open}
                 onClose={() => setToast({ open: false, msg: '' })}

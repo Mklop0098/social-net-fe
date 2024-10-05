@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { UserType, ToastType, PostListType, FriendArrayType } from '../../type'
 import { useMsg } from '../../components/Context/msgContext'
 import Snackbar from "@mui/material/Snackbar";
@@ -137,7 +137,7 @@ export const FriendPage = () => {
                                         </div>
                                     </div>
                                     <div className="lg:pl-6 xs:pl-0 flex flex-col xs:items-center lg:items-start">
-                                        <span className="text-2xl font-semibold mb-2">{userInfo.firstName + " " + userInfo.lastName}</span>
+                                        <Link to={`/profile/${userInfo._id}`} className='mb-2'><span className="text-2xl font-semibold mb-2">{userInfo.firstName + " " + userInfo.lastName}</span></Link>
                                         <div className='flex flex-row'>
                                             <div className='flex flex-row items-center bg-gray-200 px-4 py-1 rounded-lg'>
                                                 <FaUserCheck size={20} />

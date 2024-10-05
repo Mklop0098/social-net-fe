@@ -1,6 +1,6 @@
-import { useUser } from "../components/Context/userContext"
+import { useUser } from "../../components/Context/userContext"
 import { Divider } from "@mui/material"
-import { useModal } from "../components/Context/modalContext"
+import { useModal } from "../../components/Context/modalContext"
 import { IoMdClose } from "react-icons/io";
 
 

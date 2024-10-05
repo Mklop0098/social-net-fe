@@ -9,13 +9,13 @@ import { Divider } from "@mui/material"
 import { FaImages } from "react-icons/fa6"
 import { useModal } from "../../components/Context/modalContext"
 import { createPost, getAllPost } from '../../api/userAPI/usePost'
-import { HomeModal } from "../../components/HomeModal"
+import { HomeModal } from "../../components/Modals/HomeModal"
 import Post from "../../components/Post"
 import Skeletons from '../../components/Skeleton'
 import Snackbar from "@mui/material/Snackbar";
 import { HiUserGroup } from "react-icons/hi2";
 import { Link, useNavigate } from "react-router-dom"
-import { LoadingModal } from "../../components/LoadingModal"
+import { LoadingModal } from "../../components/Modals/LoadingModal"
 
 function Homepage() {
 

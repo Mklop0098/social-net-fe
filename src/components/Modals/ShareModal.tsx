@@ -1,12 +1,12 @@
-import { useUser } from "../components/Context/userContext"
+import { useUser } from "../../components/Context/userContext"
 import { Divider } from "@mui/material"
-import { useModal } from "../components/Context/modalContext"
+import { useModal } from "../../components/Context/modalContext"
 import { IoMdClose } from "react-icons/io";
 import { FaEarthAsia } from "react-icons/fa6";
 import { useState } from 'react'
-import { sharePost } from '../api/userAPI/usePost'
-import { PostListType } from '../type'
-import { ToastType } from "../type";
+import { sharePost } from '../../api/userAPI/usePost'
+import { PostListType } from '../../type'
+import { ToastType } from "../../type";
 
 
 type ShareModalProps = {
@@ -78,7 +78,6 @@ export const ShareModal: React.FC<ShareModalProps> = (props) => {
                 <button
                     className="w-fit px-8 bg-[#0068ff] h-full text-white text-lg font-semibold rounded-lg"
                     onClick={() => {
-                        // onSubmit(valueRef.current)
                         handleSubmit()
                         hideModal()
                     }}

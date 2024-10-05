@@ -5,16 +5,13 @@ import { Divider, Snackbar } from "@mui/material"
 import { Link } from 'react-router-dom'
 import { IoArrowBack, IoSearchOutline } from "react-icons/io5";
 import Header from '../Header'
-
+import { ChatMonitor } from '../ChatMonitor'
 import { useUser } from "../Context/userContext"
 import { getAllUser } from "../../api/userAPI/userAuth"
 import { useFriend } from "../Context/friendContext"
-import { useMsg } from '../Context/msgContext'
-import ChatBox from '../ChatBox'
-import MiniChatBox from '../MiniChatBox'
+
 
 export const FriendPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
-    const { activeChatList, minimizeChatBoxList } = useMsg()
     const [toast, setToast] = useState<ToastType>({ open: false, msg: '' });
     const navigate = useNavigate()
     // const { showModal } = useModal()
@@ -49,17 +46,6 @@ export const FriendPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
             navigate("/login");
         }
     }, [])
-
-    // const handleClick = () => {
-    //     const test: ModalType = {
-    //         toggle: true,
-    //         root: 'modal-root',
-    //         width: 30,
-    //         height: 50,
-    //         body: <RequestModal />
-    //     }
-    //     showModal(test);
-    // };
 
     return (
         <div className='h-[93vh] flex flex-col relative bg-white'>
@@ -108,32 +94,7 @@ export const FriendPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
                     </div>
                     <div className="col-span-4 max-h-[93vh] flex flex-col relative">
                         {children}
-                        <div className='m-w-[1050px] h-[420px] z-10 bottom-0 right-10 absolute flex flex-row'>
-                            <div className='flex flex-row h-full'>
-                                {
-                                    activeChatList.slice(0, 3).map((user, key) => (
-                                        <ChatBox key={key} user={user} />
-                                    ))
-                                }
-                            </div>
-                            <div className='w-20 h-full flex flex-col items-center justify-end pb-8'>
-                                {
-                                    minimizeChatBoxList.slice(0, 3).map((user, key) => (
-                                        <MiniChatBox key={key} user={user} />
-                                    ))
-                                }
-                                {
-                                    minimizeChatBoxList.length > 3 && (
-                                        <div className="w-14 h-14 bg-gray-200 mt-4 rounded-full flex items-center justify-center">
-                                            {'+' + minimizeChatBoxList.slice(3).length}
-                                        </div>
-                                    )
-                                }
-                                <div className="w-14 h-14 bg-gray-200 mt-4 rounded-full">
-
-                                </div>
-                            </div>
-                        </div>
+                        <ChatMonitor />
                     </div>
                     <Snackbar
                         open={toast.open}

@@ -1,21 +1,21 @@
-import { useUser } from "../components/Context/userContext"
+import { useUser } from "../Context/userContext"
 import { Divider } from "@mui/material"
-import { useModal } from "../components/Context/modalContext"
+import { useModal } from "../Context/modalContext"
 import { IoMdClose } from "react-icons/io";
 import { FaEarthAsia } from "react-icons/fa6";
-import { PostListType, UserType, ReactType } from "../type";
+import { PostListType, UserType, ReactType } from "../../type";
 import { useEffect, useState } from "react";
-import { getAllUser } from "../api/userAPI/userAuth";
-import { timeAgo } from "../ultils";
+import { getAllUser } from "../../api/userAPI/userAuth";
+import { timeAgo } from "../../ultils";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
-import { useSocket } from "./Context/socketIOContext";
-import { likePost, removeLikePost, commentPost } from '../api/userAPI/usePost'
-import { createNotify } from "../api/userAPI/userNotify"
+import { useSocket } from "../Context/socketIOContext";
+import { likePost, removeLikePost, commentPost } from '../../api/userAPI/usePost'
+import { createNotify } from "../../api/userAPI/userNotify"
 import { VscComment } from "react-icons/vsc";
 import { PiShareFatLight } from "react-icons/pi";
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { IoSend } from 'react-icons/io5'
-import { Carousel } from '../components/Carousel'
+import { Carousel } from '../Carousel'
 
 type CommentModalProps = {
     post: PostListType

@@ -2,7 +2,7 @@ import { useModal } from "../../components/Context/modalContext";
 import { Divider } from "@mui/material";
 import { FaImages } from "react-icons/fa6";
 import { ModalType, PostListType, ToastType, UserType, FriendArrayType } from "../../type";
-import { HomeModal } from '../../components/HomeModal'
+import { HomeModal } from '../../components/Modals/HomeModal'
 import { useEffect, useState } from "react";
 import { createPost, getAllUserPost } from '../../api/userAPI/usePost'
 import { useUser } from "../../components/Context/userContext";

@@ -13,8 +13,8 @@ import { likePost, removeLikePost } from '../api/userAPI/usePost'
 import { useSocket } from "./Context/socketIOContext";
 import { createNotify } from "../api/userAPI/userNotify"
 import { useModal } from "./Context/modalContext";
-import { CommentModal } from "./CommentModal";
-import { ShareModal } from '../components/ShareModal'
+import { CommentModal } from "./Modals/CommentModal";
+import { ShareModal } from '../components/Modals/ShareModal'
 import { UserType, ToastType } from "../type";
 import { Carousel } from '../components/Carousel'
 import { useFriend } from '../components/Context/friendContext'

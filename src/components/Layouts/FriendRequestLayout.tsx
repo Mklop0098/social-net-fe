@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom'
 import { IoArrowBack } from "react-icons/io5";
 import Header from '../Header'
 import { useModal } from '../Context/modalContext'
-import { RequestModal } from "../RequestModal"
+import { RequestModal } from "../Modals/RequestModal"
+import { ChatMonitor } from "../ChatMonitor"
 
 
 export const FriendRequestLayout: React.FC<PropsWithChildren> = ({ children }) => {
@@ -56,6 +57,7 @@ export const FriendRequestLayout: React.FC<PropsWithChildren> = ({ children }) =
                     </div>
                     <div className="col-span-4 min-h-[100vh] bg-gray-100 flex flex-col">
                         {children}
+                        <ChatMonitor />
                     </div>
                     <Snackbar
                         open={toast.open}

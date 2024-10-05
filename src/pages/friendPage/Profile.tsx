@@ -178,7 +178,7 @@ export const FriendDetailPage = () => {
                         </div>
                     </div>
                     <div className='mt-1 bg-gray-100'>
-                        <div className='2xl:w-2/3  m-auto'>
+                        <div className='2xl:w-[60%]  m-auto'>
                             <div className="w-full">
                                 <div className="py-4 grid grid-cols-7 xs:grid-cols-1 xl:grid-cols-7 lg:gap-4 relative">
                                     <div className="shadow-sm rounded-lg  py-4 col-span-3">
@@ -192,7 +192,7 @@ export const FriendDetailPage = () => {
                                                                 <>
                                                                     {
                                                                         po.imgaes.map((img, key) => (
-                                                                            <div style={{ backgroundImage: `url(${img})`, backgroundPosition: 'center', backgroundSize: 'cover' }} key={key} className='h-[150px]'>
+                                                                            <div style={{ backgroundImage: `url(${img})`, backgroundPosition: 'center', backgroundSize: 'cover' }} key={key} className='h-[130px]'>
                                                                             </div>
                                                                         ))
                                                                     }
@@ -210,7 +210,7 @@ export const FriendDetailPage = () => {
                                                     getFriendList().map((friend, key) => (
                                                         <div className="flex flex-row items-center w-full" key={key}>
                                                             <div className="flex flex-col items-center w-full">
-                                                                <div className="w-full h-[150px] rounded-lg bg-gray-200 overflow-hidden" style={{ backgroundImage: `url(${friend.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>
+                                                                <div className="w-full h-[130px] rounded-lg bg-gray-200 overflow-hidden" style={{ backgroundImage: `url(${friend.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>
                                                                 <div className='text-sm mt-1'>{friend.firstName + ' ' + friend.lastName}</div>
                                                             </div>
 

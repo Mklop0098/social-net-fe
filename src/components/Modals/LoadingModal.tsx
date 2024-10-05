@@ -1,4 +1,4 @@
-import load from '../assets/loader.gif'
+import load from '../../assets/loader.gif'
 
 export const LoadingModal = () => {
 
