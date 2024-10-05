@@ -124,17 +124,17 @@ const UserArticlePage = () => {
                         <div className='text-xl font-semibold mb-4'>Ảnh</div>
                         <div className='grid grid-cols-3 gap-4'>
                             {
-                                postList.map((po, key) => {
+                                postList.map((po) => {
                                     if (po.imgaes.length > 0) {
                                         return (
-                                            <div key={key} >
+                                            <>
                                                 {
                                                     po.imgaes.map((img, key) => (
                                                         <div style={{ backgroundImage: `url(${img})`, backgroundPosition: 'center', backgroundSize: 'cover' }} key={key} className='h-[120px]'>
                                                         </div>
                                                     ))
                                                 }
-                                            </div>
+                                            </>
                                         )
                                     }
                                 })
