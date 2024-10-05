@@ -3,6 +3,7 @@ import { MessageReturnType } from '../type'
 import { useUser } from './Context/userContext'
 import { TypingType } from './ChatBox'
 import LoadingAnimation from './LoadingAnimation'
+import { AiFillLike } from 'react-icons/ai'
 
 type MessageBoxProps = {
     messages: MessageReturnType[]
@@ -38,7 +39,7 @@ const MessageBox: React.FC<MessageBoxProps> = (props) => {
 
     return (
         <div className="flex-1 flex flex-col overflow-y-auto justify-end ">
-            <div className='overflow-y-auto' ref={ref}>
+            <div className='overflow-y-auto min-h-[100px]' ref={ref}>
                 {
                     messages.map((msg, key) => {
                         return (
@@ -46,15 +47,37 @@ const MessageBox: React.FC<MessageBoxProps> = (props) => {
                                 <div
                                     key={key}
                                     className={`
-                                        px-4 py-2 rounded-2xl w-fit max-w-[70%] mx-4 
-                                        bg-${msg.fromSelf ? 'blue-500' : 'gray-100'} text-${msg.fromSelf ? 'white' : 'black'} 
+                                  
                                         ${checkLink(msg.message) && 'truncate'}
                                     `}
                                 >
                                     {
-                                        checkLink(msg.message)
-                                            ? <a target="_blank" className='underline' href={msg.message}>{msg.message}</a>
-                                            : <span>{msg.message}</span>
+
+                                        msg.message === '#like' ?
+                                            <div className='px-4 py-2'>
+                                                <AiFillLike className='text-blue-500' size={30} />
+                                            </div> :
+                                            checkLink(msg.message)
+                                                ?
+                                                <a target="_blank"
+                                                    className={`
+                                                        px-4 py-2 rounded-2xl w-fit max-w-[70%] mx-4 
+                                                        bg-${msg.fromSelf ? 'blue-500' : 'gray-100'} 
+                                                        text-${msg.fromSelf ? 'white' : 'black'} underline`
+                                                    }
+                                                    href={msg.message}
+                                                >
+                                                    {msg.message}
+                                                </a>
+                                                : <span
+                                                    className={`      
+                                                        px-4 py-2 rounded-2xl w-fit max-w-[70%] mx-4 
+                                                        bg-${msg.fromSelf ? 'blue-500' : 'gray-100'} 
+                                                        text-${msg.fromSelf ? 'white' : 'black'} `
+                                                    }
+                                                >
+                                                    {msg.message}
+                                                </span>
                                     }
                                 </div>
 

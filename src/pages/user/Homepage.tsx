@@ -14,11 +14,12 @@ import Post from "../../components/Post"
 import Skeletons from '../../components/Skeleton'
 import Snackbar from "@mui/material/Snackbar";
 import { HiUserGroup } from "react-icons/hi2";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { LoadingModal } from "../../components/LoadingModal"
 
 function Homepage() {
 
+    const navigate = useNavigate()
     const { addChatList } = useMsg()
     const { friendList } = useFriend()
     const { currentUser } = useUser()
@@ -43,6 +44,14 @@ function Homepage() {
             getAllUserInfo()
         }
     }, [currentUser])
+
+    useEffect(() => {
+        const currentUserId = JSON.parse(localStorage.getItem('chat-app-current-user') as string);
+        if (!currentUserId) {
+            hideModal()
+            navigate('/login')
+        }
+    }, [])
 
     const getFriendList = () => {
         const findUser = (list: FriendArrayType[], id: string) => {

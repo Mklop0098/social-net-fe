@@ -1,7 +1,7 @@
 import { useModal } from "../../components/Context/modalContext";
 import { Divider } from "@mui/material";
 import { FaImages } from "react-icons/fa6";
-import { ModalType, PostListType, ToastType } from "../../type";
+import { ModalType, PostListType, ToastType, UserType, FriendArrayType } from "../../type";
 import { HomeModal } from '../../components/HomeModal'
 import { useEffect, useState } from "react";
 import { createPost, getAllUserPost } from '../../api/userAPI/usePost'
@@ -11,6 +11,9 @@ import { FaEarthAsia } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 import { timeAgo } from "../../ultils";
 import Snackbar from "@mui/material/Snackbar";
+import { useFriend } from "../../components/Context/friendContext";
+import { getAllUser } from "../../api/userAPI/userAuth";
+import { Link } from 'react-router-dom'
 
 const UserArticlePage = () => {
 
@@ -19,6 +22,31 @@ const UserArticlePage = () => {
     const [flag, setFlag] = useState<boolean>(false)
     const { currentUser } = useUser()
     const [postList, setPostList] = useState<PostListType[]>([])
+    const [users, setUsers] = useState<UserType[]>([])
+    const { friendList } = useFriend()
+
+
+    useEffect(() => {
+
+        const getAllUserInfo = async () => {
+            if (currentUser._id) {
+                const res = await getAllUser(currentUser._id)
+                if (res.data.status) {
+                    setUsers(res.data.users)
+                }
+            }
+        }
+        getAllUserInfo()
+
+    }, [currentUser._id])
+
+    const getFriendList = () => {
+        const findUser = (list: FriendArrayType[], id: string) => {
+            return list.find(friend => friend.friendId === id)
+        }
+        const test = users.filter(user => findUser(friendList, user._id))
+        return test
+    }
 
 
     const { showModal } = useModal();
@@ -89,10 +117,47 @@ const UserArticlePage = () => {
 
 
     return (
-        <div className="w-full">
-            <div className="py-4 grid grid-cols-7 xs:grid-cols-1 xl:grid-cols-7 lg:gap-4">
-                <div className="my-4 bg-white shadow-sm rounded-lg px-4 py-6 col-span-3">
-                    hello
+        <div className="w-full relative">
+            <div className="py-4 grid xs:grid-cols-1 xl:grid-cols-7 lg:gap-4">
+                <div className="my-4 bg-white shadow-sm rounded-lg px-4 py-6 col-span-3 h-fit xl:sticky top-4">
+                    <div className='p-4 bg-white shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] rounded-md'>
+                        <div className='text-xl font-semibold mb-4'>Ảnh</div>
+                        <div className='grid grid-cols-3 gap-4'>
+                            {
+                                postList.map((po, key) => {
+                                    if (po.imgaes.length > 0) {
+                                        return (
+                                            <div key={key} >
+                                                {
+                                                    po.imgaes.map((img, key) => (
+                                                        <div style={{ backgroundImage: `url(${img})`, backgroundPosition: 'center', backgroundSize: 'cover' }} key={key} className='h-[120px]'>
+                                                        </div>
+                                                    ))
+                                                }
+                                            </div>
+                                        )
+                                    }
+                                })
+                            }
+                        </div>
+                    </div>
+                    <div className='bg-white shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] p-5 rounded-md mt-4'>
+                        <div className='text-xl font-semibold mb-4'>Bạn bè</div>
+                        <div className='grid grid-cols-3 gap-4'>
+                            {
+                                getFriendList().map((friend, key) => (
+                                    <Link to={`/profile/${friend._id}`}>
+                                        <div className="flex flex-row items-center w-full" key={key}>
+                                            <div className="flex flex-col items-center w-full">
+                                                <div className="w-full h-[120px] rounded-lg bg-gray-200 overflow-hidden" style={{ backgroundImage: `url(${friend.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>
+                                                <div className='text-sm mt-1'>{friend.firstName + ' ' + friend.lastName}</div>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                ))
+                            }
+                        </div>
+                    </div>
                 </div>
                 <div className="my-4 shadow-sm rounded-lg col-span-4">
                     <div className="flex flex-col items-center justify-center bg-white rounded-lg">
@@ -153,13 +218,13 @@ const UserArticlePage = () => {
                         ))
                     }
                 </div>
-                <Snackbar
-                    open={toast.open}
-                    onClose={() => setToast({ open: false, msg: '' })}
-                    autoHideDuration={6000}
-                    message={toast.msg}
-                />
             </div>
+            <Snackbar
+                open={toast.open}
+                onClose={() => setToast({ open: false, msg: '' })}
+                autoHideDuration={6000}
+                message={toast.msg}
+            />
         </div>
     )
 }

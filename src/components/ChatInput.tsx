@@ -38,6 +38,18 @@ const ChatInput: React.FC<ChatInputProps> = (props) => {
         }
     }
 
+    const handleLike = async () => {
+        socket?.emit("send-msg", {
+            to: friendId,
+            from: currentUser._id,
+            msg: 'emote',
+        });
+        await SendMessage(currentUser._id, friendId, '#like')
+        const msgs = [...messages];
+        msgs.push({ fromSelf: true, message: '#like' });
+        setMessages(msgs);
+    }
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setMsg(e.target.value)
@@ -62,7 +74,7 @@ const ChatInput: React.FC<ChatInputProps> = (props) => {
     return (
         <div className=" h-[50px] flex flex-row items-center px-2 justify-between mt-2">
             <div className="w-8 h-8 hover:bg-gray-100 rounded-full flex items-center justify-center cursor-pointer ">
-                <AiFillLike className='text-blue-500' size={24} />
+                <AiFillLike className='text-blue-500' size={24} onClick={handleLike} />
             </div>
             <div>
                 <input type="text" className="focus:outline-none bg-gray-100 py-1 px-4 rounded-full" value={msg} onChange={handleChange} />

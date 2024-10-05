@@ -190,7 +190,6 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
             }
             getCurrentUser(currentUserId._id)
         }
-        else { navigate("/login") };
     }, [])
 
     const handleClick = async () => {

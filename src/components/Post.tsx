@@ -17,6 +17,10 @@ import { CommentModal } from "./CommentModal";
 import { ShareModal } from '../components/ShareModal'
 import { UserType, ToastType } from "../type";
 import { Carousel } from '../components/Carousel'
+import { useFriend } from '../components/Context/friendContext'
+import { BsDot } from "react-icons/bs";
+import { addRequestList } from "../api/userAPI/useFriend";
+import { useNavigate } from 'react-router-dom'
 
 type PostProps = {
     post: PostListType
@@ -36,12 +40,12 @@ const Post: React.FC<PostProps> = (props) => {
 
     const { post, setToast } = props
     const { socket } = useSocket()
-
     const { currentUser } = useUser()
     const [users, setUsers] = useState<UserType[]>([])
     const [currentPost, setCurrentPost] = useState<PostCaculate>({} as PostCaculate)
-
     const { showModal } = useModal()
+    const { friendList } = useFriend()
+    const navigate = useNavigate()
 
 
     useEffect(() => {
@@ -142,6 +146,24 @@ const Post: React.FC<PostProps> = (props) => {
         showModal(test);
     }
 
+    const checkFriend = (id: string) => {
+        const isFriend = friendList.find(friend => friend.friendId === id)
+        return !!isFriend
+    }
+
+    const handleSendRequest = async (friendId: string) => {
+        const res = await createNotify(friendId, `${currentUser.firstName + " " + currentUser.lastName} đã gửi đến bạn một lời mời kết bạn`, 'friendRequest', currentUser._id)
+        await addRequestList(friendId, currentUser._id)
+        setToast({ open: true, msg: res.data.msg })
+    }
+
+    const handleProfile = (id: string) => {
+        if (id === currentUser._id) {
+            navigate(`/${id}`)
+        }
+        else navigate(`/profile/${id}`)
+    }
+
     return (
         <div className="flex flex-col justify-center w-full">
             <div className="flex flex-row justify-between items-center p-4">
@@ -149,10 +171,24 @@ const Post: React.FC<PostProps> = (props) => {
                     <div className="w-12 h-12 bg-gray-200 rounded-full overflow-hidden" style={{ backgroundImage: `url(${post.owner !== currentUser._id ? getCurrentUser(post.owner).avatar : currentUser.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
                     </div>
                     <div className="pl-3">
-                        <div className='font-semibold'>
-                            {
-                                post.owner === currentUser._id ? currentUser.firstName + ' ' + currentUser.lastName : getCurrentFriend(post.owner)
-                            }
+                        <div className='font-semibold flex flex-row w-full justify-between'>
+                            <div onClick={() => handleProfile(post.owner)}>
+                                {
+                                    post.owner === currentUser._id ? currentUser.firstName + ' ' + currentUser.lastName : getCurrentFriend(post.owner)
+                                }
+                            </div>
+                            <div>
+                                {
+                                    (!checkFriend(post.owner) && currentUser._id !== post.owner) &&
+                                    <button
+                                        onClick={() => handleSendRequest(post.owner)}
+                                        className="text-blue-500 ml-4 font-medium flex flex-row items-center"
+                                    >
+                                        <BsDot />
+                                        <span>Thêm bạn bè</span>
+                                    </button>
+                                }
+                            </div>
                         </div>
                         <div className="flex flex-row items-center">
                             <div className="text-gray-500 text-sm pr-1">
@@ -219,7 +255,7 @@ const Post: React.FC<PostProps> = (props) => {
                 </div>
             </div>
 
-        </div>
+        </div >
     )
 }
 

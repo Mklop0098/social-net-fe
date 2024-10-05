@@ -11,6 +11,7 @@ import SearchFriend from "../pages/friendPage/SearchFriend";
 import { FriendPageLayout } from "./Layouts/FriendPageLayout";
 import FriendPage from '../pages/friendPage/FriendPage'
 import FriendPageEmpty from '../pages/friendPage/FriendPageEmpty'
+import FriendDetailPage from "../pages/friendPage/Profile";
 
 export const publicRoutes = [
     { path: '/', component: Homepage, layout: DefautLayout },
@@ -19,6 +20,7 @@ export const publicRoutes = [
     { path: '/register', component: Register },
     { path: '/:id/:status', component: UserFriendsPage, layout: UserPageLayout },
     { path: '/:id', component: UserArticlePage, layout: UserPageLayout },
+    { path: '/profile/:id', component: FriendDetailPage, layout: DefautLayout },
     { path: '/friends/requests', component: SearchFriend, layout: FriendRequestLayout },
     { path: '/friends/list', component: FriendPageEmpty, layout: FriendPageLayout },
     { path: '/friends/list/:id', component: FriendPage, layout: FriendPageLayout },
