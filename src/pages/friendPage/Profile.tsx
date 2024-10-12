@@ -117,12 +117,12 @@ export const FriendDetailPage = () => {
                 <div className="h-[93vh] overflow-y-auto flex flex-col ">
                     <div className='shadow-md'>
                         <div className="2xl:w-2/3 xl:w-[80%] xs:w-full mx-auto flex flex-col">
-                            <div className="w-full h-[460px] xs:h-[40vw] xl:h-[30vw] bg-gray-300 rounded-lg relative -z-10" style={{ backgroundImage: `url(${userInfo.backgroundImage})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+                            <div className="w-full h-[460px] xs:h-[40vw] xl:h-[30vw] bg-gray-300 rounded-lg relative " style={{ backgroundImage: `url(${userInfo.backgroundImage})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
                             </div>
                             <div className="w-full xs:pb-4 lg-pb-0">
                                 <div className="mx-9 flex flex-row xs:flex-col lg:flex-row items-center">
                                     <div className="w-[180px] h-[180px] relative">
-                                        <div className="bg-gray-400 w-full h-full rounded-full border border-4 border-white absolute -z-10 -top-9 left-0 overflow-hidden" style={{ backgroundImage: `url(${userInfo.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+                                        <div className="bg-gray-400 w-full h-full rounded-full border border-4 border-white absolute -top-9 left-0 overflow-hidden" style={{ backgroundImage: `url(${userInfo.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
 
                                         </div>
                                     </div>
@@ -151,7 +151,7 @@ export const FriendDetailPage = () => {
                             </div>
                         </div>
                     </div>
-                    <div className='mt-1 bg-gray-100 -z-10'>
+                    <div className='mt-1 bg-gray-100'>
                         <div className='2xl:w-[60%] m-auto'>
                             <div className="w-full">
                                 <div className="py-4 grid grid-cols-7 xs:grid-cols-1 xl:grid-cols-7 lg:gap-4 relative">

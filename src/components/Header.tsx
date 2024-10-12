@@ -265,7 +265,7 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
                 <Link to={"/"}>
                     <div className="w-12 h-12 bg-[--primary-color] rounded-full mr-2"></div>
                 </Link>
-                <div className="border rounded-full bg-gray-100 flex flex-row items-center xs:justify-center relative z-100">
+                <div className="border rounded-full bg-gray-100 flex flex-row items-center xs:justify-center relative z-50">
                     <div className="w-[40px] h-[40px] flex justify-center items-center ">
                         <IoSearchOutline size={20} />
                     </div>
@@ -276,7 +276,8 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
                         onChange={e => setValue(e.target.value)}    
                         value={value}
                     />
-                    {value !== '' && <div className="w-full h-fit absolute top-[100%] bg-white shadow-md p-2 rounded-md z-999">
+                    {value !== '' && 
+                    <div className="w-full h-fit absolute top-[100%] bg-white shadow-md p-2 rounded-md z-50">
                         <div className="py-3 px-4 hover:bg-gray-200 grid grid-cols-9 items-center rounded-lg cursor-pointer"  onClick={() => {
                                 navigate(`/search/${value}`)
                                 setFilterData([])

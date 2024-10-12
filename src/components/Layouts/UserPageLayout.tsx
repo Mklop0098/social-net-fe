@@ -80,15 +80,15 @@ export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
 
     return (
         <div className='h-[100vh] flex flex-col relative'>
-            <div className='sticky top-0 w-full'>
+            <div className='sticky top-0 w-full z-50'>
                 <Header />
             </div>
             <div className='w-full'>
                 <div className="h-[93vh] overflow-y-auto flex flex-col">
                     <div className='shadow-md'>
                         <div className="2xl:w-2/3 xl:w-[80%] xs:w-full mx-auto flex flex-col">
-                            <div className="w-full h-[460px] xs:h-[40vw] xl:h-[30vw] bg-gray-300 rounded-lg relative -z-10" style={{ backgroundImage: `url(${userInfo.backgroundImage})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
-                                <div onClick={handleClick} className="flex flex-row absolute bottom-3 xs:right-4 right-10 items-center py-2 px-3 bg-white rounded-md cursor-pointer hover:bg-gray-100">
+                            <div className="w-full h-[460px] xs:h-[40vw] xl:h-[30vw] bg-gray-300 rounded-lg relative" style={{ backgroundImage: `url(${userInfo.backgroundImage})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+                                <div onClick={handleClick} className="z-100 flex flex-row absolute bottom-3 xs:right-4 right-10 items-center py-2 px-3 bg-white rounded-md cursor-pointer hover:bg-gray-100">
                                     <FaCamera />
                                     <span className="ml-3 xs:hidden lg:block">Chỉnh sửa ảnh bìa</span>
                                 </div>
@@ -96,7 +96,7 @@ export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
                             <div className="w-full xs:pb-4 lg-pb-0">
                                 <div className="mx-9 flex flex-row xs:flex-col lg:flex-row items-center">
                                     <div className="w-[180px] h-[180px] relative" onClick={handleClickAvatar}>
-                                        <div className="bg-gray-400 w-full h-full rounded-full border border-4 border-white absolute -top-9 left-0 overflow-hidden -z-10" style={{ backgroundImage: `url(${userInfo.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+                                        <div className="bg-gray-400 w-full h-full rounded-full border border-4 border-white absolute -top-9 left-0 overflow-hidden" style={{ backgroundImage: `url(${userInfo.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
 
                                         </div>
                                         <div className="flex items-center justify-center absolute bottom-14 right-2  border border-2 border-blue-200 items-center py-2 w-8 h-8 bg-gray-300 rounded-full cursor-pointer hover:bg-gray-200">

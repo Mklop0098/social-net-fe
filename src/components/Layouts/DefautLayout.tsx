@@ -15,7 +15,7 @@ export const DefautLayout: React.FC<PropsWithChildren> = ({ children }) => {
 
     return (
         <div className='h-[100vh] flex flex-col relative'>
-            <div className='sticky top-0 w-full'>
+            <div className='sticky top-0 w-full z-50'>
                 <Header defaultStatus='newFeed' />
             </div>
             <div className='w-full'>
