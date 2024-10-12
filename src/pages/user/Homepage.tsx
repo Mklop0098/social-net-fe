@@ -1,10 +1,8 @@
 import { IoSearchOutline } from "react-icons/io5"
 import { useMsg } from "../../components/Context/msgContext"
-import { useFriend } from "../../components/Context/friendContext"
 import { useUser } from "../../components/Context/userContext"
 import { useState, useRef, useEffect, useLayoutEffect } from 'react'
-import { UserType, FriendArrayType, ModalType, PostListType, ToastType } from "../../type"
-import { getAllUser } from "../../api/userAPI/userAuth"
+import { UserType, ModalType, PostListType, ToastType } from "../../type"
 import { Divider } from "@mui/material"
 import { FaImages } from "react-icons/fa6"
 import { useModal } from "../../components/Context/modalContext"
@@ -16,12 +14,13 @@ import Snackbar from "@mui/material/Snackbar";
 import { HiUserGroup } from "react-icons/hi2";
 import { Link, useNavigate } from "react-router-dom"
 import { LoadingModal } from "../../components/Modals/LoadingModal"
+import {getFriendDataList} from '../../api/userAPI/useFriend'
+
 
 function Homepage() {
 
     const navigate = useNavigate()
     const { addChatList } = useMsg()
-    const { friendList } = useFriend()
     const { currentUser } = useUser()
     const { showModal, hideModal } = useModal()
     const [toast, setToast] = useState<ToastType>({ open: false, msg: '' });
@@ -30,20 +29,8 @@ function Homepage() {
     const [postList, setPostList] = useState<PostListType[]>([])
     const newFeedRef = useRef<HTMLDivElement>(null)
     const [postLoader, setPostLoader] = useState(false)
-    const [users, setUsers] = useState<UserType[]>([])
+    const [friends, setFriends] = useState<UserType[]>([])
 
-
-    useEffect(() => {
-        if (currentUser._id) {
-            const getAllUserInfo = async () => {
-                const res = await getAllUser(currentUser._id)
-                if (res.data.status) {
-                    setUsers(res.data.users)
-                }
-            }
-            getAllUserInfo()
-        }
-    }, [currentUser])
 
     useEffect(() => {
         const currentUserId = JSON.parse(localStorage.getItem('chat-app-current-user') as string);
@@ -52,16 +39,6 @@ function Homepage() {
             navigate('/login')
         }
     }, [])
-
-    const getFriendList = () => {
-        const findUser = (list: FriendArrayType[], id: string) => {
-            return list.find(friend => friend.friendId === id)
-        }
-        const test = users.filter(user => findUser(friendList, user._id))
-        return test
-    }
-
-
 
     const handleClick = () => {
         const test: ModalType = {
@@ -92,14 +69,24 @@ function Homepage() {
     }
 
     useEffect(() => {
+        
         const gettPost = async () => {
             const res = await getAllPost()
             if (res.data.status) {
                 setPostList(res.data.post)
             }
         }
+
+        const getFriendListData = async () => {
+            const friends = await getFriendDataList(currentUser._id)
+            if (friends.data.status) {
+                setFriends(friends.data.data)
+            }
+            
+        } 
+        getFriendListData()
         gettPost()
-    }, [])
+    }, [currentUser._id])
 
 
     const handleScroll = () => {
@@ -139,14 +126,16 @@ function Homepage() {
         }
     }, [currentUser._id])
 
+
+
     return (
-        <div>
-            <div className='flex-1'>
+        <div >
+            <div className='flex-1 '>
                 <div className="grid xl:grid-cols-5 xs:grid-cols-1 lg:grid-cols-4">
                     <div className="bg-red-100 h-full xs:hidden xl:block">
                         <div className="h-[93vh] bg-gray-100 overflow-y-auto flex flex-col font-semibold py-5">
                             <div className="py-3 px-4 hover:bg-gray-200 grid grid-cols-9 items-center rounded-lg cursor-pointer">
-                                <div className=" col-span-1 w-7 h-7 bg-blue-200 rounded-full overflow-hidden" style={{ backgroundImage: `url(${currentUser.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+                                <div className=" col-span-1 w-7 h-7 bg-blue-200 rounded-full overflow-hidden " style={{ backgroundImage: `url(${currentUser.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
                                 </div>
                                 <div className="col-span-7">{currentUser.firstName + " " + currentUser.lastName} </div>
                             </div>
@@ -216,7 +205,7 @@ function Homepage() {
                                 <IoSearchOutline size={20} />
                             </div>
                             {
-                                getFriendList().map((user, key) => (
+                                friends.map((user, key) => (
                                     <div className="p-2 hover:bg-gray-100 flex flex-row items-center rounded-lg cursor-pointer" key={key} onClick={() => addChatList(user._id)}>
                                         <div className="w-10 h-10 bg-blue-200 rounded-full mr-4"
                                             style={{ backgroundImage: `url(${user.avatar}`, backgroundPosition: 'center', backgroundSize: 'cover' }}

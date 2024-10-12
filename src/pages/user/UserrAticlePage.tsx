@@ -1,7 +1,7 @@
 import { useModal } from "../../components/Context/modalContext";
 import { Divider } from "@mui/material";
 import { FaImages } from "react-icons/fa6";
-import { ModalType, PostListType, ToastType, UserType, FriendArrayType } from "../../type";
+import { ModalType, PostListType, ToastType, UserType } from "../../type";
 import { HomeModal } from '../../components/Modals/HomeModal'
 import { useEffect, useState } from "react";
 import { createPost, getAllUserPost } from '../../api/userAPI/usePost'
@@ -11,9 +11,8 @@ import { FaEarthAsia } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 import { timeAgo } from "../../ultils";
 import Snackbar from "@mui/material/Snackbar";
-import { useFriend } from "../../components/Context/friendContext";
-import { getAllUser } from "../../api/userAPI/userAuth";
 import { Link } from 'react-router-dom'
+import {getFriendDataList} from '../../api/userAPI/useFriend'
 
 const UserArticlePage = () => {
 
@@ -22,34 +21,22 @@ const UserArticlePage = () => {
     const [flag, setFlag] = useState<boolean>(false)
     const { currentUser } = useUser()
     const [postList, setPostList] = useState<PostListType[]>([])
-    const [users, setUsers] = useState<UserType[]>([])
-    const { friendList } = useFriend()
+    const [friends, setFriends] = useState<UserType[]>([])
+    const { showModal } = useModal();
 
 
     useEffect(() => {
-
-        const getAllUserInfo = async () => {
-            if (currentUser._id) {
-                const res = await getAllUser(currentUser._id)
-                if (res.data.status) {
-                    setUsers(res.data.users)
-                }
+        const getFriendListData = async () => {
+            const friends = await getFriendDataList(currentUser._id)
+            if (friends.data.status) {
+                setFriends(friends.data.data)
             }
-        }
-        getAllUserInfo()
+            
+        } 
+        getFriendListData()
 
     }, [currentUser._id])
 
-    const getFriendList = () => {
-        const findUser = (list: FriendArrayType[], id: string) => {
-            return list.find(friend => friend.friendId === id)
-        }
-        const test = users.filter(user => findUser(friendList, user._id))
-        return test
-    }
-
-
-    const { showModal } = useModal();
 
     const handleClick = () => {
         const test: ModalType = {
@@ -117,9 +104,9 @@ const UserArticlePage = () => {
 
 
     return (
-        <div className="w-full relative">
+        <div className="w-full -z-10">
             <div className="py-4 grid xs:grid-cols-1 xl:grid-cols-7 lg:gap-4">
-                <div className="my-4 bg-white shadow-sm rounded-lg px-4 py-6 col-span-3 h-fit xl:sticky top-4">
+                <div className="my-4 bg-white shadow-sm rounded-lg px-4 py-6 col-span-3 h-fit">
                     <div className='p-4 bg-white shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] rounded-md'>
                         <div className='text-xl font-semibold mb-4'>Ảnh</div>
                         <div className='grid grid-cols-3 gap-4'>
@@ -145,7 +132,7 @@ const UserArticlePage = () => {
                         <div className='text-xl font-semibold mb-4'>Bạn bè</div>
                         <div className='grid grid-cols-3 gap-4'>
                             {
-                                getFriendList().map((friend, key) => (
+                                friends.map((friend, key) => (
                                     <Link to={`/profile/${friend._id}`}>
                                         <div className="flex flex-row items-center w-full" key={key}>
                                             <div className="flex flex-col items-center w-full">

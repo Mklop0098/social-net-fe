@@ -16,6 +16,8 @@ export const createDataRoute = `${host}/api/friends/createData`
 export const addFriendListRoute = `${host}/api/friends/addFriendList`
 export const addRequestListRoute = `${host}/api/friends/addRequestList`
 export const getFriendDataRoute = `${host}/api/friends/getFriendData`
+export const getFriendDataListRoute = `${host}/api/friends/getFriendListv2`
+export const getRequestFriendDataListRoute = `${host}/api/friends/getRequestListv2`
 
 export const sendMessageRoute = `${host}/api/messages/addmsg`
 export const getAllMessageRoute = `${host}/api/messages/getmsg`

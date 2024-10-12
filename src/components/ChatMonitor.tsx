@@ -6,6 +6,7 @@ import { ToastType, ModalType } from "../type"
 import { useModal } from "./Context/modalContext"
 import Snackbar from "@mui/material/Snackbar";
 import { ChatModal } from '../components/Modals/ChatModal'
+import { PiNotePencil } from "react-icons/pi";
 
 export const ChatMonitor = () => {
 
@@ -26,8 +27,8 @@ export const ChatMonitor = () => {
     };
 
     return (
-        <div className='m-w-[1050px] h-[420px] z-10 bottom-0 right-10 absolute flex flex-row'>
-            <div className='flex flex-row h-full'>
+        <div className='m-w-[1050px] h-[420px] bottom-0 right-10 absolute flex flex-row '>
+            <div className='flex flex-row h-full z-0'>
                 {
                     activeChatList.slice(0, 3).map((user, key) => (
                         <ChatBox key={key} user={user} />
@@ -47,8 +48,8 @@ export const ChatMonitor = () => {
                         </div>
                     )
                 }
-                <div className="w-14 h-14 bg-gray-200 mt-4 rounded-full" onClick={handleClick}>
-
+                <div className="p-4 bg-gray-200 mt-4 rounded-full flex items-cemter justify-center cursor-pointer" onClick={handleClick}>
+                    <PiNotePencil size={28}/>
                 </div>
             </div>
             <Snackbar

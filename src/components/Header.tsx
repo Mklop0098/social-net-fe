@@ -19,6 +19,8 @@ import { useMsg } from "./Context/msgContext";
 import { useSocket } from "./Context/socketIOContext";
 import { GetReceiveMessage } from '../api/userAPI/useMessage'
 import { IoSearchOutline } from "react-icons/io5";
+import { normalizeText } from 'normalize-text';
+
 
 type HeaderProps = {
     defaultStatus?: string
@@ -42,6 +44,7 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
     const [showMess, setShowMess] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
     const [showNotify, setShowNotify] = useState(false);
+
     const navigate = useNavigate()
     const [status, setStatus] = useState(defaultStatus)
 
@@ -51,6 +54,8 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
     const [messageReceive, setMessageReceive] = useState<MessReceiveType[]>([])
     const [newChat, setNewChat] = useState<NewChatType>({} as NewChatType)
     const [newNotify, setNewNotify] = useState<boolean>(false)
+    const [value, setValue] = useState('')
+    const [filterData, setFilterData] = useState<UserType[]>([])
 
     const { resetFriendContext } = useFriend()
 
@@ -59,6 +64,11 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
     const [users, setUsers] = useState<UserType[]>([])
 
     useEffect(() => {
+
+        if (currentUser && socket) {
+            socket.emit("add-user", currentUser._id)
+        }
+
         if (currentUser._id) {
             const getAllUserInfo = async () => {
                 const res = await getAllUser(currentUser._id)
@@ -110,10 +120,24 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
     }
 
     useEffect(() => {
+        const currentUserId = JSON.parse(localStorage.getItem('chat-app-current-user') as string);
+        if (currentUserId) {
+            const getCurrentUser = async (id: string) => {
+                const userData = await getUser(id)
+                if (userData.data.status) {
+
+                    updateCurrentUser(userData.data.userData[0])
+                }
+                const userNotify = await getAllNotifies(id)
+                if (userNotify.data.status) {
+                    const notifies = userNotify.data.notify[0].notify
+                    setNotifiesList(notifies as NotifyType[])
+                }
+            }
+            getCurrentUser(currentUserId._id)
+        }
 
         if (socket) {
-
-
             socket.on("msg-receive", (data: NewChatType) => {
                 setNewMessage(true)
                 setNewChat(data)
@@ -166,31 +190,24 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
         }
     }, [newChat])
 
-    useEffect(() => {
-        if (currentUser && socket) {
-            socket.emit("add-user", currentUser._id)
-        }
-    }, [currentUser])
-
 
     useEffect(() => {
-        const currentUserId = JSON.parse(localStorage.getItem('chat-app-current-user') as string);
-        if (currentUserId) {
-            const getCurrentUser = async (id: string) => {
-                const userData = await getUser(id)
-                if (userData.data.status) {
-
-                    updateCurrentUser(userData.data.userData[0])
-                }
-                const userNotify = await getAllNotifies(id)
-                if (userNotify.data.status) {
-                    const notifies = userNotify.data.notify[0].notify
-                    setNotifiesList(notifies as NotifyType[])
-                }
+        const handler = setTimeout(() => {
+            if (value !== '') {
+                setFilterData(
+                    users.filter((d) => normalizeText(d.firstName + ' ' + d.lastName).toLowerCase().includes(normalizeText(value).toLowerCase()))
+                );
             }
-            getCurrentUser(currentUserId._id)
+            else {
+                setFilterData([]);
+            }
+        }, 500)
+        return () => {
+            clearTimeout(handler)
         }
-    }, [])
+    }, [value])
+
+
 
     const handleClick = async () => {
         const id = JSON.parse(localStorage.getItem('chat-app-current-user') as string)._id;
@@ -235,24 +252,51 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
         setNewMessage(false)
     }
 
-
+    const handleNavigate = (id: string) => {
+        setValue('')
+        setFilterData([])
+        navigate(`/profile/${id}`)
+    }
 
 
     return (
-        <div className="grid md:grid-cols-3 xs:grid-cols-2 gap-4 px-4 shadow-sm bg-white h-[4rem]">
+        <div className="grid md:grid-cols-3 xs:grid-cols-2 gap-4 px-4 shadow-sm bg-white h-[4rem] z-100">
             <div className="flex flex-row items-center">
                 <Link to={"/"}>
                     <div className="w-12 h-12 bg-[--primary-color] rounded-full mr-2"></div>
                 </Link>
-                <div className="border rounded-full bg-gray-100 flex flex-row items-center xs:justify-center overflow-hidden">
+                <div className="border rounded-full bg-gray-100 flex flex-row items-center xs:justify-center relative z-100">
                     <div className="w-[40px] h-[40px] flex justify-center items-center ">
                         <IoSearchOutline size={20} />
                     </div>
                     <input
-                        className="xs:hidden lg:block py-3 ml-1 bg-gray-100 outline-none w-80 text-md  h-[40px]"
+                        className="xs:hidden lg:block py-3 ml-1 bg-gray-100 outline-none w-80 text-md mr-3 h-[40px]"
                         type="text"
                         placeholder="Bạn đang tìm kiếm gì?"
+                        onChange={e => setValue(e.target.value)}    
+                        value={value}
                     />
+                    {value !== '' && <div className="w-full h-fit absolute top-[100%] bg-white shadow-md p-2 rounded-md z-999">
+                        <div className="py-3 px-4 hover:bg-gray-200 grid grid-cols-9 items-center rounded-lg cursor-pointer"  onClick={() => {
+                                navigate(`/search/${value}`)
+                                setFilterData([])
+                                setValue('')
+                            }}>
+                            <div className=" col-span-1 w-7 h-7 rounded-full flex items-center justify-center">
+                                <IoSearchOutline size={20} />
+                            </div>
+                            <div className="col-span-7">{value} </div>
+                        </div>
+                        {
+                            filterData.map((data, key) => (
+                                <div className="py-3 px-4 hover:bg-gray-200 grid grid-cols-9 items-center rounded-lg cursor-pointer" key={key} onClick={() => handleNavigate(data._id)}>
+                                    <div className=" col-span-1 w-7 h-7 bg-blue-200 rounded-full overflow-hidden" style={{ backgroundImage: `url(${data.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+                                    </div>
+                                    <div className="col-span-7">{data.firstName + " " + data.lastName} </div>
+                                </div>
+                            ))
+                        }
+                    </div>}
                 </div>
             </div>
             <div className="flex flex-row justify-center items-center h-full xs:hidden sm:hidden md:flex">
@@ -318,7 +362,7 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
                     <div className="flex flex-col px-2">
                         <div className="text-xl px-2 font-bold pt-4 pb-2">Doan Chat</div>
                         {
-                            messageReceive.length > 0 && messageReceive.map((mess, key) => (
+                            messageReceive.length > 0 ? messageReceive.map((mess, key) => (
                                 <div
                                     key={key}
                                     className='hover:bg-gray-100 w-full p-3 flex flex-row items-center cursor-pointer'
@@ -336,7 +380,9 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
                                         </div>
                                     </div>
                                 </div>
-                            ))
+                            )) : <div className='hover:bg-gray-100 w-full p-3 flex flex-row items-center justify-center cursor-pointer py-12'>
+                            <span className='text-md text-gray-500'>Không có tin nhan moi</span>
+                        </div>
                         }
                     </div>
                 </CustomMenu>

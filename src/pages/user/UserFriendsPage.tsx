@@ -1,37 +1,26 @@
 import { CiSearch } from "react-icons/ci"
 import { HiOutlineDotsHorizontal } from "react-icons/hi"
-import { useFriend } from "../../components/Context/friendContext"
 import { useState, useEffect } from 'react'
-import { UserType, FriendArrayType } from '../../type'
+import { UserType } from '../../type'
 import { useUser } from '../../components/Context/userContext'
-import { getAllUser } from '../../api/userAPI/userAuth'
+import {getFriendDataList} from '../../api/userAPI/useFriend'
 
 function UserFriendsPage() {
 
-    const { friendList } = useFriend()
     const { currentUser } = useUser()
-
-    const [users, setUsers] = useState<UserType[]>([])
+    const [friends, setFriends] = useState<UserType[]>([])
     useEffect(() => {
         if (currentUser._id) {
-            const getAllUserInfo = async () => {
-                const res = await getAllUser(currentUser._id)
-                if (res.data.status) {
-                    setUsers(res.data.users)
+            const getFriendListData = async () => {
+                const friends = await getFriendDataList(currentUser._id)
+                if (friends.data.status) {
+                    setFriends(friends.data.data)
                 }
-            }
-            getAllUserInfo()
+                
+            } 
+            getFriendListData()
         }
     }, [currentUser])
-
-    const getFriendList = () => {
-        const findUser = (list: FriendArrayType[], id: string) => {
-            return list.find(friend => friend.friendId === id)
-        }
-        const test = users.filter(user => findUser(friendList, user._id))
-        return test
-    }
-
 
     return (
         <div className="w-full">
@@ -50,7 +39,7 @@ function UserFriendsPage() {
                     </div>
                     <div className="grid grid-cols-2 xs:grid-cols-1 lg:grid-cols-2 gap-2 pt-8">
                         {
-                            getFriendList().map((friend, key) => (
+                            friends.map((friend, key) => (
                                 <div className="border p-4 flex flex-row items-center w-full" key={key}>
                                     <div className="flex flex-row items-center w-full">
                                         <div className="w-20 h-20 rounded-lg bg-gray-200 mr-4 overflow-hidden" style={{ backgroundImage: `url(${friend.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>

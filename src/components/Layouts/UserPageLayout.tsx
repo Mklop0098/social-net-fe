@@ -5,15 +5,14 @@ import { Divider } from '@mui/material'
 import { FaCamera } from 'react-icons/fa6'
 import { UserType, ModalType, ToastType } from '../../type'
 import { getUser } from '../../api/userAPI/userAuth'
-import { useFriend } from '../Context/friendContext'
 import { useModal } from '../Context/modalContext'
 import { ChangeImage } from '../ChangeImage'
 import Snackbar from "@mui/material/Snackbar";
 import { useUser } from '../Context/userContext'
-import { getAllUser } from '../../api/userAPI/userAuth'
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import { ChatMonitor } from '../ChatMonitor'
+import {getFriendDataList} from '../../api/userAPI/useFriend'
 
 export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
 
@@ -22,30 +21,22 @@ export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
     const match = useParams<{ id: string, state: string }>();
     const [userInfo, setUserInfo] = useState<UserType>({} as UserType)
     const [status, setStatus] = useState("")
-    const { friendList } = useFriend()
     const { showModal } = useModal()
     const [toast, setToast] = useState<ToastType>({ open: false, msg: '' });
-    const [users, setUsers] = useState<UserType[]>([])
-
+    const [friends, setFriends] = useState<UserType[]>([])
     useEffect(() => {
         if (currentUser._id) {
-            const getAllUserInfo = async () => {
-                const res = await getAllUser(currentUser._id)
-                if (res.data.status) {
-                    setUsers(res.data.users)
+            
+            const getFriendListData = async () => {
+                const friends = await getFriendDataList(currentUser._id)
+                if (friends.data.status) {
+                    setFriends(friends.data.data)
                 }
-            }
-            getAllUserInfo()
+                
+            } 
+            getFriendListData()
         }
     }, [currentUser])
-
-    const getCurrentFriend = (userId: string) => {
-        const test = users.find(user => user._id === userId)
-        if (test) {
-            return test
-        }
-        return {} as UserType
-    }
 
     useEffect(() => {
         if (!localStorage.getItem('chat-app-current-user')) {
@@ -96,7 +87,7 @@ export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
                 <div className="h-[93vh] overflow-y-auto flex flex-col">
                     <div className='shadow-md'>
                         <div className="2xl:w-2/3 xl:w-[80%] xs:w-full mx-auto flex flex-col">
-                            <div className="w-full h-[460px] xs:h-[40vw] xl:h-[30vw] bg-gray-300 rounded-lg relative z-0" style={{ backgroundImage: `url(${userInfo.backgroundImage})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+                            <div className="w-full h-[460px] xs:h-[40vw] xl:h-[30vw] bg-gray-300 rounded-lg relative -z-10" style={{ backgroundImage: `url(${userInfo.backgroundImage})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
                                 <div onClick={handleClick} className="flex flex-row absolute bottom-3 xs:right-4 right-10 items-center py-2 px-3 bg-white rounded-md cursor-pointer hover:bg-gray-100">
                                     <FaCamera />
                                     <span className="ml-3 xs:hidden lg:block">Chỉnh sửa ảnh bìa</span>
@@ -105,7 +96,7 @@ export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
                             <div className="w-full xs:pb-4 lg-pb-0">
                                 <div className="mx-9 flex flex-row xs:flex-col lg:flex-row items-center">
                                     <div className="w-[180px] h-[180px] relative" onClick={handleClickAvatar}>
-                                        <div className="bg-gray-400 w-full h-full rounded-full border border-4 border-white absolute -top-9 left-0 overflow-hidden" style={{ backgroundImage: `url(${userInfo.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+                                        <div className="bg-gray-400 w-full h-full rounded-full border border-4 border-white absolute -top-9 left-0 overflow-hidden -z-10" style={{ backgroundImage: `url(${userInfo.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
 
                                         </div>
                                         <div className="flex items-center justify-center absolute bottom-14 right-2  border border-2 border-blue-200 items-center py-2 w-8 h-8 bg-gray-300 rounded-full cursor-pointer hover:bg-gray-200">
@@ -116,11 +107,11 @@ export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
                                         userInfo._id ?
                                             <div className="lg:pl-6 xs:pl-0 flex flex-col xs:items-center lg:items-start">
                                                 <span className="text-2xl font-semibold mb-2">{userInfo.firstName + " " + userInfo.lastName}</span>
-                                                <span className="text-gray-500 font-semibold mb-2">{friendList.length} người bạn</span>
+                                                <span className="text-gray-500 font-semibold mb-2">{friends.length} người bạn</span>
                                                 <div className="flex flex-row">
                                                     {
-                                                        friendList.map((user, key) => (
-                                                            <div key={key} className="flex mr-1 items-center justify-center w-8 h-8 bg-gray-300 rounded-full cursor-pointer hover:bg-gray-200 border border-2 border-white" style={{ backgroundImage: `url(${getCurrentFriend(user.friendId).avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+                                                        friends.map((user, key) => (
+                                                            <div key={key} className="flex mr-1 items-center justify-center w-8 h-8 bg-gray-300 rounded-full cursor-pointer hover:bg-gray-200 border border-2 border-white" style={{ backgroundImage: `url(${user.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
 
                                                             </div>
                                                         ))
@@ -164,7 +155,7 @@ export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
                     {
                         userInfo._id &&
                         <div className='mt-1 bg-gray-100'>
-                            <div className=' xs:w-full md:max-w-[660px] mx-auto xl:max-w-[80%] 2xl:w-3/5'>{children}</div>
+                            <div className=' xs:w-full md:max-w-[660px] mx-auto xl:max-w-[80%] 2xl:w-3/5' >{children}</div>
                         </div>
                     }
                 </div>

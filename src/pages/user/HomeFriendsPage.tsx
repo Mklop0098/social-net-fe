@@ -10,6 +10,7 @@ import { Snackbar } from "@mui/material"
 import { FaUserPlus, FaUserClock } from "react-icons/fa6";
 import { HiUsers } from "react-icons/hi2";
 import { Link } from 'react-router-dom'
+import {getRequestFriendDataList} from '../../api/userAPI/useFriend'
 
 function HomeFriendsPage() {
 
@@ -17,11 +18,7 @@ function HomeFriendsPage() {
     const { friendList, requestList } = useFriend()
     const [toast, setToast] = useState<ToastType>({ open: false, msg: '' });
     const [users, setUsers] = useState<UserType[]>([])
-    const [requests, setRequests] = useState<FriendArrayType[]>([])
-
-    useEffect(() => {
-        setRequests(requestList)
-    }, [requestList])
+    const [requests, setRequests] = useState<UserType[]>([])
 
     useEffect(() => {
         if (currentUser._id) {
@@ -32,6 +29,15 @@ function HomeFriendsPage() {
                 }
             }
             getAllUserInfo()
+            const getFriendListData = async () => {
+                const friends = await getRequestFriendDataList(currentUser._id)
+                console.log(friends)
+                if (friends.data.status) {
+                    setRequests(friends.data.data)
+                }
+                
+            } 
+            getFriendListData()
         }
     }, [currentUser])
 
@@ -55,58 +61,54 @@ function HomeFriendsPage() {
         const res = await addFriendList(userId, friendId)
         console.log('abc')
         if (res.data.status) {
-            setRequests(requests.filter(req => req.friendId !== friendId))
+            setRequests(requests.filter(req => req._id !== friendId))
             setToast({ open: true, msg: "Thêm bạn bè thành công" })
 
         }
 
     }
 
-    const getRequestList = () => {
-        const findUser = (list: FriendArrayType[], id: string) => {
-            return list.find(friend => friend.friendId === id)
-        }
-        const test = users.filter(user => findUser(requestList, user._id))
-        return test
-    }
-
-
-
     return (
-        <div className="grid md:grid-cols-5 xs:grid-cols-1 gap-1">
+        <div className="grid md:grid-cols-5 xs:grid-cols-1 gap-1 bg-white">
             <div className="shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
-                <div className="sticky top-5 shadow-l-md xs:hidden md:block flex flex-col">
+                <div className="shadow-l-md xs:hidden md:block flex flex-col bg-white">
                     <div className="text-2xl font-bold py-2 px-4">Bạn bè</div>
                     <Link to={'/friends'}>
                         <div className="grid grid-cols-9 py-2 hover:bg-gray-200 py-2 px-4 mx-2 rounded-lg cursor-pointer">
-                            <div className="flex -items-center col-span-1 ">
+                            <div className="flex items-center col-span-1 ">
                                 <div className="bg-[--primary-color] p-1.5 rounded-full">
-                                    <HiUsers size={20} className="text-white" />
+                                    <HiUsers size={20} className="text-white p-0.5" />
                                 </div>
                             </div>
-                            <div className="col-span-7 flex items-center text-lg font-semibold">Trang chủ</div>
+                            <div className="col-span-7 flex items-center text-md font-semibold ml-4">Trang chủ</div>
                         </div>
                     </Link>
                     <Link to={'/friends/requests'}>
-                        <div className="grid grid-cols-9 py-2 hover:bg-gray-200 py-2 px-4 mx-2 rounded-lg cursor-pointer">
-                            <div className="flex -items-center col-span-1">
-                                <FaUserPlus size={24} />
+                        <div className="grid grid-cols-9 py-2 hover:bg-gray-200 py-2 px-4 mx-2 rounded-lg cursor-pointer">  
+                            <div className="flex items-center col-span-1 ">
+                                <div className="bg-gray-300 p-1.5 rounded-full">
+                                    <FaUserPlus size={20} className="text-black p-0.5" />
+                                </div>
                             </div>
-                            <div className="col-span-7 flex items-center text-lg font-semibold">Lời mời kết bạn</div>
+                            <div className="col-span-7 flex items-center text-md ml-4 font-semibold">Lời mời kết bạn</div>
                         </div>
                     </Link>
                     <div className="grid grid-cols-9 py-2 hover:bg-gray-200 py-2 px-4 mx-2 rounded-lg cursor-pointer">
-                        <div className="flex -items-center col-span-1">
-                            <FaUserPlus size={24} />
-                        </div>
-                        <div className="col-span-7 flex items-center text-lg font-semibold">Gợi ý</div>
+                        <div className="flex items-center col-span-1 ">
+                                <div className="bg-gray-300 p-1.5 rounded-full">
+                                    <FaUserPlus size={20} className="text-black p-0.5" />
+                                </div>
+                            </div>
+                        <div className="col-span-7 flex items-center text-md ml-4 font-semibold">Gợi ý</div>
                     </div>
                     <Link to={"/friends/list"}>
                         <div className="grid grid-cols-9 py-2 hover:bg-gray-200 py-2 px-4 mx-2 rounded-lg cursor-pointer">
-                            <div className="flex -items-center col-span-1">
-                                <FaUserClock size={24} />
+                            <div className="flex items-center col-span-1 ">
+                                <div className="bg-gray-300 p-1.5 rounded-full">
+                                    <FaUserClock size={20} className="text-black p-0.5" />
+                                </div>
                             </div>
-                            <div className="col-span-7 flex items-center text-lg font-semibold">Tất cả bạn bè</div>
+                            <div className="col-span-7 flex items-center text-md ml-4 font-semibold">Tất cả bạn bè</div>
                         </div>
                     </Link>
 
@@ -117,7 +119,7 @@ function HomeFriendsPage() {
                     <span className="text-xl font-semibold">Lời mời kết bạn</span>
                     <div className="grid lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 xs:grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
                         {
-                            getRequestList().map((user, key) => (
+                            requests.map((user, key) => (
                                 <FriendBox key={key} user={user} state={'Xác nhận'} upFunction={handleAddFriend} dowmFunction={() => { }} />
                             ))
                         }

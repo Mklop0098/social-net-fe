@@ -19,7 +19,7 @@ export const DefautLayout: React.FC<PropsWithChildren> = ({ children }) => {
                 <Header defaultStatus='newFeed' />
             </div>
             <div className='w-full'>
-                <div className="h-[93vh] overflow-y-auto flex flex-col">
+                <div className="h-[93vh] overflow-y-auto flex flex-col ">
                     {
                         children
                     }

@@ -1,5 +1,5 @@
 import axios from "axios"
-import { addFriendListRoute, addRequestListRoute, createDataRoute, getFriendDataRoute } from "../ultils"
+import { addFriendListRoute, addRequestListRoute, createDataRoute, getFriendDataRoute, getFriendDataListRoute, getRequestFriendDataListRoute } from "../ultils"
 
 export const createData = async (userId: string) => {
     const res = await axios.post(createDataRoute, {
@@ -21,6 +21,24 @@ export const addRequestList = async (userId: string, friendId: string) => {
 export const addFriendList = async (userId: string, friendId: string) => {
     const res = await axios.post(addFriendListRoute, {
         userId, friendId
+    })
+
+    return res
+}
+
+export const getFriendDataList = async (userId: string) => {
+    const res = await axios.post(getFriendDataListRoute, {
+        userId
+    })
+
+    return res
+    
+}
+
+export const getRequestFriendDataList = async (userId: string) => {
+    console.log('p', userId)
+    const res = await axios.post(getRequestFriendDataListRoute, {
+        userId
     })
 
     return res

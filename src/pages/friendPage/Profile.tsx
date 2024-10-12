@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { UserType, ToastType, PostListType, FriendArrayType } from '../../type'
+import { UserType, ToastType, PostListType } from '../../type'
 import { useMsg } from '../../components/Context/msgContext'
 import Snackbar from "@mui/material/Snackbar";
-import { getAllUser, getUser } from '../../api/userAPI/userAuth'
+import { getUser } from '../../api/userAPI/userAuth'
 import Skeleton from '../../components/Skeleton'
 import { FaUserCheck, FaUserPlus, FaFacebookMessenger } from "react-icons/fa";
 import { getAllUserPost } from '../../api/userAPI/usePost'
@@ -11,10 +11,11 @@ import Post from '../../components/Post'
 import { timeAgo } from '../../ultils'
 import { FaEarthAsia } from 'react-icons/fa6'
 import { IoMdClose } from 'react-icons/io'
-import { getFriendData, addRequestList } from '../../api/userAPI/useFriend'
+import { addRequestList } from '../../api/userAPI/useFriend'
 import { useFriend } from '../../components/Context/friendContext'
 import { createNotify } from '../../api/userAPI/userNotify';
 import { useUser } from '../../components/Context/userContext'
+import {getFriendDataList} from '../../api/userAPI/useFriend'
 
 export const FriendDetailPage = () => {
 
@@ -24,32 +25,9 @@ export const FriendDetailPage = () => {
     const [toast, setToast] = useState<ToastType>({ open: false, msg: '' });
     const [post, setPost] = useState<PostListType[]>([])
     const [loading, setLoading] = useState(true)
-    const [friend, setFriend] = useState<FriendArrayType[]>([])
-    const [users, setUsers] = useState<UserType[]>([])
+    const [friends, setFriends] = useState<UserType[]>([])
     const { friendList } = useFriend()
     const { currentUser } = useUser()
-
-    useEffect(() => {
-
-        const getAllUserInfo = async () => {
-            if (match.id) {
-                const res = await getAllUser(match.id)
-                if (res.data.status) {
-                    setUsers(res.data.users)
-                }
-            }
-        }
-        getAllUserInfo()
-
-    }, [match.id])
-
-    const getFriendList = () => {
-        const findUser = (list: FriendArrayType[], id: string) => {
-            return list.find(friend => friend.friendId === id)
-        }
-        const test = users.filter(user => findUser(friend, user._id))
-        return test
-    }
 
     useEffect(() => {
         const getCurrentUser = async () => {
@@ -78,20 +56,16 @@ export const FriendDetailPage = () => {
             setLoading(false)
         }
 
-        const getFriendList = async () => {
+        const getFriendListData = async () => {
             if (match.id) {
-                const friend = await getFriendData(match.id)
-                if (friend.data.status) {
-                    setFriend(friend.data.friendData[0].friendList)
-                }
-                else {
-                    setFriend([])
+                const friends = await getFriendDataList(match.id)
+                if (friends.data.status) {
+                    setFriends(friends.data.data)
                 }
             }
-            setLoading(false)
-        }
-
-        getFriendList()
+            
+        } 
+        getFriendListData()
         getCurrentUser()
         getCurrentPost()
     }, [match.id])
@@ -110,7 +84,6 @@ export const FriendDetailPage = () => {
                 tmp = share.createAt
             }
         })
-        console.log(tmp)
         return tmp
     }
 
@@ -136,19 +109,20 @@ export const FriendDetailPage = () => {
         setToast({ open: true, msg: res.data.msg })
     }
 
+    console.log(friends)
+
     return (
         <div className='h-[93vh] flex flex-col'>
             <div className='w-full'>
-                <div className="h-[93vh] overflow-y-auto flex flex-col">
+                <div className="h-[93vh] overflow-y-auto flex flex-col ">
                     <div className='shadow-md'>
                         <div className="2xl:w-2/3 xl:w-[80%] xs:w-full mx-auto flex flex-col">
-                            <div className="w-full h-[460px] xs:h-[40vw] xl:h-[30vw] bg-gray-300 rounded-lg relative" style={{ backgroundImage: `url(${userInfo.backgroundImage})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
-
+                            <div className="w-full h-[460px] xs:h-[40vw] xl:h-[30vw] bg-gray-300 rounded-lg relative -z-10" style={{ backgroundImage: `url(${userInfo.backgroundImage})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
                             </div>
                             <div className="w-full xs:pb-4 lg-pb-0">
                                 <div className="mx-9 flex flex-row xs:flex-col lg:flex-row items-center">
                                     <div className="w-[180px] h-[180px] relative">
-                                        <div className="bg-gray-400 w-full h-full rounded-full border border-4 border-white absolute -top-9 left-0 overflow-hidden" style={{ backgroundImage: `url(${userInfo.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+                                        <div className="bg-gray-400 w-full h-full rounded-full border border-4 border-white absolute -z-10 -top-9 left-0 overflow-hidden" style={{ backgroundImage: `url(${userInfo.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
 
                                         </div>
                                     </div>
@@ -177,8 +151,8 @@ export const FriendDetailPage = () => {
                             </div>
                         </div>
                     </div>
-                    <div className='mt-1 bg-gray-100'>
-                        <div className='2xl:w-[60%]  m-auto'>
+                    <div className='mt-1 bg-gray-100 -z-10'>
+                        <div className='2xl:w-[60%] m-auto'>
                             <div className="w-full">
                                 <div className="py-4 grid grid-cols-7 xs:grid-cols-1 xl:grid-cols-7 lg:gap-4 relative">
                                     <div className="shadow-sm rounded-lg  py-4 col-span-3">
@@ -207,7 +181,7 @@ export const FriendDetailPage = () => {
                                             <div className='text-xl font-semibold mb-4'>Bạn bè</div>
                                             <div className='grid grid-cols-3 gap-4'>
                                                 {
-                                                    getFriendList().map((friend, key) => (
+                                                    friends.map((friend, key) => (
                                                         <div className="flex flex-row items-center w-full" key={key}>
                                                             <div className="flex flex-col items-center w-full">
                                                                 <div className="w-full h-[130px] rounded-lg bg-gray-200 overflow-hidden" style={{ backgroundImage: `url(${friend.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>

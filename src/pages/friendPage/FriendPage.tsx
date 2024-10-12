@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { UserType, ToastType, PostListType, FriendArrayType } from '../../type'
+import { UserType, ToastType, PostListType } from '../../type'
 import { useMsg } from '../../components/Context/msgContext'
 import Snackbar from "@mui/material/Snackbar";
-import { getAllUser, getUser } from '../../api/userAPI/userAuth'
+import { getUser } from '../../api/userAPI/userAuth'
 import Skeleton from '../../components/Skeleton'
 import { FaUserCheck, FaFacebookMessenger } from "react-icons/fa";
 import { getAllUserPost } from '../../api/userAPI/usePost'
@@ -11,7 +11,8 @@ import Post from '../../components/Post'
 import { timeAgo } from '../../ultils'
 import { FaEarthAsia } from 'react-icons/fa6'
 import { IoMdClose } from 'react-icons/io'
-import { getFriendData } from '../../api/userAPI/useFriend'
+import { getFriendDataList } from '../../api/userAPI/useFriend'
+
 
 export const FriendPage = () => {
 
@@ -21,32 +22,10 @@ export const FriendPage = () => {
     const [toast, setToast] = useState<ToastType>({ open: false, msg: '' });
     const [post, setPost] = useState<PostListType[]>([])
     const [loading, setLoading] = useState(true)
-    const [friend, setFriend] = useState<FriendArrayType[]>([])
-    const [users, setUsers] = useState<UserType[]>([])
+    const [friend, setFriend] = useState<UserType[]>([])
 
     useEffect(() => {
-
-        const getAllUserInfo = async () => {
-            if (match.id) {
-                const res = await getAllUser(match.id)
-                if (res.data.status) {
-                    setUsers(res.data.users)
-                }
-            }
-        }
-        getAllUserInfo()
-
-    }, [match.id])
-
-    const getFriendList = () => {
-        const findUser = (list: FriendArrayType[], id: string) => {
-            return list.find(friend => friend.friendId === id)
-        }
-        const test = users.filter(user => findUser(friend, user._id))
-        return test
-    }
-
-    useEffect(() => {
+        console.log(match.id)
         const getCurrentUser = async () => {
             if (match.id) {
                 const test = await getUser(match.id)
@@ -75,9 +54,9 @@ export const FriendPage = () => {
 
         const getFriendList = async () => {
             if (match.id) {
-                const friend = await getFriendData(match.id)
+                const friend = await getFriendDataList(match.id)
                 if (friend.data.status) {
-                    setFriend(friend.data.friendData[0].friendList)
+                    setFriend(friend.data.data)
                 }
                 else {
                     setFriend([])
@@ -183,7 +162,7 @@ export const FriendPage = () => {
                                             <div className='text-xl font-semibold mb-4'>Bạn bè</div>
                                             <div className='grid grid-cols-3 gap-4'>
                                                 {
-                                                    getFriendList().map((friend, key) => (
+                                                    friend.map((friend, key) => (
                                                         <div className="flex flex-row items-center w-full" key={key}>
                                                             <div className="flex flex-col items-center w-full">
                                                                 <div className="w-full h-[150px] rounded-lg bg-gray-200 overflow-hidden" style={{ backgroundImage: `url(${friend.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>

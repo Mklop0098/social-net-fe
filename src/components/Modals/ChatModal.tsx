@@ -53,7 +53,7 @@ export const ChatModal = () => {
 
 
     return (
-        <div className="flex flex-col justify-between px-4 pb-4 w-[330px]  h-[410px] m-auto top-0 left-0 bottom-0 right-0 absolute bg-white rounded-lg">
+        <div className="flex flex-col justify-between px-4 pb-4 w-[330px]  h-[410px] m-auto top-0 left-0 bottom-0 right-0 absolute bg-white rounded-lg z-100">
             <div className=" flex flex-col  justify-center items-start h-fit py-4">
                 <div className="font-semibold flex flex-row items-center justify-between w-full">
                     Tin nhắn mới
