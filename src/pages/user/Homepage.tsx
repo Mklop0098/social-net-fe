@@ -134,11 +134,13 @@ function Homepage() {
                 <div className="grid xl:grid-cols-5 xs:grid-cols-1 lg:grid-cols-4">
                     <div className="bg-red-100 h-full xs:hidden xl:block">
                         <div className="h-[93vh] bg-gray-100 overflow-y-auto flex flex-col font-semibold py-5">
-                            <div className="py-3 px-4 hover:bg-gray-200 grid grid-cols-9 items-center rounded-lg cursor-pointer">
-                                <div className=" col-span-1 w-7 h-7 bg-blue-200 rounded-full overflow-hidden " style={{ backgroundImage: `url(${currentUser.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+                            <Link to={`${currentUser._id}`}>
+                                <div className="py-3 px-4 hover:bg-gray-200 grid grid-cols-9 items-center rounded-lg cursor-pointer">
+                                    <div className=" col-span-1 w-7 h-7 bg-blue-200 rounded-full overflow-hidden " style={{ backgroundImage: `url(${currentUser.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+                                    </div>
+                                    <div className="col-span-7">{currentUser.firstName + " " + currentUser.lastName} </div>
                                 </div>
-                                <div className="col-span-7">{currentUser.firstName + " " + currentUser.lastName} </div>
-                            </div>
+                            </Link>
                             <Link to={'/friends'}>
                                 <div className="py-3 px-4 hover:bg-gray-200 grid grid-cols-9 items-center rounded-lg cursor-pointer">
                                     <HiUserGroup size={26} className="text-[--primary-color] col-span-1" />

@@ -40,10 +40,12 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
     const messRef = useRef(null);
     const infoRef = useRef(null);
     const notifyRef = useRef(null);
+    const searchRef = useRef(null)
 
     const [showMess, setShowMess] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
     const [showNotify, setShowNotify] = useState(false);
+    const [openSearch, setOpenSearch] = useState(false);
 
     const navigate = useNavigate()
     const [status, setStatus] = useState(defaultStatus)
@@ -192,6 +194,12 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
 
 
     useEffect(() => {
+        if (value !== '') {
+            setOpenSearch(true)
+        }
+        else {
+            setOpenSearch(false)
+        }
         const handler = setTimeout(() => {
             if (value !== '') {
                 setFilterData(
@@ -258,6 +266,14 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
         navigate(`/profile/${id}`)
     }
 
+    useEffect(() => {
+        const handleClick = (e: MouseEvent) => {
+            if (e.target !== searchRef.current) {
+                setOpenSearch(false)
+            }
+        }
+        document.addEventListener('click', e => handleClick(e))
+    }, [])
 
     return (
         <div className="grid md:grid-cols-3 xs:grid-cols-2 gap-4 px-4 shadow-sm bg-white h-[4rem] z-100">
@@ -273,31 +289,42 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
                         className="xs:hidden lg:block py-3 ml-1 bg-gray-100 outline-none w-80 text-md mr-3 h-[40px]"
                         type="text"
                         placeholder="Bạn đang tìm kiếm gì?"
-                        onChange={e => setValue(e.target.value)}    
+                        onChange={e => setValue(e.target.value)}
                         value={value}
+                        onFocus={() => setOpenSearch(true)}
+                        ref={searchRef}
                     />
-                    {value !== '' && 
-                    <div className="w-full h-fit absolute top-[100%] bg-white shadow-md p-2 rounded-md z-50">
-                        <div className="py-3 px-4 hover:bg-gray-200 grid grid-cols-9 items-center rounded-lg cursor-pointer"  onClick={() => {
-                                navigate(`/search/${value}`)
-                                setFilterData([])
-                                setValue('')
-                            }}>
-                            <div className=" col-span-1 w-7 h-7 rounded-full flex items-center justify-center">
-                                <IoSearchOutline size={20} />
-                            </div>
-                            <div className="col-span-7">{value} </div>
-                        </div>
-                        {
-                            filterData.map((data, key) => (
-                                <div className="py-3 px-4 hover:bg-gray-200 grid grid-cols-9 items-center rounded-lg cursor-pointer" key={key} onClick={() => handleNavigate(data._id)}>
-                                    <div className=" col-span-1 w-7 h-7 bg-blue-200 rounded-full overflow-hidden" style={{ backgroundImage: `url(${data.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+                    {openSearch &&
+                        <div className="w-full h-fit absolute top-[100%] bg-white shadow-md p-2 rounded-md z-50">
+                            {
+                                value !== '' ? <div className="py-3 px-4 hover:bg-gray-200 grid grid-cols-9 items-center rounded-lg cursor-pointer" onClick={() => {
+                                    navigate(`/search/${value}`)
+                                    setFilterData([])
+                                    setValue('')
+                                }}>
+                                    <div className=" col-span-1 w-7 h-7 rounded-full flex items-center justify-center">
+                                        <IoSearchOutline size={20} />
                                     </div>
-                                    <div className="col-span-7">{data.firstName + " " + data.lastName} </div>
-                                </div>
-                            ))
-                        }
-                    </div>}
+                                    <div className="col-span-7">{value} </div>
+                                </div> :
+                                    <div className="py-3 px-4 grid grid-cols-9 items-center rounded-lg">
+                                        <div className=" col-span-1 w-7 h-7 rounded-full flex items-center justify-center">
+                                            <IoSearchOutline size={20} />
+                                        </div>
+                                        <div className="col-span-7">Nhập từ khóa để tìm kiếm </div>
+                                    </div>
+
+                            }
+                            {
+                                filterData.map((data, key) => (
+                                    <div className="py-3 px-4 hover:bg-gray-200 grid grid-cols-9 items-center rounded-lg cursor-pointer" key={key} onClick={() => handleNavigate(data._id)}>
+                                        <div className=" col-span-1 w-7 h-7 bg-blue-200 rounded-full overflow-hidden" style={{ backgroundImage: `url(${data.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+                                        </div>
+                                        <div className="col-span-7">{data.firstName + " " + data.lastName} </div>
+                                    </div>
+                                ))
+                            }
+                        </div>}
                 </div>
             </div>
             <div className="flex flex-row justify-center items-center h-full xs:hidden sm:hidden md:flex">
@@ -382,8 +409,8 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
                                     </div>
                                 </div>
                             )) : <div className='hover:bg-gray-100 w-full p-3 flex flex-row items-center justify-center cursor-pointer py-12'>
-                            <span className='text-md text-gray-500'>Không có tin nhan moi</span>
-                        </div>
+                                <span className='text-md text-gray-500'>Không có tin nhan moi</span>
+                            </div>
                         }
                     </div>
                 </CustomMenu>
