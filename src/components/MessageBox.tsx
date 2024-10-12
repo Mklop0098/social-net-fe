@@ -47,7 +47,6 @@ const MessageBox: React.FC<MessageBoxProps> = (props) => {
                                 <div
                                     key={key}
                                     className={`
-                                  
                                         ${checkLink(msg.message) && 'truncate'}
                                     `}
                                 >
@@ -59,25 +58,27 @@ const MessageBox: React.FC<MessageBoxProps> = (props) => {
                                             </div> :
                                             checkLink(msg.message)
                                                 ?
-                                                <a target="_blank"
+                                                <div
                                                     className={`
-                                                        px-4 py-2 rounded-2xl w-fit max-w-[70%] mx-4 
+                                                        truncate
+                                                        px-4 py-2 rounded-2xl  max-w-[70%] mx-4 
                                                         bg-${msg.fromSelf ? 'blue-500' : 'gray-100'} 
                                                         text-${msg.fromSelf ? 'white' : 'black'} underline`
                                                     }
-                                                    href={msg.message}
                                                 >
-                                                    {msg.message}
-                                                </a>
-                                                : <span
+                                                    <a href={msg.message} target='_blank'>
+                                                        {msg.message}
+                                                    </a>
+                                                </div>
+                                                : <div
                                                     className={`      
-                                                        px-4 py-2 rounded-2xl w-fit max-w-[70%] mx-4 
+                                                        px-4 py-2 rounded-2xl w-fit max-w-[70%] mx-4
                                                         bg-${msg.fromSelf ? 'blue-500' : 'gray-100'} 
                                                         text-${msg.fromSelf ? 'white' : 'black'} `
                                                     }
                                                 >
                                                     {msg.message}
-                                                </span>
+                                                </div>
                                     }
                                 </div>
 
