@@ -22,6 +22,7 @@ export default function Login() {
         e.preventDefault()
         const res = await login(input)
         const { msg, status, user } = res.data
+        console.log(res.data)
         if (status) {
             localStorage.setItem(
                 'chat-app-current-user',
