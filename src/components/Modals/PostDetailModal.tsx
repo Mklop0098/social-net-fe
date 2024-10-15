@@ -21,7 +21,7 @@ import PostMini from '../../pages/postPage/PostMini'
 
 
 type PostDetailProps = {
-    post: PostListType
+    post?: PostListType
 }
 
 type MessReceiveType = {
@@ -36,7 +36,7 @@ type NewChatType = { from: string, to: string, msg: string }
 
 export const PostDetail: React.FC<PostDetailProps> = (props) => {
 
-    const { post } = props
+    const { post = {} as PostListType } = props
 
     const messRef = useRef(null);
     const infoRef = useRef(null);
