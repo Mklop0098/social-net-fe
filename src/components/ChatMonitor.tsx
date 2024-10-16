@@ -8,7 +8,11 @@ import Snackbar from "@mui/material/Snackbar";
 import { ChatModal } from '../components/Modals/ChatModal'
 import { PiNotePencil } from "react-icons/pi";
 
-export const ChatMonitor = () => {
+type ChatMonitorProps = {
+    shortcut?: boolean
+}
+
+export const ChatMonitor: React.FC<ChatMonitorProps> = ({ shortcut = true }) => {
 
     const { activeChatList, minimizeChatBoxList } = useMsg()
     const [toast, setToast] = useState<ToastType>({ open: false, msg: '' });
@@ -48,9 +52,12 @@ export const ChatMonitor = () => {
                         </div>
                     )
                 }
-                <div className="p-4 bg-gray-200 mt-4 rounded-full flex items-cemter justify-center cursor-pointer" onClick={handleClick}>
-                    <PiNotePencil size={28}/>
-                </div>
+                {
+                    shortcut &&
+                    <div className="p-4 bg-gray-200 mt-4 rounded-full flex items-cemter justify-center cursor-pointer" onClick={handleClick}>
+                        <PiNotePencil size={28} />
+                    </div>
+                }
             </div>
             <Snackbar
                 open={toast.open}

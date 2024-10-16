@@ -6,13 +6,13 @@ import { HomeModal } from '../../components/Modals/HomeModal'
 import { useEffect, useState } from "react";
 import { createPost, getAllUserPost } from '../../api/userAPI/usePost'
 import { useUser } from "../../components/Context/userContext";
-import Post from "../../components/Post";
+import Post from "../postPage/Post";
 import { FaEarthAsia } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 import { timeAgo } from "../../ultils";
 import Snackbar from "@mui/material/Snackbar";
 import { Link } from 'react-router-dom'
-import {getFriendDataList} from '../../api/userAPI/useFriend'
+import { getFriendDataList } from '../../api/userAPI/useFriend'
 
 const UserArticlePage = () => {
 
@@ -31,8 +31,8 @@ const UserArticlePage = () => {
             if (friends.data.status) {
                 setFriends(friends.data.data)
             }
-            
-        } 
+
+        }
         getFriendListData()
 
     }, [currentUser._id])

@@ -1,26 +1,25 @@
-import { FaEarthAsia } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai'
 import { VscComment } from "react-icons/vsc";
 import { PiShareFatLight } from "react-icons/pi";
-import { useUser } from '../components/Context/userContext'
-import { ModalType, PostListType, ReactType } from "../type";
-import { timeAgo } from "../ultils";
+import { useUser } from '../../components/Context/userContext'
+import { ModalType, PostListType, ReactType } from "../../type";
+import { timeAgo } from "../../ultils";
 import { Divider } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getAllUser } from "../api/userAPI/userAuth";
-import { likePost, removeLikePost } from '../api/userAPI/usePost'
-import { useSocket } from "./Context/socketIOContext";
-import { createNotify } from "../api/userAPI/userNotify"
-import { useModal } from "./Context/modalContext";
-import { CommentModal } from "./Modals/CommentModal";
-import { ShareModal } from '../components/Modals/ShareModal'
-import { UserType, ToastType } from "../type";
-import { Carousel } from '../components/Carousel'
-import { useFriend } from '../components/Context/friendContext'
+import { getAllUser } from "../../api/userAPI/userAuth";
+import { likePost, removeLikePost, commentPost } from '../../api/userAPI/usePost'
+import { useSocket } from "../../components/Context/socketIOContext";
+import { addRequestList } from "../../api/userAPI/useFriend";
+import { createNotify } from "../../api/userAPI/userNotify"
+import { useModal } from "../../components/Context/modalContext";
+import { ShareModal } from '../../components/Modals/ShareModal'
+import { UserType, ToastType } from "../../type";
+import { FaEarthAsia } from "react-icons/fa6";
+import { useFriend } from '../../components/Context/friendContext'
 import { BsDot } from "react-icons/bs";
-import { addRequestList } from "../api/userAPI/useFriend";
-import { useNavigate } from 'react-router-dom'
+import { TextareaAutosize } from '@mui/base/TextareaAutosize';
+import { IoSend } from 'react-icons/io5'
 
 type PostProps = {
     post: PostListType
@@ -31,6 +30,7 @@ type PostCaculate = {
     comments: {
         userId: string;
         comment: string;
+        createAt: Date
     }[];
     likes: ReactType[];
     shared: ReactType[];
@@ -45,7 +45,7 @@ const Post: React.FC<PostProps> = (props) => {
     const [currentPost, setCurrentPost] = useState<PostCaculate>({} as PostCaculate)
     const { showModal } = useModal()
     const { friendList } = useFriend()
-    const navigate = useNavigate()
+    const [value, setValue] = useState("")
 
 
     useEffect(() => {
@@ -124,16 +124,27 @@ const Post: React.FC<PostProps> = (props) => {
         return false
     }
 
-    const handleComment = () => {
-        const test: ModalType = {
-            toggle: true,
-            root: 'modal-root',
-            width: 36,
-            height: 90,
-            body: <CommentModal post={post} />,
+    const handleComment = async () => {
+        if (value !== '') {
+            if (currentUser._id !== post.owner) {
+                await createNotify(post.owner, `${currentUser.firstName + " " + currentUser.lastName} đã bình luận một bài viết của bạn`, 'comment', currentUser._id)
+            }
+            socket?.emit("comment-post", {
+                userId: currentUser._id,
+                owner: post.owner,
+                postId: post._id
+            });
+            await commentPost(currentUser._id, post._id, value)
+            const time = new Date()
+            setCurrentPost(currentPost => {
+                currentPost.comments.splice(0, 0, { userId: currentUser._id, comment: value, createAt: time })
+                const newPost = JSON.parse(JSON.stringify(currentPost))
+                return newPost
+            })
+            setValue("")
         }
-        showModal(test);
-    };
+    }
+
 
     const handleShare = () => {
         const test: ModalType = {
@@ -157,12 +168,22 @@ const Post: React.FC<PostProps> = (props) => {
         setToast({ open: true, msg: res.data.msg })
     }
 
-    const handleProfile = (id: string) => {
-        if (id === currentUser._id) {
-            navigate(`/${id}`)
+    const getUserData = (userId: string) => {
+        const test = users.find(user => user._id === userId)
+
+        if (test) {
+            return test
         }
-        else navigate(`/profile/${id}`)
+
+        return {} as UserType
     }
+
+    // const handleProfile = (id: string) => {
+    //     if (id === currentUser._id) {
+    //         navigate(`/${id}`)
+    //     }
+    //     else navigate(`/profile/${id}`)
+    // }
 
     return (
         <div className="flex flex-col justify-center w-full">
@@ -172,7 +193,7 @@ const Post: React.FC<PostProps> = (props) => {
                     </div>
                     <div className="pl-3">
                         <div className='font-semibold flex flex-row w-full justify-between'>
-                            <div onClick={() => handleProfile(post.owner)}>
+                            <div>
                                 {
                                     post.owner === currentUser._id ? currentUser.firstName + ' ' + currentUser.lastName : getCurrentFriend(post.owner)
                                 }
@@ -208,9 +229,6 @@ const Post: React.FC<PostProps> = (props) => {
                         post.posts
                     }
                 </div>
-                <div className="-z-10">
-                    <Carousel srcs={post.imgaes} slidePerView={1} />
-                </div>
             </div>
             <div className="flex flex-col p-4 pb-2">
                 <div className="flex flex-row justify-between pb-4">
@@ -232,7 +250,7 @@ const Post: React.FC<PostProps> = (props) => {
                     </div>
                 </div>
                 <Divider />
-                <div className={`grid grid-cols-${currentUser._id !== post.owner ? 3 : 2} gap-4 pt-2`}>
+                <div className={`grid grid-cols-${currentUser._id !== post.owner ? 3 : 2} gap-4 pt-2 pb-2`}>
                     <div className="flex flex-row justify-center items-center hover:bg-gray-100 py-2 rounded-lg text-gray-500 cursor-pointer" onClick={handleLikePost}>
                         {
                             likeInclude() ? <AiFillLike size={24} className="text-blue-500" /> :
@@ -252,6 +270,52 @@ const Post: React.FC<PostProps> = (props) => {
                             <p className="font-semibold pl-2">Chia sẻ</p>
                         </div>
                     }
+                </div>
+                <Divider />
+                <div className="flex flex-col pb-2 my-4 overflow-y-auto max-h-[600px]">
+                    {
+                        post.comments.map((com, key) => (
+                            <div className="flex flex-row items-start mb-4" key={key}>
+                                <div className="w-8 h-8 bg-blue-200 rounded-full overflow-hidden" style={{ backgroundImage: `url(${com.userId !== currentUser._id ? getUserData(com.userId).avatar : currentUser.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+
+                                </div>
+                                <div className="ml-4">
+                                    <div className="bg-gray-100 rounded-xl flex w-fit flex-col py-1 px-3 text-md">
+                                        <div className="flex flex-row items-center">
+                                            <div
+                                                className="font-semibold text-sm">
+                                                {getCurrentFriend(com.userId) !== '' ? getCurrentFriend(com.userId) : currentUser.firstName + " " + currentUser.lastName}
+                                            </div>
+                                            {
+                                                com.userId === post.owner && <div className="pl-4 text-sm text-blue-500">Tác giả</div>
+                                            }
+                                        </div>
+                                        <p>{com.comment}</p>
+                                    </div>
+                                    <p className="text-sm mt-1 ml-2.5 text-gray-500">{timeAgo(com.createAt)}</p>
+                                </div>
+
+
+                            </div>
+                        ))
+                    }
+                </div>
+                <div className="flex flex-row pb-4 items-center shadow-md absolute bottom-0">
+                    <div className="w-12 h-12 bg-blue-200 rounded-full overflow-hidden" style={{ backgroundImage: `url(${currentUser.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+
+                    </div>
+                    <div className="flex-1 bg-gray-100 ml-4 rounded-lg flex flex-row">
+                        <TextareaAutosize
+                            maxRows={3}
+                            className="w-full outline-none bg-gray-100 p-4 rounded-lg"
+                            placeholder="Viết bình luận"
+                            onChange={e => setValue(e.target.value)}
+                            value={value}
+                        />
+                    </div>
+                    <div className="pl-3" onClick={handleComment}>
+                        <IoSend className="text-gray-500" />
+                    </div>
                 </div>
             </div>
 

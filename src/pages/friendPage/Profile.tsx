@@ -7,7 +7,7 @@ import { getUser } from '../../api/userAPI/userAuth'
 import Skeleton from '../../components/Skeleton'
 import { FaUserCheck, FaUserPlus, FaFacebookMessenger } from "react-icons/fa";
 import { getAllUserPost } from '../../api/userAPI/usePost'
-import Post from '../../components/Post'
+import Post from '../postPage/Post'
 import { timeAgo } from '../../ultils'
 import { FaEarthAsia } from 'react-icons/fa6'
 import { IoMdClose } from 'react-icons/io'
@@ -15,7 +15,7 @@ import { addRequestList } from '../../api/userAPI/useFriend'
 import { useFriend } from '../../components/Context/friendContext'
 import { createNotify } from '../../api/userAPI/userNotify';
 import { useUser } from '../../components/Context/userContext'
-import {getFriendDataList} from '../../api/userAPI/useFriend'
+import { getFriendDataList } from '../../api/userAPI/useFriend'
 
 export const FriendDetailPage = () => {
 
@@ -63,8 +63,8 @@ export const FriendDetailPage = () => {
                     setFriends(friends.data.data)
                 }
             }
-            
-        } 
+
+        }
         getFriendListData()
         getCurrentUser()
         getCurrentPost()

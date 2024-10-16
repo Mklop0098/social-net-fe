@@ -14,9 +14,11 @@ import FriendPageEmpty from '../pages/friendPage/FriendPageEmpty'
 import FriendDetailPage from "../pages/friendPage/Profile";
 import SearchPage from '../pages/search/SearchPage'
 import SearchLayout from "./Layouts/SearchLayout";
+import HomeLayout from './Layouts/HomeLayout'
+import { PostDetail } from "./Modals/PostDetailModal";
 
 export const publicRoutes = [
-    { path: '/', component: Homepage, layout: DefautLayout },
+    { path: '/', component: Homepage, layout: HomeLayout },
     { path: '/friends', component: HomeFriendsPage, layout: DefautLayout },
     { path: '/login', component: Login },
     { path: '/register', component: Register },
@@ -27,6 +29,7 @@ export const publicRoutes = [
     { path: '/friends/list', component: FriendPageEmpty, layout: FriendPageLayout },
     { path: '/friends/list/:id', component: FriendPage, layout: FriendPageLayout },
     { path: '/search/:value', component: SearchPage, layout: SearchLayout },
+    { path: '/photo/:id', component: PostDetail}
 ];
 
 export const privateRoutes = [];

@@ -15,7 +15,8 @@ import { VscComment } from "react-icons/vsc";
 import { PiShareFatLight } from "react-icons/pi";
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { IoSend } from 'react-icons/io5'
-import { Carousel } from '../Carousel'
+import { PostImages } from "../PostImages";
+
 
 type CommentModalProps = {
     post: PostListType
@@ -190,7 +191,9 @@ export const CommentModal: React.FC<CommentModalProps> = (props) => {
                             post.posts
                         }
                     </div>
-                    <Carousel srcs={post.imgaes} slidePerView={1} />
+                    {
+                        <PostImages srcs={post} />
+                    }
                 </div>
                 <div className="flex flex-col p-4 pt-2">
                     <div className="flex flex-row justify-between pb-2 px-2">

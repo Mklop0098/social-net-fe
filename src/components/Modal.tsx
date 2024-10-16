@@ -25,7 +25,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
     if (toggle && root) {
         const el: HTMLElement = document.getElementById(root) as HTMLElement;
         return ReactDOM.createPortal(
-            <div className='w-full h-full top-0 left-0 absolute z-999'>
+            <div className='w-full h-full top-0 left-0 absolute z-50'>
                 <div
                     className='w-full h-[100vh]'
                     style={{

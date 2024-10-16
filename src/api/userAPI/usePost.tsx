@@ -1,5 +1,5 @@
 import axios from "axios"
-import { createPostRoute, getAllPostsRoute, likePostRoute, removeLikePostRoute, getAllUserPostRoute, commentPostRoute, sharePostRoute } from "../ultils"
+import { createPostRoute, getAllPostsRoute, likePostRoute, removeLikePostRoute, getAllUserPostRoute, commentPostRoute, sharePostRoute, getPostByIdRoute } from "../ultils"
 
 
 export const createPost = async (owner: string, post: string, images: string[]) => {
@@ -22,6 +22,14 @@ export const getAllUserPost = async (userId: string) => {
     })
     return res
 }
+
+export const getPostById = async (id: string) => {
+    const res = await axios.post(getPostByIdRoute, {
+        id
+    })
+    return res
+}
+
 
 export const likePost = async (userId: string, postId: string) => {
 

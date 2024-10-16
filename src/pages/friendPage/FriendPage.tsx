@@ -7,7 +7,7 @@ import { getUser } from '../../api/userAPI/userAuth'
 import Skeleton from '../../components/Skeleton'
 import { FaUserCheck, FaFacebookMessenger } from "react-icons/fa";
 import { getAllUserPost } from '../../api/userAPI/usePost'
-import Post from '../../components/Post'
+import Post from '../postPage/Post'
 import { timeAgo } from '../../ultils'
 import { FaEarthAsia } from 'react-icons/fa6'
 import { IoMdClose } from 'react-icons/io'
