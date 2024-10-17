@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from "react";
-import Header from "../Header";
+import Header from "../Header/Header";
 import { ChatMonitor } from "../ChatMonitor";
 import { IoSearchOutline } from "react-icons/io5";
 import { useMsg } from "../../components/Context/msgContext";

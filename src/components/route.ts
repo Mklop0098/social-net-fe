@@ -16,6 +16,7 @@ import SearchPage from '../pages/search/SearchPage'
 import SearchLayout from "./Layouts/SearchLayout";
 import HomeLayout from './Layouts/HomeLayout'
 import { PostDetail } from "./Modals/PostDetailModal";
+import { CreateStatus } from "../pages/Status/CreateStatus";
 
 export const publicRoutes = [
     { path: '/', component: Homepage, layout: HomeLayout },
@@ -29,7 +30,8 @@ export const publicRoutes = [
     { path: '/friends/list', component: FriendPageEmpty, layout: FriendPageLayout },
     { path: '/friends/list/:id', component: FriendPage, layout: FriendPageLayout },
     { path: '/search/:value', component: SearchPage, layout: SearchLayout },
-    { path: '/photo/:id', component: PostDetail}
+    { path: '/photo/:id', component: PostDetail},
+    { path: '/story/create', component: CreateStatus }
 ];
 
 export const privateRoutes = [];

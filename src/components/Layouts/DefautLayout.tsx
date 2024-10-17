@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useEffect } from 'react'
-import Header from '../Header'
+import Header from '../Header/Header'
 import { useNavigate } from 'react-router-dom'
 import { ChatMonitor } from '../ChatMonitor'
 

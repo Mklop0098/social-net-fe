@@ -132,26 +132,26 @@ export const FriendPage = () => {
                             </div>
                         </div>
                     </div>
-                    <div className='mt-1 bg-gray-100'>
-                        <div className='2xl:w-[80%]  m-auto'>
+                    <div className='mt-1 bg-gray-100 '>
+                        <div className='2xl:w-[70%] relative m-auto'>
                             <div className="w-full">
-                                <div className="py-4 grid grid-cols-7 xs:grid-cols-1 xl:grid-cols-7 lg:gap-4 relative">
+                                <div className="py-4 grid grid-cols-7 xs:grid-cols-1 xl:grid-cols-7 lg:gap-4 ">
                                     <div className="shadow-sm rounded-lg  py-4 col-span-3">
                                         <div className='bg-white shadow-md p-5 rounded-md'>
                                             <div className='text-xl font-semibold mb-4'>Ảnh</div>
-                                            <div className='grid grid-cols-3 gap-4'>
+                                            <div className='grid grid-cols-3 gap-2'>
                                                 {
-                                                    post.map((po, key) => {
+                                                    post.map((po) => {
                                                         if (po.imgaes.length > 0) {
                                                             return (
-                                                                <div key={key} >
+                                                                <>
                                                                     {
                                                                         po.imgaes.map((img, key) => (
-                                                                            <div style={{ backgroundImage: `url(${img})`, backgroundPosition: 'center', backgroundSize: 'cover' }} key={key} className='h-[150px]'>
+                                                                            <div style={{ backgroundImage: `url(${img})`, backgroundPosition: 'center', backgroundSize: 'cover' }} key={key} className='h-[120px]'>
                                                                             </div>
                                                                         ))
                                                                     }
-                                                                </div>
+                                                                </>
                                                             )
                                                         }
                                                     })
@@ -165,7 +165,7 @@ export const FriendPage = () => {
                                                     friend.map((friend, key) => (
                                                         <div className="flex flex-row items-center w-full" key={key}>
                                                             <div className="flex flex-col items-center w-full">
-                                                                <div className="w-full h-[150px] rounded-lg bg-gray-200 overflow-hidden" style={{ backgroundImage: `url(${friend.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>
+                                                                <div className="w-full h-[120px] rounded-lg bg-gray-200 overflow-hidden" style={{ backgroundImage: `url(${friend.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>
                                                                 <div className='text-sm mt-1'>{friend.firstName + ' ' + friend.lastName}</div>
                                                             </div>
 

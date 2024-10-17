@@ -11,6 +11,7 @@ import Skeletons from "../../components/Skeleton";
 import Snackbar from "@mui/material/Snackbar";
 import { Link, useNavigate } from "react-router-dom";
 import { LoadingModal } from "../../components/Modals/LoadingModal";
+import { Status } from "../Status/Status";
 
 function Homepage() {
     const navigate = useNavigate();
@@ -118,6 +119,9 @@ function Homepage() {
             ref={newFeedRef}
             onScroll={handleScroll}
         >
+            <div className="md:w-[500px] lg:w-[680px] xs:w-full xs:max-w-[500px] lg:max-w-[680px] mx-auto rounded-lg mt-4 mb-1">
+                <Status />
+            </div>
             <div className="flex flex-col items-center justify-center md:w-[500px] lg:w-[680px] xs:w-full xs:max-w-[500px] lg:max-w-[680px] mx-auto bg-white rounded-lg my-4">
                 <div className="w-full px-4 py-2">
                     <div className="flex flex-row items-center pb-4 pt-2 w-full">

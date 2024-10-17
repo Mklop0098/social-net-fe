@@ -106,7 +106,7 @@ const UserArticlePage = () => {
     return (
         <div className="w-full -z-10">
             <div className="py-4 grid xs:grid-cols-1 xl:grid-cols-7 lg:gap-4">
-                <div className="my-4 bg-white shadow-sm rounded-lg px-4 py-6 col-span-3 h-fit">
+                <div className="my-4 bg-white shadow-sm rounded-lg px-4 py-6 col-span-3 h-fit sticky top-0 overflow-auto">
                     <div className='p-4 bg-white shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] rounded-md'>
                         <div className='text-xl font-semibold mb-4'>Ảnh</div>
                         <div className='grid grid-cols-3 gap-4'>

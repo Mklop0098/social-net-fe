@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useEffect, useState } from 'react'
-import Header from '../Header'
+import Header from '../Header/Header'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Divider } from '@mui/material'
 import { FaCamera } from 'react-icons/fa6'
@@ -12,7 +12,7 @@ import { useUser } from '../Context/userContext'
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import { ChatMonitor } from '../ChatMonitor'
-import {getFriendDataList} from '../../api/userAPI/useFriend'
+import { getFriendDataList } from '../../api/userAPI/useFriend'
 
 export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
 
@@ -26,14 +26,14 @@ export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
     const [friends, setFriends] = useState<UserType[]>([])
     useEffect(() => {
         if (currentUser._id) {
-            
+
             const getFriendListData = async () => {
                 const friends = await getFriendDataList(currentUser._id)
                 if (friends.data.status) {
                     setFriends(friends.data.data)
                 }
-                
-            } 
+
+            }
             getFriendListData()
         }
     }, [currentUser])

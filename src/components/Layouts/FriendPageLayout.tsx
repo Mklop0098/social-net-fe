@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { Divider, Snackbar } from "@mui/material"
 import { Link } from 'react-router-dom'
 import { IoArrowBack, IoSearchOutline } from "react-icons/io5";
-import Header from '../Header'
+import Header from '../Header/Header'
 import { ChatMonitor } from '../ChatMonitor'
 import { useUser } from "../Context/userContext"
 import { getFriendDataList } from '../../api/userAPI/useFriend'

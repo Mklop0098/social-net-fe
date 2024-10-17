@@ -112,7 +112,7 @@ export const FriendDetailPage = () => {
     console.log(friends)
 
     return (
-        <div className='h-[93vh] flex flex-col'>
+        <div className='h-[93vh] flex flex-col relative'>
             <div className='w-full'>
                 <div className="h-[93vh] overflow-y-auto flex flex-col ">
                     <div className='shadow-md'>
@@ -154,9 +154,9 @@ export const FriendDetailPage = () => {
                     <div className='mt-1 bg-gray-100'>
                         <div className='2xl:w-[60%] m-auto'>
                             <div className="w-full">
-                                <div className="py-4 grid grid-cols-7 xs:grid-cols-1 xl:grid-cols-7 lg:gap-4 relative">
-                                    <div className="shadow-sm rounded-lg  py-4 col-span-3">
-                                        <div className='bg-white shadow-md p-5 rounded-md'>
+                                <div className="py-4 grid grid-cols-7 xs:grid-cols-1 xl:grid-cols-7 lg:gap-4">
+                                    <div className="shadow-sm rounded-lg  py-4 col-span-3 sticky top-0">
+                                        <div className='bg-white shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] p-5 rounded-md'>
                                             <div className='text-xl font-semibold mb-4'>Ảnh</div>
                                             <div className='grid grid-cols-3 gap-4'>
                                                 {
@@ -177,7 +177,7 @@ export const FriendDetailPage = () => {
                                                 }
                                             </div>
                                         </div>
-                                        <div className='bg-white shadow-md p-5 rounded-md mt-4'>
+                                        <div className='bg-white shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] p-5 rounded-md mt-4'>
                                             <div className='text-xl font-semibold mb-4'>Bạn bè</div>
                                             <div className='grid grid-cols-3 gap-4'>
                                                 {

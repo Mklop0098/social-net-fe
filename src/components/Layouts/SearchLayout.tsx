@@ -1,15 +1,15 @@
 import { PropsWithChildren, useState, useEffect } from "react"
-import {ToastType } from "../../type"
-import Header from '../Header'
+import { ToastType } from "../../type"
+import Header from '../Header/Header'
 import { Divider, Snackbar } from "@mui/material"
-import { BsMenuButtonWideFill, BsPostcardFill  } from "react-icons/bs";
+import { BsMenuButtonWideFill, BsPostcardFill } from "react-icons/bs";
 import { HiUsers } from "react-icons/hi";
 import { Link } from 'react-router-dom'
 import { ChatMonitor } from "../ChatMonitor";
 import { useNavigate } from 'react-router-dom'
 
-const SearchLayout: React.FC<PropsWithChildren> = ({children}) => {
-    
+const SearchLayout: React.FC<PropsWithChildren> = ({ children }) => {
+
     const [toast, setToast] = useState<ToastType>({ open: false, msg: '' });
     const navigate = useNavigate()
 
@@ -35,7 +35,7 @@ const SearchLayout: React.FC<PropsWithChildren> = ({children}) => {
                                     <div className="grid grid-cols-9 py-2 hover:bg-gray-200 py-2 px-4 mx-2 rounded-lg cursor-pointer mt-2">
                                         <div className="flex -items-center col-span-1 ">
                                             <div className="bg-[--primary-color] p-1.5 rounded-full">
-                                                <BsMenuButtonWideFill  size={20} className="text-white p-0.5" />
+                                                <BsMenuButtonWideFill size={20} className="text-white p-0.5" />
                                             </div>
                                         </div>
                                         <div className="col-span-7 flex items-center text-md font-semibold pl-4 pl-4">Tất cả</div>
@@ -45,7 +45,7 @@ const SearchLayout: React.FC<PropsWithChildren> = ({children}) => {
                                     <div className="grid grid-cols-9 py-2 hover:bg-gray-200 py-2 px-4 mx-2 rounded-lg cursor-pointer">
                                         <div className="flex -items-center col-span-1 ">
                                             <div className="bg-gray-200 p-1.5 rounded-full">
-                                                <BsPostcardFill  size={20} className="text-black p-0.5" />
+                                                <BsPostcardFill size={20} className="text-black p-0.5" />
                                             </div>
                                         </div>
                                         <div className="col-span-7 flex items-center text-md font-semibold pl-4">Bài viết</div>
@@ -53,10 +53,10 @@ const SearchLayout: React.FC<PropsWithChildren> = ({children}) => {
                                 </Link>
                                 <div className="grid grid-cols-9 py-2 hover:bg-gray-200 py-2 px-4 mx-2 rounded-lg cursor-pointer">
                                     <div className="flex -items-center col-span-1 ">
-                                            <div className="bg-gray-200 p-1.5 rounded-full">
-                                                <HiUsers  size={20} className="text-black p-0.5" />
-                                            </div>
+                                        <div className="bg-gray-200 p-1.5 rounded-full">
+                                            <HiUsers size={20} className="text-black p-0.5" />
                                         </div>
+                                    </div>
                                     <div className="col-span-7 flex items-center text-md font-semibold pl-4">Mọi người</div>
                                 </div>
 

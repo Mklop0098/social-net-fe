@@ -1,30 +1,23 @@
 import { useEffect, useRef, useState } from "react";
 import { FaFacebookMessenger, FaBell } from "react-icons/fa";
-import { CustomMenu } from "./CustomMenu/CustomMenu";
+import { CustomMenu } from "../CustomMenu/CustomMenu";
 import { Divider } from "@mui/material";
 import { IoIosLogOut } from "react-icons/io";
 import axios from "axios";
-import { logoutRoute } from "../api/ultils";
+import { logoutRoute } from "../../api/ultils";
 import { Link, useNavigate } from "react-router-dom";
-import { useUser } from "./Context/userContext";
-import { getUser, getAllUser } from "../api/userAPI/userAuth";
-import { IoHomeOutline } from "react-icons/io5";
-import { HiOutlineUsers } from "react-icons/hi2";
-import { useNotify } from "./Context/notifyContext";
-import { getAllNotifies, readNotifies } from "../api/userAPI/userNotify";
-import { NotifyType, UserType } from "../type";
-import { haveUnreadNotify, timeAgo } from "../ultils";
-import { useFriend } from "./Context/friendContext";
-import { useMsg } from "./Context/msgContext";
-import { useSocket } from "./Context/socketIOContext";
-import { GetReceiveMessage } from '../api/userAPI/useMessage'
-import { IoSearchOutline } from "react-icons/io5";
-import { normalizeText } from 'normalize-text';
+import { useUser } from "../Context/userContext";
+import { getUser, getAllUser } from "../../api/userAPI/userAuth";
+import { useNotify } from "../Context/notifyContext";
+import { getAllNotifies, readNotifies } from "../../api/userAPI/userNotify";
+import { NotifyType, UserType } from "../../type";
+import { haveUnreadNotify, timeAgo } from "../../ultils";
+import { useFriend } from "../Context/friendContext";
+import { useMsg } from "../Context/msgContext";
+import { useSocket } from "../Context/socketIOContext";
+import { GetReceiveMessage } from '../../api/userAPI/useMessage'
+import { IoClose } from "react-icons/io5";
 
-
-type HeaderProps = {
-    defaultStatus?: string
-}
 
 type MessReceiveType = {
     from: string,
@@ -36,19 +29,16 @@ type MessReceiveType = {
 
 type NewChatType = { from: string, to: string, msg: string }
 
-const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
+const SubHeader = () => {
     const messRef = useRef(null);
     const infoRef = useRef(null);
     const notifyRef = useRef(null);
-    const searchRef = useRef(null)
 
     const [showMess, setShowMess] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
     const [showNotify, setShowNotify] = useState(false);
-    const [openSearch, setOpenSearch] = useState(false);
 
     const navigate = useNavigate()
-    const [status, setStatus] = useState(defaultStatus)
 
     const { currentUser, updateCurrentUser } = useUser()
     const { notifies, setNotifiesList } = useNotify()
@@ -56,8 +46,6 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
     const [messageReceive, setMessageReceive] = useState<MessReceiveType[]>([])
     const [newChat, setNewChat] = useState<NewChatType>({} as NewChatType)
     const [newNotify, setNewNotify] = useState<boolean>(false)
-    const [value, setValue] = useState('')
-    const [filterData, setFilterData] = useState<UserType[]>([])
 
     const { resetFriendContext } = useFriend()
 
@@ -192,31 +180,6 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
         }
     }, [newChat])
 
-
-    useEffect(() => {
-        if (value !== '') {
-            setOpenSearch(true)
-        }
-        else {
-            setOpenSearch(false)
-        }
-        const handler = setTimeout(() => {
-            if (value !== '') {
-                setFilterData(
-                    users.filter((d) => normalizeText(d.firstName + ' ' + d.lastName).toLowerCase().includes(normalizeText(value).toLowerCase()))
-                );
-            }
-            else {
-                setFilterData([]);
-            }
-        }, 500)
-        return () => {
-            clearTimeout(handler)
-        }
-    }, [value])
-
-
-
     const handleClick = async () => {
         const id = JSON.parse(localStorage.getItem('chat-app-current-user') as string)._id;
         const data = await axios.get(`${logoutRoute}/${id}`);
@@ -260,91 +223,16 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
         setNewMessage(false)
     }
 
-    const handleNavigate = (id: string) => {
-        setValue('')
-        setFilterData([])
-        navigate(`/profile/${id}`)
-    }
-
-    useEffect(() => {
-        const handleClick = (e: MouseEvent) => {
-            if (e.target !== searchRef.current) {
-                setOpenSearch(false)
-            }
-        }
-        document.addEventListener('click', e => handleClick(e))
-    }, [])
-
     return (
-        <div className="grid md:grid-cols-3 xs:grid-cols-2 gap-4 px-4 shadow-sm bg-white h-[4rem]">
+        <div className="grid md:grid-cols-2 xs:grid-cols-2 gap-4 px-4 bg-opacity-0 h-[4rem] shadow-md">
             <div className="flex flex-row items-center">
                 <Link to={"/"}>
+                    <div className="w-10 h-10 bg-gray-500 rounded-full mr-2 flex items-center justify-center">
+                        <IoClose size={24} className="text-white" />
+                    </div>
+                </Link>
+                <Link to={"/"}>
                     <div className="w-12 h-12 bg-[--primary-color] rounded-full mr-2"></div>
-                </Link>
-                <div className="border rounded-full bg-gray-100 flex flex-row items-center xs:justify-center relative z-50">
-                    <div className="w-[40px] h-[40px] flex justify-center items-center ">
-                        <IoSearchOutline size={20} />
-                    </div>
-                    <input
-                        className="xs:hidden lg:block py-3 ml-1 bg-gray-100 outline-none w-80 text-md mr-3 h-[40px]"
-                        type="text"
-                        placeholder="Bạn đang tìm kiếm gì?"
-                        onChange={e => setValue(e.target.value)}
-                        value={value}
-                        onFocus={() => setOpenSearch(true)}
-                        ref={searchRef}
-                    />
-                    {openSearch &&
-                        <div className="w-full h-fit absolute top-[100%] bg-white shadow-md p-2 rounded-md z-50">
-                            {
-                                value !== '' ? <div className="py-3 px-4 hover:bg-gray-200 grid grid-cols-9 items-center rounded-lg cursor-pointer" onClick={() => {
-                                    navigate(`/search/${value}`)
-                                    setFilterData([])
-                                    setValue('')
-                                }}>
-                                    <div className=" col-span-1 w-7 h-7 rounded-full flex items-center justify-center">
-                                        <IoSearchOutline size={20} />
-                                    </div>
-                                    <div className="col-span-7">{value} </div>
-                                </div> :
-                                    <div className="py-3 px-4 grid grid-cols-9 items-center rounded-lg">
-                                        <div className=" col-span-1 w-7 h-7 rounded-full flex items-center justify-center">
-                                            <IoSearchOutline size={20} />
-                                        </div>
-                                        <div className="col-span-7">Nhập từ khóa để tìm kiếm </div>
-                                    </div>
-
-                            }
-                            {
-                                filterData.map((data, key) => (
-                                    <div className="py-3 px-4 hover:bg-gray-200 grid grid-cols-9 items-center rounded-lg cursor-pointer" key={key} onClick={() => handleNavigate(data._id)}>
-                                        <div className=" col-span-1 w-7 h-7 bg-blue-200 rounded-full overflow-hidden" style={{ backgroundImage: `url(${data.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
-                                        </div>
-                                        <div className="col-span-7">{data.firstName + " " + data.lastName} </div>
-                                    </div>
-                                ))
-                            }
-                        </div>}
-                </div>
-            </div>
-            <div className="flex flex-row justify-center items-center h-full xs:hidden sm:hidden md:flex">
-                <Link to={'/'} className="h-[94%] mt-auto">
-                    <div
-                        className={`${status === 'newFeed' ? 'border-blue-500/100' : 'border-indigo-500/0'} 
-                        rounded-lg rounded-b-none h-full border-b-4 px-14 h-full flex items-center hover:bg-gray-100 cursor-pointer`}
-                        onClick={() => setStatus('newFeed')}
-                    >
-                        <IoHomeOutline size={26} className={`${status === 'newFeed' && 'text-blue-500/100'}`} />
-                    </div>
-                </Link>
-                <Link to={'/friends'} className="h-[94%] mt-auto" onClick={() => setStatus('friends')}>
-                    <div
-                        className={`${status === 'friends' ? 'border-blue-500/100' : 'border-indigo-500/0'} 
-                        rounded-lg rounded-b-none h-full border-b-4 px-14 h-full flex items-center hover:bg-gray-100 cursor-pointer`}
-
-                    >
-                        <HiOutlineUsers size={26} className={`${status === 'friends' && 'text-blue-500/100'}`} />
-                    </div>
                 </Link>
             </div>
             <div className="flex flex-row justify-end items-center pl-4">
@@ -459,7 +347,7 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
                         <span className='text-xl font-bold  p-3'>Thông báo</span>
                         {
                             notifies.length > 0 ? notifies.reverse().map((notify, key) => (
-                                <Link to={'/friends'} onClick={() => setStatus('friends')} key={key}>
+                                <Link to={'/friends'} key={key}>
                                     <div className='hover:bg-gray-100 w-full p-3 flex flex-row items-center cursor-pointer' >
                                         <div className='w-14 h-14 rounded-full bg-gray-300 overflow-hidden mr-3' style={{ backgroundImage: `url(${getCurrentFriend(notify.from).avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
 
@@ -483,4 +371,4 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
     );
 }
 
-export default Header;
+export default SubHeader;

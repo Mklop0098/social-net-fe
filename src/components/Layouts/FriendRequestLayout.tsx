@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { Snackbar } from "@mui/material"
 import { Link } from 'react-router-dom'
 import { IoArrowBack } from "react-icons/io5";
-import Header from '../Header'
+import Header from '../Header/Header'
 import { useModal } from '../Context/modalContext'
 import { RequestModal } from "../Modals/RequestModal"
 import { ChatMonitor } from "../ChatMonitor"
