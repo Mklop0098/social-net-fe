@@ -41,7 +41,7 @@ const ChatInput: React.FC<ChatInputProps> = (props) => {
         socket?.emit("send-msg", {
           to: friendId,
           from: currentUser._id,
-          msg: { text: msg, imgs: uploadImages },
+          msg: { text: msg, imgs: linksReturn },
         });
         setMsg('')
         setUploadImages([])
@@ -58,7 +58,7 @@ const ChatInput: React.FC<ChatInputProps> = (props) => {
       socket?.emit("send-msg", {
         to: friendId,
         from: currentUser._id,
-        msg: { text: msg, imgs: uploadImages },
+        msg: { text: msg, imgs: [] },
       });
       setMsg('')
 
@@ -73,7 +73,7 @@ const ChatInput: React.FC<ChatInputProps> = (props) => {
     socket?.emit("send-msg", {
       to: friendId,
       from: currentUser._id,
-      msg: 'emote',
+      msg: { text: '#like', imgs: [] },
     });
     await SendMessage(currentUser._id, friendId, { text: '#like', imgs: [] })
     const msgs = [...messages];
