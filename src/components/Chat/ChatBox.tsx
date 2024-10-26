@@ -40,6 +40,7 @@ const ChatBox: React.FC<ChatBoxProps> = (props) => {
             "msg-receive",
             (data: { from: string; to: string; msg: { text: string, imgs: string[] } }) => {
                 if (data.from === user.userId) {
+                    console.log(data)
                     setArrivalMessage({ fromSelf: false, message: data.msg.text, imgs: data.msg.imgs });
                 }
             }
@@ -80,8 +81,6 @@ const ChatBox: React.FC<ChatBoxProps> = (props) => {
         const getMessage = async () => {
             const res = await GetAllMessage(currentUser._id, currentFriend._id);
             if (res.data.status) {
-                console.log(res.data)
-
                 setMessages(res.data.projectedMessages);
             }
         };

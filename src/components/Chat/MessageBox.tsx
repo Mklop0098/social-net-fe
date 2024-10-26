@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MessageReturnType } from "../../type";
 import { useUser } from "../Context/userContext";
 import { TypingType } from "./ChatBox";
 import LoadingAnimation from "../LoadingAnimation";
 import { AiFillLike } from "react-icons/ai";
+import { Modal } from 'antd';
 
 type MessageBoxProps = {
   messages: MessageReturnType[];
@@ -13,10 +14,17 @@ type MessageBoxProps = {
 
 const MessageBox: React.FC<MessageBoxProps> = (props) => {
   const { messages, isTyping, friendId } = props;
+  const [currentImg, setCurrentImg] = useState('')
 
   const { currentUser } = useUser();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const ref = useRef<HTMLDivElement>(null);
+
+  const handleOpen = (current: string) => {
+    setCurrentImg(current)
+    setIsModalOpen(true)
+  }
 
   useEffect(() => {
     if (ref.current) {
@@ -79,19 +87,17 @@ const MessageBox: React.FC<MessageBoxProps> = (props) => {
                           {msg.message}
                         </a>
                       </div>
-                      <div>hello</div>
                     </>
                   ) : (
                     <div
                       className={`
-                            mr-4
-                            flex flex-col
-                            items-end
-                            `}
+                          flex flex-col
+                          ${msg.fromSelf ? "items-end mr-4" : "items-start mx-4"}
+                      `}
                     >
                       {
                         msg.message && <div
-                          className={`px-4 py-2 rounded-2xl w-fit
+                          className={`px-4 py-2 rounded-2xl w-fit mb-2
                             bg-${msg.fromSelf
                               ? "blue-500"
                               : "gray-100"
@@ -106,8 +112,8 @@ const MessageBox: React.FC<MessageBoxProps> = (props) => {
                         <div className={`grid grid-cols-${msg.imgs.length} gap-1`}>
                           {
                             msg.imgs.map((src, key) => (
-                              <div key={key} className='w-full h-full bg-gray-100 cursor-pointer'>
-                                <img src={src} alt="" className='w-full h-full' />
+                              <div key={key} className='w-full h-full bg-gray-100 cursor-pointer' onClick={() => handleOpen(src)}>
+                                <img src={src} alt="" className='w-full h-full rounded-xl' />
                               </div>
                             ))
                           }
@@ -118,13 +124,14 @@ const MessageBox: React.FC<MessageBoxProps> = (props) => {
                         <div className="grid grid-cols-3 gap-2">
                           {
                             msg.imgs.map((src, key) => (
-                              <div key={key} className='w-[60px] h-[60px] bg-gray-100 cursor-pointer'
+                              <div key={key} className='w-[60px] h-[60px] bg-gray-100 cursor-pointer rounded-xl'
+                                onClick={() => handleOpen(src)}
                                 style={{
                                   backgroundImage: `url(${src})`,
                                   backgroundPosition: "center",
+                                  backgroundSize: "cover",
                                 }}
                               >
-                                <img src={src} alt="" className='w-full h-full' />
                               </div>
                             ))
                           }
@@ -149,6 +156,17 @@ const MessageBox: React.FC<MessageBoxProps> = (props) => {
           </div>
         )}
       </div>
+      <Modal
+        open={isModalOpen}
+        onOk={() => setIsModalOpen(false)}
+        onCancel={() => setIsModalOpen(false)}
+        width={1200}
+        footer={null}
+      >
+        <div className="w-full h-[700px] bg-black flex items-center justify-center">
+          <img src={currentImg} alt="" className="max-h-[90%]" />
+        </div>
+      </Modal>
     </div >
   );
 };
