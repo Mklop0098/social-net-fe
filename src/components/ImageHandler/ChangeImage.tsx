@@ -1,12 +1,12 @@
-import { useUser } from "../components/Context/userContext"
+import { useUser } from "../Context/userContext"
 import { Divider } from "@mui/material"
-import { useModal } from "../components/Context/modalContext"
+import { useModal } from "../Context/modalContext"
 import { IoMdClose } from "react-icons/io";
 import { useState } from 'react'
-import { ImageUploadType, UploadImage } from '../components/UploadImage'
-import { setBgImage, setAvatar } from '../api/userAPI/userAuth'
-import { ToastType, UserType } from '../type'
-import { imageDb } from '../components/FirebaseImg/Config'
+import { ImageUploadType, UploadImage } from '../ImageHandler/UploadImage'
+import { setBgImage, setAvatar } from '../../api/userAPI/userAuth'
+import { ToastType, UserType } from '../../type'
+import { imageDb } from '../FirebaseImg/Config'
 import { ref, uploadBytes, StorageReference, getDownloadURL } from 'firebase/storage'
 import { v4 } from 'uuid'
 

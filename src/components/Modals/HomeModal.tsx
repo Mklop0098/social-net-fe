@@ -5,7 +5,7 @@ import { useModal } from "../../components/Context/modalContext"
 import { IoMdClose } from "react-icons/io";
 import { FaEarthAsia } from "react-icons/fa6";
 import { useRef, useState } from 'react'
-import { ImageUploadType, UploadImage } from '../../components/UploadImage'
+import { ImageUploadType, UploadImage } from '../ImageHandler/UploadImage'
 import { imageDb } from '../../components/FirebaseImg/Config'
 import { ref, uploadBytes, StorageReference, getDownloadURL } from 'firebase/storage'
 import { v4 } from 'uuid'

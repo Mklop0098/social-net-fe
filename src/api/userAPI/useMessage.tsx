@@ -3,7 +3,8 @@ import { getAllMessageRoute, sendMessageRoute, getReceiveMessageRoute } from "..
 
 
 
-export const SendMessage = async (from: string, to: string, msg: string) => {
+export const SendMessage = async (from: string, to: string, msg: { text: string, imgs: string[] }) => {
+    console.log(msg)
     const res = await axios.post(sendMessageRoute, {
         from, to, msg
     })

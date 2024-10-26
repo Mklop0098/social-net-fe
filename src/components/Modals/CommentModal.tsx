@@ -15,7 +15,7 @@ import { VscComment } from "react-icons/vsc";
 import { PiShareFatLight } from "react-icons/pi";
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { IoSend } from 'react-icons/io5'
-import { PostImages } from "../PostImages";
+import { PostImages } from "../ImageHandler/PostImages";
 
 
 type CommentModalProps = {

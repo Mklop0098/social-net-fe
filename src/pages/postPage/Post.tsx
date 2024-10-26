@@ -20,7 +20,7 @@ import { FaEarthAsia } from "react-icons/fa6";
 import { useFriend } from '../../components/Context/friendContext'
 import { BsDot } from "react-icons/bs";
 import { useNavigate } from 'react-router-dom'
-import { PostImages } from "../../components/PostImages";
+import { PostImages } from "../../components/ImageHandler/PostImages";
 
 type PostProps = {
     post: PostListType

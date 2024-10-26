@@ -80,6 +80,7 @@ export type FriendArrayType = {
 export type MessageReturnType = {
     fromSelf: boolean
     message: string
+    imgs: string[]
 }
 
 export type SocketIoHookReturn = {

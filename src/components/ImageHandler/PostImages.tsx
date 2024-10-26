@@ -1,6 +1,6 @@
-import { useModal } from '../components/Context/modalContext'
-import { PostListType, ModalType } from '../type'
-import { PostDetail } from './Modals/PostDetailModal'
+import { useModal } from '../Context/modalContext'
+import { PostListType, ModalType } from '../../type'
+import { PostDetail } from '../Modals/PostDetailModal'
 
 type PostImagesProps = {
     srcs: PostListType
