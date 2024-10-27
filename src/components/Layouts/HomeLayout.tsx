@@ -12,6 +12,7 @@ import { HiUserGroup } from "react-icons/hi2";
 import { Link, useNavigate } from "react-router-dom";
 import { LoadingModal } from "../../components/Modals/LoadingModal";
 import { getFriendDataList } from "../../api/userAPI/useFriend";
+import { useFriend } from '../Context/friendContext'
 
 export const HomeLayout: React.FC<PropsWithChildren> = ({ children }) => {
   const navigate = useNavigate();
@@ -27,6 +28,9 @@ export const HomeLayout: React.FC<PropsWithChildren> = ({ children }) => {
   const { showModal, hideModal } = useModal();
   const [toast, setToast] = useState<ToastType>({ open: false, msg: "" });
   const [friends, setFriends] = useState<UserType[]>([]);
+  const { onlineFriends } = useFriend()
+
+  console.log(onlineFriends)
 
   useEffect(() => {
     const currentUserId = JSON.parse(
@@ -118,13 +122,18 @@ export const HomeLayout: React.FC<PropsWithChildren> = ({ children }) => {
                       onClick={() => addChatList(user._id)}
                     >
                       <div
-                        className="w-10 h-10 bg-blue-200 rounded-full mr-4"
+                        className="w-10 h-10 bg-blue-200 rounded-full mr-4 relative border"
                         style={{
                           backgroundImage: `url(${user.avatar}`,
                           backgroundPosition: "center",
                           backgroundSize: "cover",
                         }}
-                      ></div>
+                      >
+                        {
+                          onlineFriends.includes(user._id) &&
+                          <div className={`bg-green-500 w-3 h-3  rounded-full bottom-0 absolute right-0`}></div>
+                        }
+                      </div>
                       <div>{user.firstName + " " + user.lastName} </div>
                     </div>
                   ))}

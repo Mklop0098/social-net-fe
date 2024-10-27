@@ -14,13 +14,12 @@ import { useNotify } from "../Context/notifyContext";
 import { getAllNotifies, readNotifies } from "../../api/userAPI/userNotify";
 import { NotifyType, UserType } from "../../type";
 import { haveUnreadNotify, timeAgo } from "../../ultils";
-import { useFriend } from "../Context/friendContext";
 import { useMsg } from "../Context/msgContext";
 import { useSocket } from "../Context/socketIOContext";
 import { GetReceiveMessage } from '../../api/userAPI/useMessage'
 import { IoSearchOutline } from "react-icons/io5";
 import { normalizeText } from 'normalize-text';
-
+import { useFriend } from '../Context/friendContext'
 
 type HeaderProps = {
     defaultStatus?: string
@@ -140,6 +139,8 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
         }
 
         if (socket) {
+
+
             socket.on("msg-receive", (data: NewChatType) => {
                 setNewMessage(true)
                 setNewChat(data)
@@ -238,7 +239,6 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
     }
 
     useEffect(() => {
-        console.log('a')
         if (currentUser._id) {
             const getReceive = async () => {
                 const res = await GetReceiveMessage(currentUser._id)

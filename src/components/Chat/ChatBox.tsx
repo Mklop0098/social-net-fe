@@ -11,6 +11,7 @@ import { useUser } from "../Context/userContext";
 import { GetAllMessage } from "../../api/userAPI/useMessage";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
+import { useFriend } from '../Context/friendContext'
 
 type ChatBoxProps = {
     user: ChatListType;
@@ -25,6 +26,7 @@ export type TypingType = {
 const ChatBox: React.FC<ChatBoxProps> = (props) => {
     const { user } = props;
     const { minimizeChatBox, removeChatBox } = useMsg();
+    const { onlineFriends } = useFriend()
     const [currentFriend, setCurrentFriend] = useState<UserType>({} as UserType);
     const { currentUser } = useUser();
     const [messages, setMessages] = useState<MessageReturnType[]>([]);
@@ -93,13 +95,18 @@ const ChatBox: React.FC<ChatBoxProps> = (props) => {
                 {currentFriend._id ? (
                     <div className="flex flex-row items-center">
                         <div
-                            className="w-10 h-10 bg-blue-200 rounded-full mr-2"
+                            className="w-10 h-10 bg-blue-200 rounded-full mr-2 relative"
                             style={{
                                 backgroundImage: `url(${currentFriend.avatar})`,
                                 backgroundPosition: "center",
                                 backgroundSize: "cover",
                             }}
-                        ></div>
+                        >
+                            {
+                                onlineFriends.includes(currentFriend._id) &&
+                                <div className={`bg-green-500 w-3 h-3  rounded-full bottom-0 absolute right-0`}></div>
+                            }
+                        </div>
                         <div className="flex flex-col">
                             <span>
                                 {currentFriend.firstName + " " + currentFriend.lastName}

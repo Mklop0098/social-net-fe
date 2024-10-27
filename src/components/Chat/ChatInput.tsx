@@ -26,9 +26,16 @@ const ChatInput: React.FC<ChatInputProps> = (props) => {
 
   const { socket } = useSocket()
 
+  const getUrls = (arr: ImageUploadType[]) => arr.map(item => item.url);
+
   const handleSubmit = async (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     e.preventDefault()
-
+    console.log(uploadImages)
+    const msgs = [...messages];
+    msgs.push({ fromSelf: true, message: msg, imgs: getUrls(uploadImages) });
+    setMessages(msgs);
+    setMsg('')
+    setUploadImages([])
     if (uploadImages.length > 0) {
       const uploadPromises = uploadImages.map(async (image) => {
         const storageRef: StorageReference = ref(imageDb, `files/${v4()}`)
@@ -43,13 +50,7 @@ const ChatInput: React.FC<ChatInputProps> = (props) => {
           from: currentUser._id,
           msg: { text: msg, imgs: linksReturn },
         });
-        setMsg('')
-        setUploadImages([])
-
         await SendMessage(currentUser._id, friendId, { text: msg, imgs: linksReturn })
-        const msgs = [...messages];
-        msgs.push({ fromSelf: true, message: msg, imgs: linksReturn });
-        setMessages(msgs);
       } catch (error) {
         console.error('Error uploading images:', error);
       }
@@ -60,12 +61,7 @@ const ChatInput: React.FC<ChatInputProps> = (props) => {
         from: currentUser._id,
         msg: { text: msg, imgs: [] },
       });
-      setMsg('')
-
       await SendMessage(currentUser._id, friendId, { text: msg, imgs: [] })
-      const msgs = [...messages];
-      msgs.push({ fromSelf: true, message: msg, imgs: [] });
-      setMessages(msgs);
     }
   }
 

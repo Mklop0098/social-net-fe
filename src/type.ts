@@ -53,7 +53,11 @@ export type FriendHookReturn = {
     friendList: FriendArrayType[],
     requestList: FriendArrayType[],
     friendLoading: boolean,
-    resetFriendContext: () => void
+    onlineFriends: string[],
+    setOnlineFriends: (list: string[]) => void
+    resetFriendContext: () => void,
+    addOnlineFriend: (friend: string) => void
+    removeOnlineFriend: (friend: string) => void
 }
 
 export type NotifyType = {
