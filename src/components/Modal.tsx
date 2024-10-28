@@ -16,7 +16,7 @@ type ModalProps = {
 export const Modal: React.FC<ModalProps> = (props) => {
     // const { onClick } = props;
     const { root, toggle, body, width = 50, height = 50, onClick = () => { } } = props;
-
+    console.log(width, height)
     const { hideModal } = useModal();
     const { setIsReply } = useMsg()
 
