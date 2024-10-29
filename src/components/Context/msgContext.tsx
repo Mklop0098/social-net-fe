@@ -13,6 +13,7 @@ export const MsgContextProvider: React.FC<PropsWithChildren> = (props) => {
     const [activeChatList, setActiveChatList] = useState<ChatListType[]>([]);
     const [minimizeChatBoxList, setMinimizeChatBoxList] = useState<ChatListType[]>([]);
     const [newMessage, setNewMessage] = useState<boolean>(false)
+    const [isReply, setIsReply] = useState<string>('')
 
     const addChatList = (userId: string) => {
         const user = activeChatList.find(user => user.userId === userId)
@@ -64,7 +65,7 @@ export const MsgContextProvider: React.FC<PropsWithChildren> = (props) => {
 
 
     return (
-        <MsgContext.Provider value={{ activeChatList, minimizeChatBoxList, newMessage, setNewMessage, addChatList, minimizeChatBox, removeChatBox }}>
+        <MsgContext.Provider value={{ activeChatList, minimizeChatBoxList, newMessage, isReply, setIsReply, setNewMessage, addChatList, minimizeChatBox, removeChatBox }}>
             {props.children}
         </MsgContext.Provider>
     );

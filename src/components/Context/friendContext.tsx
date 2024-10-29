@@ -30,17 +30,14 @@ export const FriendContextProvider: React.FC<PropsWithChildren> = (props) => {
             }
 
             socket?.on("onlineUser", (updatedOnlineUsers) => {
-                console.log(updatedOnlineUsers)
                 setOnlineFriends(updatedOnlineUsers)
             });
 
             socket?.on("addUserOnline", (updatedOnlineUsers) => {
-                console.log(updatedOnlineUsers)
                 setOnlineFriends(updatedOnlineUsers)
             });
 
             socket?.on("userOffline", (updatedOnlineUsers) => {
-                console.log(updatedOnlineUsers)
                 setOnlineFriends(updatedOnlineUsers)
             });
         }
@@ -55,12 +52,10 @@ export const FriendContextProvider: React.FC<PropsWithChildren> = (props) => {
     }
 
     const addOnlineFriend = (friend: string) => {
-        console.log(onlineFriends, friend)
         setOnlineFriends([...onlineFriends, friend])
     }
 
     const removeOnlineFriend = (friend: string) => {
-        console.log(onlineFriends, friend)
         setOnlineFriends(onlineFriends.filter(f => f !== friend))
     }
 

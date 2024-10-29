@@ -29,8 +29,7 @@ export const ShareModal: React.FC<ShareModalProps> = (props) => {
 
     const handleSubmit = async () => {
         setToast({ open: true, msg: "Đã chia sẻ bài viết" })
-        const res = await sharePost(currentUser._id, post._id, value)
-        console.log(res)
+        await sharePost(currentUser._id, post._id, value)
     }
 
     return (

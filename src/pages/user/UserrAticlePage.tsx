@@ -67,12 +67,10 @@ const UserArticlePage = () => {
     }
 
     useEffect(() => {
-        console.log('adad')
 
         const getAllPost = async () => {
             const res = await getAllUserPost(currentUser._id)
             if (res.data.status) {
-                console.log(res.data.data)
                 setPostList(res.data.post)
             }
         }
@@ -83,11 +81,9 @@ const UserArticlePage = () => {
         let tmp = new Date()
         post.shared.map(share => {
             if (share.userId === currentUser._id) {
-                console.log(post.shared, currentUser._id, timeAgo(share.createAt))
                 tmp = share.createAt
             }
         })
-        console.log(tmp)
         return tmp
     }
 
@@ -95,7 +91,6 @@ const UserArticlePage = () => {
         let tmp = ''
         post.shared.map(share => {
             if (share.userId === currentUser._id) {
-                console.log(post.shared, currentUser._id, timeAgo(share.createAt))
                 tmp = share.comment
             }
         })

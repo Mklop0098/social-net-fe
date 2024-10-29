@@ -19,7 +19,6 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const res = await login(input);
-    console.log(res);
     const { msg, status, user } = res.data;
     if (status) {
       localStorage.setItem("chat-app-current-user", JSON.stringify(user));

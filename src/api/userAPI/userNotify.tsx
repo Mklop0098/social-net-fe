@@ -4,7 +4,6 @@ import axios from "axios"
 import { createNotifyRoute, getAllNotifiesRoute, readNotifiesRoute } from "../ultils"
 
 export const createNotify = async (userId: string, notify: string, type: string, from: string) => {
-    console.log('a')
     const res = await axios.post(createNotifyRoute, {
         userId, notify, type, from
     })

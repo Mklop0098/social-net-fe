@@ -40,7 +40,6 @@ function SearchPage() {
         }
     }, [currentUser, match.value])
 
-    console.log(users.length)
 
     return (
         <div className="col-span-4 min-h-[93vh] bg-gray-100 flex flex-col">

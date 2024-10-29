@@ -30,7 +30,6 @@ export const HomeLayout: React.FC<PropsWithChildren> = ({ children }) => {
   const [friends, setFriends] = useState<UserType[]>([]);
   const { onlineFriends } = useFriend()
 
-  console.log(onlineFriends)
 
   useEffect(() => {
     const currentUserId = JSON.parse(

@@ -11,6 +11,8 @@ import { ChatMonitor } from "../../components/Chat/ChatMonitor";
 import { useUser } from "../../components/Context/userContext";
 import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 import { getAllImages } from "../../api/userAPI/useFirebase";
+import { Input } from 'antd'
+import { createStory } from '../../api/userAPI/useStory'
 import "./style.css";
 
 export const CreateStatus = () => {
@@ -22,6 +24,7 @@ export const CreateStatus = () => {
   const [bgList, setBgList] = useState<string[]>([]);
   const [currentBg, setCurrentBg] = useState("");
   const [value, setValue] = useState("");
+  const [link, setLink] = useState("")
 
   useEffect(() => {
     if (!localStorage.getItem("chat-app-current-user")) {
@@ -50,6 +53,14 @@ export const CreateStatus = () => {
     };
     getImg();
   }, []);
+
+  const handlePostStory = async () => {
+    const res = await createStory(currentUser._id, value, currentBg, link)
+    setToast({ open: true, msg: res.data.msg })
+    if (res.status) {
+      navigate('/')
+    }
+  }
 
   return (
     <div className="h-[100vh] flex flex-col relative">
@@ -111,6 +122,12 @@ export const CreateStatus = () => {
                           ))}
                         </div>
                       </div>
+                      <div className="border border-[#bdbdbd] flex flex-col rounded-lg mt-4 p-4">
+                        <div>Điều hướng</div>
+                        <div className="mt-4">
+                          <Input className="w-full" onChange={e => setLink(e.target.value)} />
+                        </div>
+                      </div>
                     </div>
                     <div className="flex flex-row items-center justify-evenly mt-12">
                       <button
@@ -122,7 +139,7 @@ export const CreateStatus = () => {
                       >
                         Bỏ
                       </button>
-                      <button className="bg-[--primary-color] text-white py-2 px-12 rounded-md">
+                      <button className="bg-[--primary-color] text-white py-2 px-12 rounded-md" onClick={handlePostStory}>
                         Chia sẻ lên tin
                       </button>
                     </div>
@@ -174,17 +191,16 @@ export const CreateStatus = () => {
                 </div>
               )}
             </div>
-
-            <Snackbar
-              open={toast.open}
-              onClose={() => setToast({ open: false, msg: "" })}
-              autoHideDuration={6000}
-              message={toast.msg}
-            />
           </div>
         </div>
       </div>
       <ChatMonitor shortcut={false} />
+      <Snackbar
+        open={toast.open}
+        onClose={() => setToast({ open: false, msg: "" })}
+        autoHideDuration={6000}
+        message={toast.msg}
+      />
     </div>
   );
 };

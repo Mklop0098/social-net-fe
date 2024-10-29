@@ -110,7 +110,6 @@ const Post: React.FC<PostProps> = (props) => {
             setCurrentPost(currentPost => {
                 currentPost.likes.push({ userId: currentUser._id })
                 const newPost = JSON.parse(JSON.stringify(currentPost))
-                console.log(newPost)
                 return newPost
             })
         }

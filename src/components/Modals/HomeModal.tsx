@@ -43,7 +43,6 @@ export const HomeModal: React.FC<HomeModalProps> = (props) => {
 
         try {
             const linksReturn: string[] = await Promise.all(uploadPromises);
-            console.log('All images uploaded successfully', linksReturn);
             onSubmit(valueRef.current, linksReturn)
             hideModal()
         } catch (error) {

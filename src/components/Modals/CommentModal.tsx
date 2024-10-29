@@ -3,33 +3,63 @@ import { Divider } from "@mui/material"
 import { useModal } from "../Context/modalContext"
 import { IoMdClose } from "react-icons/io";
 import { FaEarthAsia } from "react-icons/fa6";
-import { PostListType, UserType, ReactType } from "../../type";
+import { PostListType, UserType, ReactType, CommentType } from "../../type";
 import { useEffect, useState } from "react";
 import { getAllUser } from "../../api/userAPI/userAuth";
 import { timeAgo } from "../../ultils";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { useSocket } from "../Context/socketIOContext";
-import { likePost, removeLikePost, commentPost } from '../../api/userAPI/usePost'
+import { likePost, removeLikePost, commentPost, getPostById } from '../../api/userAPI/usePost'
 import { createNotify } from "../../api/userAPI/userNotify"
 import { VscComment } from "react-icons/vsc";
 import { PiShareFatLight } from "react-icons/pi";
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { IoSend } from 'react-icons/io5'
 import { PostImages } from "../ImageHandler/PostImages";
-
+import { ShowComment } from './ShowComment';
 
 type CommentModalProps = {
-    post: PostListType
+    post: PostListType;
 }
 
+
 type PostCaculate = {
-    comments: {
-        userId: string;
-        comment: string;
-        createAt: Date;
-    }[];
+    comments: CommentType[];
     likes: ReactType[];
     shared: ReactType[];
+}
+
+const convertToNested = (comments: CommentType[]) => {
+    const res: CommentType[] = []
+    const addChildToComment = (comments: CommentType[], parents: string[], newChild: CommentType): boolean => {
+        for (const comment of comments) {
+            if (
+                comment.parents.length === parents.length &&
+                comment.parents.every((parent, index) => parent === parents[index])
+            ) {
+                comment.child.push(newChild);
+                return true;
+            }
+
+            if (addChildToComment(comment.child, parents, newChild)) {
+                return true;
+            }
+        }
+        return false;
+    };
+    if (comments.length > 0) {
+        comments.map(comment => {
+            if (comment.parents.length === 1) {
+                res.push(comment)
+            }
+            else if (comment.parents.length > 1) {
+                const tmp: string[] = JSON.parse(JSON.stringify(comment.parents))
+                tmp.pop()
+                addChildToComment(res, tmp, comment);
+            }
+        })
+    }
+    return res
 }
 
 export const CommentModal: React.FC<CommentModalProps> = (props) => {
@@ -41,14 +71,28 @@ export const CommentModal: React.FC<CommentModalProps> = (props) => {
     const { socket } = useSocket()
     const [currentPost, setCurrentPost] = useState<PostCaculate>({} as PostCaculate)
     const [value, setValue] = useState("")
+    const [reply, setReply] = useState("")
+    const [postData, setPostData] = useState<PostListType>({} as PostListType)
 
     const handleClick = () => {
         hideModal()
     }
 
     useEffect(() => {
-        setCurrentPost({ comments: post.comments, likes: post.likes, shared: post.shared })
+        const getPost = async () => {
+            const res = await getPostById(post._id)
+            if (res.status) {
+                setPostData(res.data.post[0])
+            }
+        }
+        getPost()
     }, [])
+
+    useEffect(() => {
+        setCurrentPost({ comments: postData.comments, likes: postData.likes, shared: postData.shared })
+    }, [postData])
+
+
 
     const getCurrentFriend = (userId: string) => {
         const test = users.find(user => user._id === userId)
@@ -108,7 +152,6 @@ export const CommentModal: React.FC<CommentModalProps> = (props) => {
             setCurrentPost(currentPost => {
                 currentPost.likes.push({ userId: currentUser._id })
                 const newPost = JSON.parse(JSON.stringify(currentPost))
-                console.log(newPost)
                 return newPost
             })
         }
@@ -135,7 +178,7 @@ export const CommentModal: React.FC<CommentModalProps> = (props) => {
         }
     }, [currentUser])
 
-    const handleComment = async () => {
+    const handleComment = async (parents?: string[]) => {
         if (value !== '') {
             if (currentUser._id !== post.owner) {
                 await createNotify(post.owner, `${currentUser.firstName + " " + currentUser.lastName} đã bình luận một bài viết của bạn`, 'comment', currentUser._id)
@@ -145,16 +188,32 @@ export const CommentModal: React.FC<CommentModalProps> = (props) => {
                 owner: post.owner,
                 postId: post._id
             });
-            await commentPost(currentUser._id, post._id, value)
-            const time = new Date()
-            setCurrentPost(currentPost => {
-                currentPost.comments.splice(0, 0, { userId: currentUser._id, comment: value, createAt: time })
-                const newPost = JSON.parse(JSON.stringify(currentPost))
-                return newPost
-            })
+            const res = await commentPost(currentUser._id, post._id, value, parents)
+            if (res.status) {
+                setPostData(res.data.result[0])
+            }
             setValue("")
         }
     }
+
+    const handleReply = async (parents?: string[]) => {
+        if (reply !== '') {
+            if (currentUser._id !== post.owner) {
+                await createNotify(post.owner, `${currentUser.firstName + " " + currentUser.lastName} đã bình luận một bài viết của bạn`, 'comment', currentUser._id)
+            }
+            socket?.emit("comment-post", {
+                userId: currentUser._id,
+                owner: post.owner,
+                postId: post._id
+            });
+            const res = await commentPost(currentUser._id, post._id, reply, parents)
+            if (res.status) {
+                setPostData(res.data.result[0])
+            }
+            setReply("")
+        }
+    }
+
 
     return (
         <div className="xs:w-full xs:max-w-[680px] max-h-[90%] h-fit flex flex-col justify-between m-auto top-0 left-0 bottom-0 right-0 absolute bg-white rounded-lg">
@@ -236,31 +295,11 @@ export const CommentModal: React.FC<CommentModalProps> = (props) => {
                         }
                     </div>
                     <Divider />
+
                     <div className="flex flex-col pb-2 my-4">
                         {
-                            post.comments.map((com, key) => (
-                                <div className="flex flex-row items-start mb-4" key={key}>
-                                    <div className="w-8 h-8 bg-blue-200 rounded-full overflow-hidden" style={{ backgroundImage: `url(${com.userId !== currentUser._id ? getUserData(com.userId).avatar : currentUser.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
-
-                                    </div>
-                                    <div className="ml-4">
-                                        <div className="bg-gray-100 rounded-xl flex w-fit flex-col py-1 px-3 text-md">
-                                            <div className="flex flex-row items-center">
-                                                <div
-                                                    className="font-semibold text-sm">
-                                                    {getCurrentFriend(com.userId) !== '' ? getCurrentFriend(com.userId) : currentUser.firstName + " " + currentUser.lastName}
-                                                </div>
-                                                {
-                                                    com.userId === post.owner && <div className="pl-4 text-sm text-blue-500">Tác giả</div>
-                                                }
-                                            </div>
-                                            <p>{com.comment}</p>
-                                        </div>
-                                        <p className="text-sm mt-1 ml-2.5 text-gray-500">{timeAgo(com.createAt)}</p>
-                                    </div>
-
-
-                                </div>
+                            postData.comments && convertToNested(JSON.parse(JSON.stringify(postData.comments))).map((com, key) => (
+                                <ShowComment comment={com} post={postData} key={key} parents={[com._id]} onChange={setReply} onSubmit={handleReply} />
                             ))
                         }
                     </div>
@@ -279,7 +318,7 @@ export const CommentModal: React.FC<CommentModalProps> = (props) => {
                         value={value}
                     />
                 </div>
-                <div className="pl-3" onClick={handleComment}>
+                <div className="pl-3" onClick={() => handleComment()}>
                     <IoSend className="text-gray-500" />
                 </div>
             </div>

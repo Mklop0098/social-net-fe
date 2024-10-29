@@ -201,7 +201,6 @@ const SubHeader = () => {
     }
 
     useEffect(() => {
-        console.log('a')
         if (currentUser._id) {
             const getReceive = async () => {
                 const res = await GetReceiveMessage(currentUser._id)

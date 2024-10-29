@@ -37,7 +37,6 @@ export const ChangeImage: React.FC<ChangeImageProps> = ({ userInfo, state, onCha
 
         try {
             const linksReturn: string[] = await Promise.all(uploadPromises);
-            console.log('All images uploaded successfully', linksReturn);
             if (state === "background") {
                 const res = await setBgImage(currentUser._id, linksReturn[0])
                 if (res.data.status) {

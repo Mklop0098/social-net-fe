@@ -1,4 +1,5 @@
 export const host = 'https://social-test-be.onrender.com';
+// export const host = 'http://localhost:5000';
 
 export const registerRoute = `${host}/api/auth/register`
 export const loginRoute = `${host}/api/auth/login`
@@ -24,11 +25,13 @@ export const getAllMessageRoute = `${host}/api/messages/getmsg`
 export const getReceiveMessageRoute = `${host}/api/messages/getreceive`
 
 export const createPostRoute = `${host}/api/post/create`
+export const getAllUserPostRoute = `${host}/api/post/getuserposts`
 export const getAllPostsRoute = `${host}/api/post/getall`
 export const likePostRoute = `${host}/api/post/likepost`
 export const removeLikePostRoute = `${host}/api/post/removelike`
-export const getAllUserPostRoute = `${host}/api/post/getuserposts`
 export const getPostByIdRoute = `${host}/api/post/getpost`
 export const commentPostRoute = `${host}/api/post/commentpost`
 export const sharePostRoute = `${host}/api/post/sharepost`
 
+export const createStoryRoute = `${host}/api/story/create`
+export const getAllUserStoryRoute = `${host}/api/story/getuserstory`

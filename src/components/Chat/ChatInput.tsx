@@ -30,7 +30,6 @@ const ChatInput: React.FC<ChatInputProps> = (props) => {
 
   const handleSubmit = async (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     e.preventDefault()
-    console.log(uploadImages)
     const msgs = [...messages];
     msgs.push({ fromSelf: true, message: msg, imgs: getUrls(uploadImages) });
     setMessages(msgs);

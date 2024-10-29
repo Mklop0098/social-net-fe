@@ -2,6 +2,7 @@
 import ReactDOM from 'react-dom';
 import { useModal } from '../components/Context/modalContext';
 import { ReactNode, useRef } from 'react';
+import { useMsg } from '../components/Context/msgContext'
 
 type ModalProps = {
     root: string,
@@ -17,10 +18,10 @@ export const Modal: React.FC<ModalProps> = (props) => {
     const { root, toggle, body, width = 50, height = 50, onClick = () => { } } = props;
 
     const { hideModal } = useModal();
+    const { setIsReply } = useMsg()
 
     const ref = useRef<HTMLDivElement>(null);
 
-    console.log(height, width)
 
     if (toggle && root) {
         const el: HTMLElement = document.getElementById(root) as HTMLElement;
@@ -33,6 +34,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
                     }}
                     onClick={() => {
                         hideModal()
+                        setIsReply('')
                         onClick()
                     }}
                 />

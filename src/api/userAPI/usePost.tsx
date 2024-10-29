@@ -3,7 +3,6 @@ import { createPostRoute, getAllPostsRoute, likePostRoute, removeLikePostRoute, 
 
 
 export const createPost = async (owner: string, post: string, images: string[]) => {
-    console.log(owner, post, images)
     const res = await axios.post(createPostRoute, {
         owner, post, images
     })
@@ -33,7 +32,6 @@ export const getPostById = async (id: string) => {
 
 export const likePost = async (userId: string, postId: string) => {
 
-    console.log(userId, postId)
     const res = await axios.post(likePostRoute, {
         userId, postId
     })
@@ -41,18 +39,16 @@ export const likePost = async (userId: string, postId: string) => {
     return res
 }
 
-export const commentPost = async (userId: string, postId: string, comment: string) => {
+export const commentPost = async (userId: string, postId: string, comment: string, parents?: string[]) => {
 
     const res = await axios.post(commentPostRoute, {
-        userId, postId, comment
+        userId, postId, comment, parents
     })
 
     return res
 }
 
 export const removeLikePost = async (userId: string, postId: string) => {
-
-    console.log(userId, postId)
     const res = await axios.post(removeLikePostRoute, {
         userId, postId
     })

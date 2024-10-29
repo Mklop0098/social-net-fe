@@ -1,0 +1,15 @@
+.comment-before {
+    flex: 1;
+    width: 1px;
+    height: 100%;
+}
+
+.comment-before::before {
+    content: '';
+    min-width: 1px;
+    height: 100%;
+    background-color: rgb(212, 212, 212);
+    position: absolute;
+    top: 55px;
+    left: 2.5%;
+}

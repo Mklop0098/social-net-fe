@@ -110,7 +110,6 @@ const Post: React.FC<PostProps> = (props) => {
             setCurrentPost(currentPost => {
                 currentPost.likes.push({ userId: currentUser._id })
                 const newPost = JSON.parse(JSON.stringify(currentPost))
-                console.log(newPost)
                 return newPost
             })
         }
@@ -130,7 +129,6 @@ const Post: React.FC<PostProps> = (props) => {
             root: 'modal-root',
             width: 36,
             height: 90,
-            // body: <div>hello</div>,
             body: <CommentModal post={post} />,
         }
         showModal(test);

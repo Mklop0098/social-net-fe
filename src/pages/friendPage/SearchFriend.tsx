@@ -4,7 +4,7 @@ import { ToastType, UserType } from "../../type"
 import FriendBox from "../../components/FriendBox"
 import { addFriendList } from "../../api/userAPI/useFriend"
 import { Snackbar } from "@mui/material"
-import {getRequestFriendDataList} from '../../api/userAPI/useFriend'
+import { getRequestFriendDataList } from '../../api/userAPI/useFriend'
 
 function SearchFriend() {
 
@@ -16,19 +16,17 @@ function SearchFriend() {
         if (currentUser._id) {
             const getFriendListData = async () => {
                 const friends = await getRequestFriendDataList(currentUser._id)
-                console.log(friends)
                 if (friends.data.status) {
                     setRequests(friends.data.data)
                 }
-                
-            } 
+
+            }
             getFriendListData()
         }
     }, [currentUser])
 
     const handleAddFriend = async (userId: string, friendId: string) => {
         const res = await addFriendList(userId, friendId)
-        console.log('abc')
         if (res.data.status) {
             setRequests(requests.filter(req => req._id !== friendId))
             setToast({ open: true, msg: "Thêm bạn bè thành công" })

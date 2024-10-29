@@ -1,20 +1,19 @@
 
-import {getFriendDataList} from '../../api/userAPI/useFriend'
-import {useEffect} from 'react'
-import {useUser} from '../../components/Context/userContext'
+import { getFriendDataList } from '../../api/userAPI/useFriend'
+import { useEffect } from 'react'
+import { useUser } from '../../components/Context/userContext'
 
 function FriendPageEmpty() {
 
-    const {currentUser} = useUser()
+    const { currentUser } = useUser()
 
     useEffect(() => {
 
         if (currentUser._id) {
             const getDt = async () => {
-                const data = await getFriendDataList(currentUser._id)
-                console.log(data)
+                await getFriendDataList(currentUser._id)
             }
-    
+
             getDt()
         }
 

@@ -18,7 +18,6 @@ function Register() {
         e.preventDefault()
         const res = await register(input)
         const { msg, status, user } = res.data
-        console.log(msg, status, user)
         if (status) {
             localStorage.setItem(
                 'chat-app-current-user',

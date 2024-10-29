@@ -80,7 +80,6 @@ export const FriendDetailPage = () => {
         let tmp = new Date()
         post.shared.map(share => {
             if (share.userId === userInfo._id) {
-                console.log(post.shared, userInfo._id, timeAgo(share.createAt))
                 tmp = share.createAt
             }
         })
@@ -91,7 +90,6 @@ export const FriendDetailPage = () => {
         let tmp = ''
         post.shared.map(share => {
             if (share.userId === userInfo._id) {
-                console.log(post.shared, userInfo._id, timeAgo(share.createAt))
                 tmp = share.comment
             }
         })
@@ -108,8 +106,6 @@ export const FriendDetailPage = () => {
         await addRequestList(friendId, currentUser._id)
         setToast({ open: true, msg: res.data.msg })
     }
-
-    console.log(friends)
 
     return (
         <div className='h-[93vh] flex flex-col relative'>

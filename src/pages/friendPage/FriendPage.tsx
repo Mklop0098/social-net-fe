@@ -25,7 +25,6 @@ export const FriendPage = () => {
     const [friend, setFriend] = useState<UserType[]>([])
 
     useEffect(() => {
-        console.log(match.id)
         const getCurrentUser = async () => {
             if (match.id) {
                 const test = await getUser(match.id)
@@ -80,11 +79,9 @@ export const FriendPage = () => {
         let tmp = new Date()
         post.shared.map(share => {
             if (share.userId === userInfo._id) {
-                console.log(post.shared, userInfo._id, timeAgo(share.createAt))
                 tmp = share.createAt
             }
         })
-        console.log(tmp)
         return tmp
     }
 
@@ -92,7 +89,6 @@ export const FriendPage = () => {
         let tmp = ''
         post.shared.map(share => {
             if (share.userId === userInfo._id) {
-                console.log(post.shared, userInfo._id, timeAgo(share.createAt))
                 tmp = share.comment
             }
         })

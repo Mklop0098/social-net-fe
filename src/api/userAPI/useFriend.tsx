@@ -10,7 +10,6 @@ export const createData = async (userId: string) => {
 }
 
 export const addRequestList = async (userId: string, friendId: string) => {
-    console.log(userId)
     const res = await axios.post(addRequestListRoute, {
         userId, friendId
     })
@@ -32,11 +31,10 @@ export const getFriendDataList = async (userId: string) => {
     })
 
     return res
-    
+
 }
 
 export const getRequestFriendDataList = async (userId: string) => {
-    console.log('p', userId)
     const res = await axios.post(getRequestFriendDataListRoute, {
         userId
     })

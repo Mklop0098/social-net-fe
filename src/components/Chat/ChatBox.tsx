@@ -42,7 +42,6 @@ const ChatBox: React.FC<ChatBoxProps> = (props) => {
             "msg-receive",
             (data: { from: string; to: string; msg: { text: string, imgs: string[] } }) => {
                 if (data.from === user.userId) {
-                    console.log(data)
                     setArrivalMessage({ fromSelf: false, message: data.msg.text, imgs: data.msg.imgs });
                 }
             }

@@ -10,7 +10,7 @@ import { Snackbar } from "@mui/material"
 import { FaUserPlus, FaUserClock } from "react-icons/fa6";
 import { HiUsers } from "react-icons/hi2";
 import { Link } from 'react-router-dom'
-import {getRequestFriendDataList} from '../../api/userAPI/useFriend'
+import { getRequestFriendDataList } from '../../api/userAPI/useFriend'
 
 function HomeFriendsPage() {
 
@@ -31,12 +31,11 @@ function HomeFriendsPage() {
             getAllUserInfo()
             const getFriendListData = async () => {
                 const friends = await getRequestFriendDataList(currentUser._id)
-                console.log(friends)
                 if (friends.data.status) {
                     setRequests(friends.data.data)
                 }
-                
-            } 
+
+            }
             getFriendListData()
         }
     }, [currentUser])
@@ -59,7 +58,6 @@ function HomeFriendsPage() {
 
     const handleAddFriend = async (userId: string, friendId: string) => {
         const res = await addFriendList(userId, friendId)
-        console.log('abc')
         if (res.data.status) {
             setRequests(requests.filter(req => req._id !== friendId))
             setToast({ open: true, msg: "Thêm bạn bè thành công" })
@@ -84,7 +82,7 @@ function HomeFriendsPage() {
                         </div>
                     </Link>
                     <Link to={'/friends/requests'}>
-                        <div className="grid grid-cols-9 py-2 hover:bg-gray-200 py-2 px-4 mx-2 rounded-lg cursor-pointer">  
+                        <div className="grid grid-cols-9 py-2 hover:bg-gray-200 py-2 px-4 mx-2 rounded-lg cursor-pointer">
                             <div className="flex items-center col-span-1 ">
                                 <div className="bg-gray-300 p-1.5 rounded-full">
                                     <FaUserPlus size={20} className="text-black p-0.5" />
@@ -95,10 +93,10 @@ function HomeFriendsPage() {
                     </Link>
                     <div className="grid grid-cols-9 py-2 hover:bg-gray-200 py-2 px-4 mx-2 rounded-lg cursor-pointer">
                         <div className="flex items-center col-span-1 ">
-                                <div className="bg-gray-300 p-1.5 rounded-full">
-                                    <FaUserPlus size={20} className="text-black p-0.5" />
-                                </div>
+                            <div className="bg-gray-300 p-1.5 rounded-full">
+                                <FaUserPlus size={20} className="text-black p-0.5" />
                             </div>
+                        </div>
                         <div className="col-span-7 flex items-center text-md ml-4 font-semibold">Gợi ý</div>
                     </div>
                     <Link to={"/friends/list"}>

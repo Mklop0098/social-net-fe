@@ -29,6 +29,8 @@ export type MsgHookReturn = {
     activeChatList: ChatListType[]
     newMessage: boolean
     minimizeChatBoxList: ChatListType[]
+    isReply: string,
+    setIsReply: (reply: string) => void
     addChatList: (userId: string) => void
     minimizeChatBox: (userId: string) => void
     removeChatBox: (userId: string, state: 'active' | 'minimize') => void
@@ -85,6 +87,7 @@ export type MessageReturnType = {
     fromSelf: boolean
     message: string
     imgs: string[]
+
 }
 
 export type SocketIoHookReturn = {
@@ -110,6 +113,15 @@ export type ReactType = {
     userId: string
 }
 
+export type CommentType = {
+    _id: string;
+    child: CommentType[];
+    parents: string[];
+    userId: string;
+    comment: string;
+    createAt: Date;
+}
+
 export type ShareType = {
     userId: string,
     createAt: Date,
@@ -118,16 +130,22 @@ export type ShareType = {
 
 export type PostListType = {
 
-    comments: {
-        userId: string,
-        comment: string,
-        createAt: Date
-    }[],
+    comments: CommentType[],
     createAt: Date,
     imgaes: string[],
     likes: ReactType[],
     owner: string,
     posts: string,
     shared: ShareType[],
+    _id: string
+}
+
+export type StoryType = {
+    link: string,
+    createAt: Date,
+    background: string,
+    likes: ReactType[],
+    owner: string,
+    story: string,
     _id: string
 }
