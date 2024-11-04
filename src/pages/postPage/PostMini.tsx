@@ -3,12 +3,11 @@ import { AiFillLike, AiOutlineLike } from 'react-icons/ai'
 import { VscComment } from "react-icons/vsc";
 import { PiShareFatLight } from "react-icons/pi";
 import { useUser } from '../../components/Context/userContext'
-import { ModalType, PostListType, ReactType } from "../../type";
+import { ModalType, PostListType, ReactType, CommentType } from "../../type";
 import { timeAgo } from "../../ultils";
 import { Divider } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getAllUser } from "../../api/userAPI/userAuth";
-import { likePost, removeLikePost, commentPost } from '../../api/userAPI/usePost'
 import { useSocket } from "../../components/Context/socketIOContext";
 import { addRequestList } from "../../api/userAPI/useFriend";
 import { createNotify } from "../../api/userAPI/userNotify"
@@ -20,6 +19,9 @@ import { useFriend } from '../../components/Context/friendContext'
 import { BsDot } from "react-icons/bs";
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { IoSend } from 'react-icons/io5'
+import { likePost, removeLikePost, commentPost, getPostById } from '../../api/userAPI/usePost'
+import { ShowComment } from '../../components/Modals/ShowComment';
+import './style.css'
 
 type PostProps = {
     post: PostListType
@@ -45,7 +47,38 @@ const Post: React.FC<PostProps> = (props) => {
     const [currentPost, setCurrentPost] = useState<PostCaculate>({} as PostCaculate)
     const { showModal } = useModal()
     const { friendList } = useFriend()
+    const [reply, setReply] = useState("")
     const [value, setValue] = useState("")
+    const [postData, setPostData] = useState<PostListType>({} as PostListType)
+
+    useEffect(() => {
+        const getPost = async () => {
+            const res = await getPostById(post._id)
+            if (res.status) {
+                setPostData(res.data.post[0])
+            }
+        }
+        getPost()
+    }, [])
+
+
+    const handleReply = async (parents?: string[]) => {
+        if (reply !== '') {
+            if (currentUser._id !== post.owner) {
+                await createNotify(post.owner, `${currentUser.firstName + " " + currentUser.lastName} đã bình luận một bài viết của bạn`, 'comment', currentUser._id)
+            }
+            socket?.emit("comment-post", {
+                userId: currentUser._id,
+                owner: post.owner,
+                postId: post._id
+            });
+            const res = await commentPost(currentUser._id, post._id, reply, parents)
+            if (res.status) {
+                setPostData(res.data.result[0])
+            }
+            setReply("")
+        }
+    }
 
 
     useEffect(() => {
@@ -123,7 +156,10 @@ const Post: React.FC<PostProps> = (props) => {
         return false
     }
 
-    const handleComment = async () => {
+    const handleComment = async (parents?: string[]) => {
+
+        console.log(value)
+
         if (value !== '') {
             if (currentUser._id !== post.owner) {
                 await createNotify(post.owner, `${currentUser.firstName + " " + currentUser.lastName} đã bình luận một bài viết của bạn`, 'comment', currentUser._id)
@@ -133,17 +169,46 @@ const Post: React.FC<PostProps> = (props) => {
                 owner: post.owner,
                 postId: post._id
             });
-            await commentPost(currentUser._id, post._id, value)
-            const time = new Date()
-            setCurrentPost(currentPost => {
-                currentPost.comments.splice(0, 0, { userId: currentUser._id, comment: value, createAt: time })
-                const newPost = JSON.parse(JSON.stringify(currentPost))
-                return newPost
-            })
+            const res = await commentPost(currentUser._id, post._id, value, parents)
+            if (res.status) {
+                setPostData(res.data.result[0])
+            }
             setValue("")
         }
     }
 
+    const convertToNested = (comments: CommentType[]) => {
+        const res: CommentType[] = []
+        const addChildToComment = (comments: CommentType[], parents: string[], newChild: CommentType): boolean => {
+            for (const comment of comments) {
+                if (
+                    comment.parents.length === parents.length &&
+                    comment.parents.every((parent, index) => parent === parents[index])
+                ) {
+                    comment.child.push(newChild);
+                    return true;
+                }
+
+                if (addChildToComment(comment.child, parents, newChild)) {
+                    return true;
+                }
+            }
+            return false;
+        };
+        if (comments.length > 0) {
+            comments.map(comment => {
+                if (comment.parents.length === 1) {
+                    res.push(comment)
+                }
+                else if (comment.parents.length > 1) {
+                    const tmp: string[] = JSON.parse(JSON.stringify(comment.parents))
+                    tmp.pop()
+                    addChildToComment(res, tmp, comment);
+                }
+            })
+        }
+        return res
+    }
 
     const handleShare = () => {
         const test: ModalType = {
@@ -167,27 +232,25 @@ const Post: React.FC<PostProps> = (props) => {
         setToast({ open: true, msg: res.data.msg })
     }
 
-    const getUserData = (userId: string) => {
-        const test = users.find(user => user._id === userId)
+    const toggleContent = () => {
+        const hiddenContent = document.getElementById("hiddenContentMini");
+        const showMoreLink = document.getElementById("showMoreLinkMini");
 
-        if (test) {
-            return test
+        if (hiddenContent && showMoreLink) {
+            if (hiddenContent.style.height === "auto") {
+                hiddenContent.style.height = "4.5em";
+                showMoreLink.innerHTML = "Xem thêm";
+            } else {
+                hiddenContent.style.height = "auto";
+                showMoreLink.innerHTML = "Rút gọn";
+            }
         }
-
-        return {} as UserType
     }
 
-    // const handleProfile = (id: string) => {
-    //     if (id === currentUser._id) {
-    //         navigate(`/${id}`)
-    //     }
-    //     else navigate(`/profile/${id}`)
-    // }
-
     return (
-        <div className="flex flex-col justify-center w-full">
+        <div className="flex flex-col justify-center w-full max-h-[93vh] overflow-y-auto">
             <div className="flex flex-row justify-between items-center p-4">
-                <div className="flex flex-row items-center">
+                <div className="flex flex-row items-center ">
                     <div className="w-12 h-12 bg-gray-200 rounded-full overflow-hidden" style={{ backgroundImage: `url(${post.owner !== currentUser._id ? getCurrentUser(post.owner).avatar : currentUser.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
                     </div>
                     <div className="pl-3">
@@ -222,14 +285,15 @@ const Post: React.FC<PostProps> = (props) => {
                     <IoMdClose size={20} />
                 </div>
             </div>
-            <div>
-                <div className="px-4 mb-4">
-                    {
-                        post.posts
-                    }
+            <div className="max-h-[500px] overflow-y-auto">
+                <div id="hiddenContentMini" className="hidden-content px-4">
+                    <div>
+                        {postData.posts}
+                    </div>
                 </div>
+                <span id="showMoreLinkMini" className="show-more mx-4 font-medium" onClick={toggleContent}>Xem thêm</span>
             </div>
-            <div className="flex flex-col p-4 pb-2">
+            <div className="flex flex-col p-4 pb-2 max-h-[300px]">
                 <div className="flex flex-row justify-between pb-4">
                     <div className="flex flex-row items-center">
                         <div className="p-1 bg-blue-500 rounded-full">
@@ -257,7 +321,7 @@ const Post: React.FC<PostProps> = (props) => {
                         }
                         <p className={`${likeInclude() && 'text-blue-500'} font-semibold pl-2`}>Thích</p>
                     </div>
-                    <div className="flex flex-row justify-center items-center hover:bg-gray-100 py-2 rounded-lg text-gray-500 cursor-pointer" onClick={handleComment}>
+                    <div className="flex flex-row justify-center items-center hover:bg-gray-100 py-2 rounded-lg text-gray-500 cursor-pointer">
 
                         <VscComment size={24} />
                         <p className="font-semibold pl-2">Bình luận</p>
@@ -271,36 +335,15 @@ const Post: React.FC<PostProps> = (props) => {
                     }
                 </div>
                 <Divider />
-                <div className="flex flex-col pb-2 my-4 overflow-y-auto max-h-[600px]">
+                <div className="flex flex-col pb-2 my-4">
                     {
-                        post.comments.map((com, key) => (
-                            <div className="flex flex-row items-start mb-4" key={key}>
-                                <div className="w-8 h-8 bg-blue-200 rounded-full overflow-hidden" style={{ backgroundImage: `url(${com.userId !== currentUser._id ? getUserData(com.userId).avatar : currentUser.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
-
-                                </div>
-                                <div className="ml-4">
-                                    <div className="bg-gray-100 rounded-xl flex w-fit flex-col py-1 px-3 text-md">
-                                        <div className="flex flex-row items-center">
-                                            <div
-                                                className="font-semibold text-sm">
-                                                {getCurrentFriend(com.userId) !== '' ? getCurrentFriend(com.userId) : currentUser.firstName + " " + currentUser.lastName}
-                                            </div>
-                                            {
-                                                com.userId === post.owner && <div className="pl-4 text-sm text-blue-500">Tác giả</div>
-                                            }
-                                        </div>
-                                        <p>{com.comment}</p>
-                                    </div>
-                                    <p className="text-sm mt-1 ml-2.5 text-gray-500">{timeAgo(com.createAt)}</p>
-                                </div>
-
-
-                            </div>
+                        postData.comments && convertToNested(JSON.parse(JSON.stringify(postData.comments))).map((com, key) => (
+                            <ShowComment comment={com} post={post} key={key} parents={[com._id]} onChange={setReply} onSubmit={handleReply} />
                         ))
                     }
                 </div>
-                <div className="flex flex-row pb-4 items-center shadow-md absolute bottom-0">
-                    <div className="w-12 h-12 bg-blue-200 rounded-full overflow-hidden" style={{ backgroundImage: `url(${currentUser.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+                <div className="flex flex-row pb-4 items-center shadow-md ">
+                    <div className="w-12 h-12 bg-blue-200 rounded-full overflow-hidden cursor-pointer" style={{ backgroundImage: `url(${currentUser.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
 
                     </div>
                     <div className="flex-1 bg-gray-100 ml-4 rounded-lg flex flex-row">
@@ -312,7 +355,7 @@ const Post: React.FC<PostProps> = (props) => {
                             value={value}
                         />
                     </div>
-                    <div className="pl-3" onClick={handleComment}>
+                    <div className="pl-3 cursor-pointer" onClick={() => handleComment()}>
                         <IoSend className="text-gray-500" />
                     </div>
                 </div>

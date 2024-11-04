@@ -1,0 +1,15 @@
+.hidden-content {
+    overflow: hidden;
+    line-height: 1.5em;
+    height: 4.5em;
+}
+.show-more {
+display: block;
+cursor: pointer;
+border-radius: 5px;
+max-width: 150px;
+padding: 5px 5px;
+}
+.hidden-content {
+margin-bottom: 10px;
+}

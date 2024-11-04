@@ -9,14 +9,16 @@ import { getAllUser } from "../../api/userAPI/userAuth";
 import { timeAgo } from "../../ultils";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { useSocket } from "../Context/socketIOContext";
-import { likePost, removeLikePost, commentPost, getPostById } from '../../api/userAPI/usePost'
 import { createNotify } from "../../api/userAPI/userNotify"
 import { VscComment } from "react-icons/vsc";
 import { PiShareFatLight } from "react-icons/pi";
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { IoSend } from 'react-icons/io5'
 import { PostImages } from "../ImageHandler/PostImages";
+import { likePost, removeLikePost, commentPost, getPostById } from '../../api/userAPI/usePost'
 import { ShowComment } from './ShowComment';
+
+import './style.css'
 
 type CommentModalProps = {
     post: PostListType;
@@ -72,12 +74,12 @@ export const CommentModal: React.FC<CommentModalProps> = (props) => {
     const [currentPost, setCurrentPost] = useState<PostCaculate>({} as PostCaculate)
     const [value, setValue] = useState("")
     const [reply, setReply] = useState("")
-    const [postData, setPostData] = useState<PostListType>({} as PostListType)
 
     const handleClick = () => {
         hideModal()
     }
 
+    const [postData, setPostData] = useState<PostListType>({} as PostListType)
     useEffect(() => {
         const getPost = async () => {
             const res = await getPostById(post._id)
@@ -178,6 +180,21 @@ export const CommentModal: React.FC<CommentModalProps> = (props) => {
         }
     }, [currentUser])
 
+    const toggleContent = () => {
+        const hiddenContent = document.getElementById("hiddenContentModal");
+        const showMoreLink = document.getElementById("showMoreLinkModal");
+
+        if (hiddenContent && showMoreLink) {
+            if (hiddenContent.style.height === "auto") {
+                hiddenContent.style.height = "4.5em";
+                showMoreLink.innerHTML = "Xem thêm";
+            } else {
+                hiddenContent.style.height = "auto";
+                showMoreLink.innerHTML = "Rút gọn";
+            }
+        }
+    }
+
     const handleComment = async (parents?: string[]) => {
         if (value !== '') {
             if (currentUser._id !== post.owner) {
@@ -245,14 +262,15 @@ export const CommentModal: React.FC<CommentModalProps> = (props) => {
                     </div>
                 </div>
                 <div>
-                    <div className="px-4 mb-4">
-                        {
-                            post.posts
-                        }
+                    <div id="hiddenContentModal" className="hidden-content px-4">
+                        <div>
+                            {post.posts}
+                        </div>
                     </div>
-                    {
+                    <span id="showMoreLinkModal" className="show-more mx-4 font-medium" onClick={toggleContent}>Xem thêm</span>
+                    <div>
                         <PostImages srcs={post} />
-                    }
+                    </div>
                 </div>
                 <div className="flex flex-col p-4 pt-2">
                     <div className="flex flex-row justify-between pb-2 px-2">

@@ -21,6 +21,7 @@ import { useFriend } from '../../components/Context/friendContext'
 import { BsDot } from "react-icons/bs";
 import { useNavigate } from 'react-router-dom'
 import { PostImages } from "../../components/ImageHandler/PostImages";
+import './style.css'
 
 type PostProps = {
     post: PostListType
@@ -163,6 +164,21 @@ const Post: React.FC<PostProps> = (props) => {
         else navigate(`/profile/${id}`)
     }
 
+    const toggleContent = () => {
+        const hiddenContent = document.getElementById("hiddenContent");
+        const showMoreLink = document.getElementById("showMoreLink");
+
+        if (hiddenContent && showMoreLink) {
+            if (hiddenContent.style.height === "auto") {
+                hiddenContent.style.height = "4.5em";
+                showMoreLink.innerHTML = "Xem thêm";
+            } else {
+                hiddenContent.style.height = "auto";
+                showMoreLink.innerHTML = "Rút gọn";
+            }
+        }
+    }
+
     return (
         <div className="flex flex-col justify-center w-full">
             <div className="flex flex-row justify-between items-center p-4">
@@ -202,13 +218,13 @@ const Post: React.FC<PostProps> = (props) => {
                 </div>
             </div>
             <div>
-                <div className="px-4 mb-4">
-                    {
-                        post.posts
-                    }
+                <div id="hiddenContent" className="hidden-content px-4">
+                    <div>
+                        {post.posts}
+                    </div>
                 </div>
+                <span id="showMoreLink" className="show-more mx-4 font-medium" onClick={toggleContent}>Xem thêm</span>
                 <div>
-                    {/* <Carousel srcs={post.imgaes} slidePerView={1} /> */}
                     <PostImages srcs={post} />
                 </div>
             </div>
