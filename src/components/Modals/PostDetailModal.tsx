@@ -201,27 +201,22 @@ export const PostDetail: React.FC<PostDetailProps> = (props) => {
 
 
   return (
-    <div className="top-0 left-0 bottom-0 right-0 absolute bg-white">
-      <div className="grid grid-cols-5 w-[100vw] h-[100vh]">
-        <div className="absolute top-0 left-0 flex items-center px-10 text-white z-50">
+    <div className="top-0 left-0 bottom-0 right-0 absolute bg-white w-[100vw] h-[100vh]">
+      <div className="grid grid-cols-5 ">
+        <div className="absolute top-0 left-0 flex items-center justify-between w-full pl-10 pr-4 text-white z-50">
           <div className="flex items-center h-[60px]" onClick={hideModal}>
             <div className="w-10 h-10 bg-gray-500 flex items-center justify-center rounded-full cursor-pointer">
               <IoMdClose size={22} />
             </div>
             <div className="w-10 h-10 bg-[--primary-color] rounded-full ml-2  cursor-pointer"></div>
           </div>
-        </div>
-        <div className="col-span-4 bg-black">
-          <Carousel srcs={post.imgaes || []} slidePerView={1} />
-        </div>
-        <div className="flex flex-col relative">
-          <div className="flex flex-row justify-end items-center pl-4 h-[60px] pr-4 shadow-md">
+          <div className="flex flex-row items-center">
             <div
               ref={messRef}
               className="p-2.5 mx-2 bg-gray-200 rounded-full cursor-pointer relative"
               onClick={handleShowMess}
             >
-              <FaFacebookMessenger size={20} />
+              <FaFacebookMessenger size={20} className="text-black" />
               {
                 newMessage && <div className="w-3 h-3 bg-red-500 absolute top-0 right-0 rounded-full"></div>
               }
@@ -231,7 +226,7 @@ export const PostDetail: React.FC<PostDetailProps> = (props) => {
               ref={notifyRef}
               onClick={handleClickNotify}
             >
-              <FaBell size={20} />
+              <FaBell size={20} className="text-black" />
               {
                 (haveUnreadNotify(notifies) || newNotify) && <div className="w-3 h-3 bg-red-500 absolute top-0 right-0 rounded-full"></div>
               }
@@ -244,6 +239,14 @@ export const PostDetail: React.FC<PostDetailProps> = (props) => {
             >
 
             </div>
+          </div>
+        </div>
+        <div className="col-span-4 bg-black">
+          <Carousel srcs={post.imgaes || []} slidePerView={1} />
+        </div>
+        <div className="flex flex-col relative">
+          <div className="flex flex-row justify-end items-center pl-4 h-[60px] pr-4 shadow-md">
+
             <CustomMenu
               anchorEl={messRef.current}
               open={showMess}
@@ -339,7 +342,7 @@ export const PostDetail: React.FC<PostDetailProps> = (props) => {
               </div>
             </CustomMenu>
           </div >
-          <div>
+          <div className="max-h-[93vh] overflow-y-auto">
             <PostMini post={post} setToast={setToast} />
           </div>
         </div>

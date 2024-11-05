@@ -20,6 +20,7 @@ import { GetReceiveMessage } from '../../api/userAPI/useMessage'
 import { IoSearchOutline } from "react-icons/io5";
 import { normalizeText } from 'normalize-text';
 import { useFriend } from '../Context/friendContext'
+import './style.css'
 
 type HeaderProps = {
     defaultStatus?: string
@@ -276,17 +277,17 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
     }, [])
 
     return (
-        <div className="grid md:grid-cols-3 xs:grid-cols-2 gap-4 px-4 shadow-sm bg-white h-[4rem]">
+        <div className="header-wrapper md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 mx-4 shadow-sm bg-white 2xs:h-[8rem] md:h-[4rem]">
             <div className="flex flex-row items-center">
                 <Link to={"/"}>
-                    <div className="w-12 h-12 bg-[--primary-color] rounded-full mr-2"></div>
+                    <div className="w-12 h-12 bg-[--primary-color] rounded-full mr-4"></div>
                 </Link>
-                <div className="border rounded-full bg-gray-100 flex flex-row items-center xs:justify-center relative z-50">
+                <div className="2xs:flex-1 md:max-w-[300px] border rounded-full bg-gray-100 flex flex-row items-center xs:justify-center relative z-50">
                     <div className="w-[40px] h-[40px] flex justify-center items-center ">
                         <IoSearchOutline size={20} />
                     </div>
                     <input
-                        className="xs:hidden lg:block py-3 ml-1 bg-gray-100 outline-none w-80 text-md mr-3 h-[40px]"
+                        className="lg:block flex-1 py-3 ml-1 bg-gray-100 outline-none text-md mr-3 h-[40px]"
                         type="text"
                         placeholder="Bạn đang tìm kiếm gì?"
                         onChange={e => setValue(e.target.value)}
@@ -327,7 +328,7 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
                         </div>}
                 </div>
             </div>
-            <div className="flex flex-row justify-center items-center h-full xs:hidden sm:hidden md:flex">
+            <div className="flex flex-row justify-center items-center h-full 2xs:hidden lg:flex">
                 <Link to={'/'} className="h-[94%] mt-auto">
                     <div
                         className={`${status === 'newFeed' ? 'border-blue-500/100' : 'border-indigo-500/0'} 
@@ -347,34 +348,53 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
                     </div>
                 </Link>
             </div>
-            <div className="flex flex-row justify-end items-center pl-4">
-                <div
-                    ref={messRef}
-                    className="p-2.5 mx-2 bg-gray-200 rounded-full cursor-pointer relative"
-                    onClick={handleShowMess}
-                >
-                    <FaFacebookMessenger size={20} />
-                    {
-                        newMessage && <div className="w-3 h-3 bg-red-500 absolute top-0 right-0 rounded-full"></div>
-                    }
+            <div className="flex flex-row 2xs:justify-between md:justify-end items-center">
+                <div className="2xs:flex flex flex-row justify-start lg:hidden">
+                    <Link to={'/'} className="h-[94%] mt-auto">
+                        <div
+                            className="p-2.5 mr-2 bg-gray-200 rounded-full cursor-pointer relative"
+                            onClick={() => setStatus('newFeed')}
+                        >
+                            <IoHomeOutline size={20} />
+                        </div>
+                    </Link>
+                    <Link to={'/friends'} className="h-[94%] mt-auto" onClick={() => setStatus('friends')}>
+                        <div
+                            className="p-2.5 mx-2 bg-gray-200 rounded-full cursor-pointer relative"
+                            onClick={() => setStatus('friends')}
+                        >
+                            <HiOutlineUsers size={20} />
+                        </div>
+                    </Link>
                 </div>
-                <div
-                    className="p-2.5 mx-2 bg-gray-200 rounded-full cursor-pointer relative"
-                    ref={notifyRef}
-                    onClick={handleClickNotify}
-                >
-                    <FaBell size={20} />
-                    {
-                        (haveUnreadNotify(notifies) || newNotify) && <div className="w-3 h-3 bg-red-500 absolute top-0 right-0 rounded-full"></div>
-                    }
-                </div>
-                <div
-                    className="ml-2 w-11 h-11 bg-gray-200 rounded-full cursor-pointer overflow-hidden"
-                    ref={infoRef}
-                    onClick={() => setShowInfo(true)}
-                    style={{ backgroundImage: `url(${currentUser.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}
-                >
-
+                <div className="flex flex-row justify-end items-center">
+                    <div
+                        ref={messRef}
+                        className="p-2.5 mx-2 bg-gray-200 rounded-full cursor-pointer relative"
+                        onClick={handleShowMess}
+                    >
+                        <FaFacebookMessenger size={20} />
+                        {
+                            newMessage && <div className="w-3 h-3 bg-red-500 absolute top-0 right-0 rounded-full"></div>
+                        }
+                    </div>
+                    <div
+                        className="p-2.5 mx-2 bg-gray-200 rounded-full cursor-pointer relative"
+                        ref={notifyRef}
+                        onClick={handleClickNotify}
+                    >
+                        <FaBell size={20} />
+                        {
+                            (haveUnreadNotify(notifies) || newNotify) && <div className="w-3 h-3 bg-red-500 absolute top-0 right-0 rounded-full"></div>
+                        }
+                    </div>
+                    <div
+                        className="ml-2 w-11 h-11 bg-gray-200 rounded-full cursor-pointer overflow-hidden"
+                        ref={infoRef}
+                        onClick={() => setShowInfo(true)}
+                        style={{ backgroundImage: `url(${currentUser.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}
+                    >
+                    </div>
                 </div>
                 <CustomMenu
                     anchorEl={messRef.current}

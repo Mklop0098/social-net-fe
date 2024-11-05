@@ -7,6 +7,7 @@ import { NotifyContextProvider } from './components/Context/notifyContext.tsx'
 import { FriendContextProvider } from './components/Context/friendContext.tsx'
 import { SocketIoContextProvider } from './components/Context/socketIOContext.tsx'
 import { ModalContextProvider } from './components/Context/modalContext.tsx'
+import { PostContextProvider } from './components/Context/postContext.tsx'
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -17,11 +18,13 @@ root.render(
     <UserContextProvider>
       <MsgContextProvider>
         <NotifyContextProvider>
-          <FriendContextProvider>
-            <ModalContextProvider>
-              <App />
-            </ModalContextProvider>
-          </FriendContextProvider>
+          <PostContextProvider>
+            <FriendContextProvider>
+              <ModalContextProvider>
+                <App />
+              </ModalContextProvider>
+            </FriendContextProvider>
+          </PostContextProvider>
         </NotifyContextProvider>
       </MsgContextProvider>
     </UserContextProvider>

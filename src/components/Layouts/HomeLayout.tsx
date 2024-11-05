@@ -78,7 +78,7 @@ export const HomeLayout: React.FC<PropsWithChildren> = ({ children }) => {
         <div className="h-[93vh] overflow-y-hidden flex flex-col ">
           <div className="flex-1 ">
             <div className="relative">
-              <div className="h-full w-[20%] xs:hidden xl:block absolute">
+              <div className="h-full w-[20%] 2xs:hidden xl:block absolute">
                 <div className="h-[93vh] overflow-y-auto flex flex-col font-semibold py-5">
                   <Link to={`${currentUser._id}`}>
                     <div className="py-3 px-4 hover:bg-gray-200 grid grid-cols-9 items-center rounded-lg cursor-pointer">
@@ -108,7 +108,7 @@ export const HomeLayout: React.FC<PropsWithChildren> = ({ children }) => {
               </div>
 
               <div className="bg-gray-100 col-span-3 ">{children}</div>
-              <div className="h-full w-[20%] absolute right-1 top-0">
+              <div className="h-full w-[20%] absolute right-1 top-0 2xs:hidden">
                 <div className="max-h-[93vh] overflow-y-auto flex flex-col p-3">
                   <div className="flex flex-row items-center justify-between p-2">
                     <span className="text-lg font-semibold">Người liên hệ</span>

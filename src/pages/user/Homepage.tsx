@@ -1,10 +1,9 @@
 import { useUser } from "../../components/Context/userContext";
 import { useState, useRef, useEffect, useLayoutEffect } from "react";
-import { ModalType, PostListType, ToastType } from "../../type";
+import { ModalType, ToastType } from "../../type";
 import { Divider } from "@mui/material";
 import { FaImages } from "react-icons/fa6";
 import { useModal } from "../../components/Context/modalContext";
-import { createPost, getAllPost } from "../../api/userAPI/usePost";
 import { HomeModal } from "../../components/Modals/HomeModal";
 import Post from "../postPage/Post";
 import Skeletons from "../../components/Skeleton";
@@ -12,6 +11,7 @@ import Snackbar from "@mui/material/Snackbar";
 import { Link, useNavigate } from "react-router-dom";
 import { LoadingModal } from "../../components/Modals/LoadingModal";
 import { Status } from "../Status/Status";
+import { usePost } from '../../components/Context/postContext'
 
 function Homepage() {
     const navigate = useNavigate();
@@ -20,9 +20,12 @@ function Homepage() {
     const [toast, setToast] = useState<ToastType>({ open: false, msg: "" });
     const [value, setValue] = useState("");
     const [flag, setFlag] = useState<boolean>(false);
-    const [postList, setPostList] = useState<PostListType[]>([]);
     const newFeedRef = useRef<HTMLDivElement>(null);
     const [postLoader, setPostLoader] = useState(false);
+
+    const { posts, createNewPost } = usePost()
+
+    console.log(posts, 'a')
 
     useEffect(() => {
         const currentUserId = JSON.parse(
@@ -55,29 +58,10 @@ function Homepage() {
     };
 
     const handlePost = async (value: string, images: string[]) => {
-        if (value !== "") {
-            const res = await createPost(currentUser._id, value, images);
-            if (res.data.status) {
-                setPostList((postList) => {
-                    postList.push(res.data.data);
-                    const newPost: PostListType[] = JSON.parse(JSON.stringify(postList));
-                    return newPost;
-                });
-            }
-            setValue("");
-            setToast({ open: true, msg: res.data.msg });
-        }
+        const res = await createNewPost(value, images)
+        setValue("");
+        setToast({ open: true, msg: res.msg });
     };
-
-    useEffect(() => {
-        const gettPost = async () => {
-            const res = await getAllPost();
-            if (res.data.status) {
-                setPostList(res.data.post);
-            }
-        };
-        gettPost();
-    }, [currentUser._id]);
 
     const handleScroll = () => {
         if (newFeedRef.current) {
@@ -122,7 +106,7 @@ function Homepage() {
             <div className="md:w-[500px] lg:w-[680px] xs:w-full xs:max-w-[500px] lg:max-w-[680px] mx-auto rounded-lg mt-4 mb-1">
                 <Status />
             </div>
-            <div className="flex flex-col items-center justify-center md:w-[500px] lg:w-[680px] xs:w-full xs:max-w-[500px] lg:max-w-[680px] mx-auto bg-white rounded-lg my-4">
+            <div className="flex flex-col items-center justify-center md:w-[500px] lg:w-[680px] xs:w-full 2xs:max-w-full lg:max-w-[680px] mx-auto bg-white rounded-lg my-4">
                 <div className="w-full px-4 py-2">
                     <div className="flex flex-row items-center pb-4 pt-2 w-full">
                         <div
@@ -153,7 +137,7 @@ function Homepage() {
                     </div>
                 </div>
             </div>
-            {postList
+            {posts
                 .sort(
                     (a, b) =>
                         new Date(b.createAt).getTime() - new Date(a.createAt).getTime()
@@ -166,7 +150,7 @@ function Homepage() {
                         <Post post={post} setToast={setToast} />
                     </div>
                 ))}
-            {postList.length < 1 && (
+            {posts.length < 1 && (
                 <div>
                     <div className="xs:w-full md:w-[500px] lg:w-[680px] xs:max-w-[500px] lg:max-w-[680px] mx-auto bg-white rounded-lg mb-4">
                         <div className="p-4 flex flex-col items-center">
