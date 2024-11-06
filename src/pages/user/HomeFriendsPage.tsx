@@ -136,7 +136,9 @@ function HomeFriendsPage() {
                 {
                     (requests.length < 1 && getUserList().length < 1) && <div className="col-span-4 min-h-[93vh] bg-gray-100 flex flex-col">
                         {
-                            <div className="flex items-center justify-center h-[90vh] text-2xl text-gray-500 font-semibold">Lời mời kết bạn và gợi ý kết bạn sẽ hiển thị ở đây</div>
+                            <div className="flex items-center justify-center h-[90vh] text-2xl text-gray-500 font-semibold m-auto text-center px-12">
+                                <p>Lời mời và gợi ý kết bạn sẽ hiển thị tại đây.</p>
+                            </div>
                         }
                     </div>
                 }

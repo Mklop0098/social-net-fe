@@ -50,7 +50,9 @@ function SearchFriend() {
 
                         </div>
                     </div> :
-                        <div className="flex items-center justify-center h-[90vh] text-2xl text-gray-500 font-semibold">Lời mời và gợi ý kết bạn sẽ hiển thị tại đây.</div>
+                        <div className="flex items-center justify-center h-[90vh] text-2xl text-gray-500 font-semibold m-auto text-center px-12">
+                            <p>Lời mời và gợi ý kết bạn sẽ hiển thị tại đây.</p>
+                        </div>
 
                 }
             </div>

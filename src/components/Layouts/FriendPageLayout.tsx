@@ -60,11 +60,11 @@ export const FriendPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
       <div className="sticky top-0 w-full">
         <Header defaultStatus="newFeed" />
       </div>
-      <div className="w-full">
+      <div className="w-full 2xs:hidden 2md:block">
         <div className="h-[93vh] overflow-y-hidden flex flex-col">
-          <div className="grid md:grid-cols-5 xs:grid-cols-1 gap-1">
-            <div className="shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
-              <div className="shadow-l-md xs:hidden md:block flex flex-col mt-4">
+          <div className="grid 2md:grid-cols-5  lg:grid-cols-6 2xl:grid-cols-10  gap-1">
+            <div className="shadow-[0_3px_10px_rgb(0,0,0,0.2)] col-span-2">
+              <div className="shadow-l-md  flex flex-col mt-4">
                 <div className="text-2xl font-bold py-2 px-4 flex flex-row items-center">
                   <Link to={"/friends"}>
                     <IoArrowBack />
@@ -76,7 +76,7 @@ export const FriendPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
                     <IoSearchOutline size={20} />
                   </div>
                   <input
-                    className="xs:hidden lg:block py-2 ml-1 bg-gray-100 outline-none w-80 text-md  h-[40px]"
+                    className="py-2 ml-1 bg-gray-100 outline-none w-80 text-md  h-[40px]"
                     type="text"
                     placeholder="Bạn đang tìm kiếm gì?"
                     onChange={(e) => setValue(e.target.value)}
@@ -105,7 +105,7 @@ export const FriendPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
                 </div>
               </div>
             </div>
-            <div className="h-[93vh] overflow-auto w-full col-span-4">
+            <div className="h-[93vh] overflow-auto w-full 2md:col-span-3  lg:col-span-4 2xl:col-span-8">
               {children}
             </div>
 
@@ -116,6 +116,30 @@ export const FriendPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
               message={toast.msg}
             />
           </div>
+        </div>
+      </div>
+      <div className="2md:hidden">
+        <div className="shadow-l-md  flex flex-col mt-4">
+          <div className="text-2xl font-bold py-2 px-4 flex flex-row items-center">
+            <Link to={"/friends"}>
+              <IoArrowBack />
+            </Link>
+            <div className="ml-2">Tất cả bạn bè</div>
+          </div>
+        </div>
+        <div className="grid grid-col-1 gap-4 mt-4">
+          {
+            friends.map((friend, key) => (
+              <Link to={`/profile/${friend._id}`} className="px-4 rounded-lg">
+                <div className="flex flex-row items-center w-full bg-gray-100 rounded-lg" key={key}>
+                  <div className="flex flex-row items-center w-full">
+                    <div className="2xs:w-[50%] 2md:w-[30%] h-[120px] rounded-lg bg-gray-200 overflow-hidden" style={{ backgroundImage: `url(${friend.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}></div>
+                    <div className='text-sm mt-1 ml-4'>{friend.firstName + ' ' + friend.lastName}</div>
+                  </div>
+                </div>
+              </Link>
+            ))
+          }
         </div>
       </div>
       <ChatMonitor />
