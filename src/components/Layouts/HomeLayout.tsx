@@ -1,6 +1,5 @@
 import React, { PropsWithChildren } from "react";
 import Header from "../Header/Header";
-import { ChatMonitor } from "../Chat/ChatMonitor";
 import { IoSearchOutline } from "react-icons/io5";
 import { useMsg } from "../../components/Context/msgContext";
 import { useUser } from "../../components/Context/userContext";
@@ -151,7 +150,7 @@ export const HomeLayout: React.FC<PropsWithChildren> = ({ children }) => {
           />
         </div>
       </div>
-      <ChatMonitor />
+      {/* <ChatMonitor /> */}
     </div>
   );
 };

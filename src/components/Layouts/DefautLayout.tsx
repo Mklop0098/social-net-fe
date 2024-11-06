@@ -1,7 +1,6 @@
 import React, { PropsWithChildren, useEffect } from "react";
 import Header from "../Header/Header";
 import { useNavigate } from "react-router-dom";
-import { ChatMonitor } from "../Chat/ChatMonitor";
 
 export const DefautLayout: React.FC<PropsWithChildren> = ({ children }) => {
   const navigate = useNavigate();
@@ -22,7 +21,7 @@ export const DefautLayout: React.FC<PropsWithChildren> = ({ children }) => {
           {children}
         </div>
       </div>
-      <ChatMonitor />
+      {/* <ChatMonitor /> */}
     </div>
   );
 };

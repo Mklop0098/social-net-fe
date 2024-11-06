@@ -7,7 +7,6 @@ import { IoArrowBack } from "react-icons/io5";
 import Header from "../Header/Header";
 import { useModal } from "../Context/modalContext";
 import { RequestModal } from "../Modals/RequestModal";
-import { ChatMonitor } from "../Chat/ChatMonitor";
 
 export const FriendRequestLayout: React.FC<PropsWithChildren> = ({
   children,
@@ -77,7 +76,7 @@ export const FriendRequestLayout: React.FC<PropsWithChildren> = ({
           </div>
         </div>
       </div>
-      <ChatMonitor />
+      {/* <ChatMonitor /> */}
     </div>
   );
 };

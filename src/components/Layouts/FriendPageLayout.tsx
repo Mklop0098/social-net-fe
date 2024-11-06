@@ -5,7 +5,6 @@ import { Divider, Snackbar } from "@mui/material";
 import { Link } from "react-router-dom";
 import { IoArrowBack, IoSearchOutline } from "react-icons/io5";
 import Header from "../Header/Header";
-import { ChatMonitor } from "../Chat/ChatMonitor";
 import { useUser } from "../Context/userContext";
 import { getFriendDataList } from "../../api/userAPI/useFriend";
 import { normalizeText } from "normalize-text";
@@ -142,7 +141,7 @@ export const FriendPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
           }
         </div>
       </div>
-      <ChatMonitor />
+      {/* <ChatMonitor /> */}
     </div>
   );
 };

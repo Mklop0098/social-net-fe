@@ -11,7 +11,6 @@ import Snackbar from "@mui/material/Snackbar";
 import { useUser } from "../Context/userContext";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
-import { ChatMonitor } from "../Chat/ChatMonitor";
 import { getFriendDataList } from "../../api/userAPI/useFriend";
 
 export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
@@ -171,8 +170,8 @@ export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
               <div className="flex flex-row">
                 <div
                   className={`${status === "artical"
-                      ? "border-blue-500/100"
-                      : "border-blue-500/0"
+                    ? "border-blue-500/100"
+                    : "border-blue-500/0"
                     } border-b-4 w-[88px] h-[66px] cursor-pointer flex flex-row items-center`}
                   onClick={() => setStatus("artical")}
                 >
@@ -184,8 +183,8 @@ export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
                 </div>
                 <div
                   className={`${status === "friends"
-                      ? "border-blue-500/100"
-                      : "border-blue-500/0"
+                    ? "border-blue-500/100"
+                    : "border-blue-500/0"
                     } border-b-4 w-[88px] h-[66px] cursor-pointer flex flex-row items-center`}
                   onClick={() => setStatus("friends")}
                 >
@@ -210,7 +209,7 @@ export const UserPageLayout: React.FC<PropsWithChildren> = ({ children }) => {
           )}
         </div>
       </div>
-      <ChatMonitor />
+      {/* <ChatMonitor /> */}
       <Snackbar
         open={toast.open}
         onClose={() => setToast({ open: false, msg: "" })}

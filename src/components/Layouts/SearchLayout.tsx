@@ -5,7 +5,6 @@ import { Divider, Snackbar } from "@mui/material";
 import { BsMenuButtonWideFill, BsPostcardFill } from "react-icons/bs";
 import { HiUsers } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import { ChatMonitor } from "../Chat/ChatMonitor";
 import { useNavigate } from "react-router-dom";
 
 const SearchLayout: React.FC<PropsWithChildren> = ({ children }) => {
@@ -87,7 +86,7 @@ const SearchLayout: React.FC<PropsWithChildren> = ({ children }) => {
           </div>
         </div>
       </div>
-      <ChatMonitor />
+      {/* <ChatMonitor /> */}
     </div>
   );
 };
