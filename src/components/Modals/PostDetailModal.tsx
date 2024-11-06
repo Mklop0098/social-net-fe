@@ -16,12 +16,12 @@ import { useMsg } from "../Context/msgContext";
 import { useSocket } from "../Context/socketIOContext";
 import { GetReceiveMessage } from '../../api/userAPI/useMessage'
 import { IoMdClose } from "react-icons/io";
-import { useModal } from '../Context/modalContext'
 import PostMini from '../../pages/postPage/PostMini'
 
 
 type PostDetailProps = {
   post?: PostListType
+  hideModal: () => void
 }
 
 type MessReceiveType = {
@@ -36,7 +36,7 @@ type NewChatType = { from: string, to: string, msg: string }
 
 export const PostDetail: React.FC<PostDetailProps> = (props) => {
 
-  const { post = {} as PostListType } = props
+  const { post = {} as PostListType, hideModal } = props
 
   const messRef = useRef(null);
   const infoRef = useRef(null);
@@ -56,7 +56,6 @@ export const PostDetail: React.FC<PostDetailProps> = (props) => {
   const { notifies, setNotifiesList } = useNotify()
   const { newMessage, activeChatList, addChatList, setNewMessage } = useMsg()
   const { socket } = useSocket()
-  const { hideModal } = useModal()
 
   useEffect(() => {
 
@@ -201,51 +200,51 @@ export const PostDetail: React.FC<PostDetailProps> = (props) => {
 
 
   return (
-    <div className="top-0 left-0 bottom-0 right-0 absolute bg-white w-[100vw] h-[100vh]">
-      <div className="grid grid-cols-5 ">
-        <div className="absolute top-0 left-0 flex items-center justify-between w-full pl-10 pr-4 text-white z-50">
-          <div className="flex items-center h-[60px]" onClick={hideModal}>
-            <div className="w-10 h-10 bg-gray-500 flex items-center justify-center rounded-full cursor-pointer">
-              <IoMdClose size={22} />
-            </div>
-            <div className="w-10 h-10 bg-[--primary-color] rounded-full ml-2  cursor-pointer"></div>
+    <div className="top-0 left-0 bottom-0 right-0 absolute bg-white">
+      <div className="flex items-center justify-between w-full px-4 text-white z-50">
+        <div className="flex items-center h-[60px]" onClick={hideModal}>
+          <div className="w-10 h-10 bg-gray-500 flex items-center justify-center rounded-full cursor-pointer">
+            <IoMdClose size={22} />
           </div>
-          <div className="flex flex-row items-center">
-            <div
-              ref={messRef}
-              className="p-2.5 mx-2 bg-gray-200 rounded-full cursor-pointer relative"
-              onClick={handleShowMess}
-            >
-              <FaFacebookMessenger size={20} className="text-black" />
-              {
-                newMessage && <div className="w-3 h-3 bg-red-500 absolute top-0 right-0 rounded-full"></div>
-              }
-            </div>
-            <div
-              className="p-2.5 mx-2 bg-gray-200 rounded-full cursor-pointer relative"
-              ref={notifyRef}
-              onClick={handleClickNotify}
-            >
-              <FaBell size={20} className="text-black" />
-              {
-                (haveUnreadNotify(notifies) || newNotify) && <div className="w-3 h-3 bg-red-500 absolute top-0 right-0 rounded-full"></div>
-              }
-            </div>
-            <div
-              className="ml-2 w-11 h-11 bg-gray-200 rounded-full cursor-pointer overflow-hidden"
-              ref={infoRef}
-              onClick={() => setShowInfo(true)}
-              style={{ backgroundImage: `url(${currentUser.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}
-            >
+          <div className="w-10 h-10 bg-[--primary-color] rounded-full ml-2  cursor-pointer"></div>
+        </div>
+        <div className="flex flex-row items-center">
+          <div
+            ref={messRef}
+            className="p-2.5 mx-2 bg-gray-200 rounded-full cursor-pointer relative"
+            onClick={handleShowMess}
+          >
+            <FaFacebookMessenger size={20} className="text-black" />
+            {
+              newMessage && <div className="w-3 h-3 bg-red-500 absolute top-0 right-0 rounded-full"></div>
+            }
+          </div>
+          <div
+            className="p-2.5 mx-2 bg-gray-200 rounded-full cursor-pointer relative"
+            ref={notifyRef}
+            onClick={handleClickNotify}
+          >
+            <FaBell size={20} className="text-black" />
+            {
+              (haveUnreadNotify(notifies) || newNotify) && <div className="w-3 h-3 bg-red-500 absolute top-0 right-0 rounded-full"></div>
+            }
+          </div>
+          <div
+            className="ml-2 w-11 h-11 bg-gray-200 rounded-full cursor-pointer overflow-hidden"
+            ref={infoRef}
+            onClick={() => setShowInfo(true)}
+            style={{ backgroundImage: `url(${currentUser.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}
+          >
 
-            </div>
           </div>
         </div>
-        <div className="col-span-4 bg-black">
+      </div>
+      <div className="w-[100vw] h-[100vh] 2xs:overflow-y-auto lg:overflow-y-hidden lg:grid lg:grid-cols-5">
+        <div className="lg:col-span-3 xl:col-span-4 bg-black h-[94vh] flex items-center">
           <Carousel srcs={post.imgaes || []} slidePerView={1} />
         </div>
-        <div className="flex flex-col relative">
-          <div className="flex flex-row justify-end items-center pl-4 h-[60px] pr-4 shadow-md">
+        <div className="flex flex-col relative lg:col-span-2 xl:col-span-1">
+          <div className="">
 
             <CustomMenu
               anchorEl={messRef.current}
@@ -342,7 +341,7 @@ export const PostDetail: React.FC<PostDetailProps> = (props) => {
               </div>
             </CustomMenu>
           </div >
-          <div className="max-h-[93vh] overflow-y-auto">
+          <div>
             <PostMini post={post} setToast={setToast} />
           </div>
         </div>

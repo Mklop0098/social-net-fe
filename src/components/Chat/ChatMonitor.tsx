@@ -37,7 +37,7 @@ export const ChatMonitor: React.FC<ChatMonitorProps> = ({
           <ChatBox key={key} user={user} />
         ))}
       </div>
-      <div className="w-20 h-full flex flex-col items-center justify-end pb-8">
+      <div className="2xs:hidden md:flex w-20 h-full flex-col items-center justify-end pb-8">
         {minimizeChatBoxList.slice(0, 3).map((user, key) => (
           <MiniChatBox key={key} user={user} />
         ))}

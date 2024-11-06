@@ -1,12 +1,14 @@
 import { useUser } from "../Context/userContext"
 import { UserType, CommentType, PostListType } from "../../type";
 import { useEffect, useState } from "react";
-import { getAllUser } from "../../api/userAPI/userAuth";
 import { timeAgo } from "../../ultils";
 import { useSocket } from "../Context/socketIOContext";
 import { useMsg } from '../Context/msgContext'
 import { ImFilePicture } from "react-icons/im";
 import { IoMdSend } from "react-icons/io";
+import { getUser } from '../../api/userAPI/userAuth'
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
 import './style.css'
 
 type ShowCommentProps = {
@@ -22,68 +24,53 @@ export const ShowComment: React.FC<ShowCommentProps> = (props) => {
     const { comment, post, parents, onChange, onSubmit } = props
 
     const { currentUser } = useUser()
-    const [users, setUsers] = useState<UserType[]>([])
+    const [owner, setOwner] = useState<UserType>({} as UserType)
     const { socket } = useSocket()
     const { isReply, setIsReply } = useMsg()
     const [showAll, setShowAll] = useState(false)
+    const [loading, setLoading] = useState(true)
 
-    const getCurrentFriend = (userId: string) => {
-        const test = users.find(user => user._id === userId)
-        if (test) {
-            return test?.firstName + ' ' + test?.lastName
+    useEffect(() => {
+        const getOwner = async () => {
+            const res = await getUser(comment.userId)
+            if (res.data.status) {
+                setOwner(res.data.userData[0])
+                setLoading(false)
+            }
         }
-        return ''
-    }
-
-    const getUserData = (userId: string) => {
-        const test = users.find(user => user._id === userId)
-
-        if (test) {
-            return test
-        }
-
-        return {} as UserType
-    }
+        getOwner()
+    }, [comment])
 
     useEffect(() => {
         if (currentUser && socket) {
             socket.emit("add-user", currentUser._id)
         }
-        if (currentUser._id) {
-            const getAllUserInfo = async () => {
-                const res = await getAllUser(currentUser._id)
-                if (res.data.status) {
-                    setUsers(res.data.users)
-                }
-            }
-            getAllUserInfo()
-        }
     }, [currentUser])
 
-    useEffect(() => {
-        if (currentUser._id) {
-            const getAllUserInfo = async () => {
-                const res = await getAllUser(currentUser._id)
-                if (res.data.status) {
-                    setUsers(res.data.users)
-                }
-            }
-            getAllUserInfo()
-        }
-    }, [currentUser])
+
+    if (loading) {
+        return (
+            <Stack>
+                <div className="flex flex-row items-center my-1">
+                    <Skeleton variant="circular" width={40} height={40} />
+                    <Skeleton variant="text" className="w-[70%] ml-4" height={60} />
+                </div>
+            </Stack>
+        )
+    }
 
     return (
         <div className="relative overflow-hidden">
             <div className="comment-before"></div>
             <div className="flex flex-row items-start mt-4 ">
-                <div className="w-8 h-8 bg-blue-200 rounded-full overflow-hidden" style={{ backgroundImage: `url(${comment.userId !== currentUser._id ? getUserData(comment.userId).avatar : currentUser.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+                <div className="w-8 h-8 bg-blue-200 rounded-full overflow-hidden" style={{ backgroundImage: `url(${owner.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
                 </div>
                 <div className="ml-4 flex-1">
                     <div className="bg-gray-100 rounded-xl flex w-fit flex-col py-1 px-3 text-md">
                         <div className="flex flex-row items-center">
                             <div
                                 className="font-semibold text-sm">
-                                {getCurrentFriend(comment.userId) !== '' ? getCurrentFriend(comment.userId) : currentUser.firstName + " " + currentUser.lastName}
+                                {owner.firstName + " " + owner.lastName}
                             </div>
                             {
                                 comment.userId === post.owner && <div className="pl-4 text-sm text-blue-500">Tác giả</div>

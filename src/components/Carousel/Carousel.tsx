@@ -28,7 +28,7 @@ export const Carousel: React.FC<CarouselProps> = (props) => {
 
             {srcs.map((item, key) => (
                 <SwiperSlide key={key}>
-                    <div className="w-full h-[100vh]">
+                    <div className="w-full h-full">
                         <div
                             className="flex items-center justify-center h-full"
                         >

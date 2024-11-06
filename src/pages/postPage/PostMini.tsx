@@ -224,7 +224,7 @@ const Post: React.FC<PostProps> = (props) => {
 
 
     return (
-        <div className="flex flex-col bg-white max-h-[86vh]">
+        <div className="flex flex-col bg-white mb-[88px] lg:overflow-y-auto lg:max-h-[93vh]">
             <div className="flex flex-row justify-between items-center p-4">
                 {
                     loading ? <Stack>
@@ -340,7 +340,7 @@ const Post: React.FC<PostProps> = (props) => {
                     }
                 </div>
             </div>
-            <div className="flex flex-row p-4 items-center shadow-md absolute bottom-0 w-full">
+            <div className="flex flex-row p-4 fixed bottom-0 items-center shadow-md bg-white w-full">
                 <div className="w-12 h-12 bg-blue-200 rounded-full overflow-hidden cursor-pointer" style={{ backgroundImage: `url(${currentUser.avatar})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
 
                 </div>

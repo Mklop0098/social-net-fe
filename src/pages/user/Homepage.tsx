@@ -144,7 +144,7 @@ function Homepage() {
                 )
                 .map((post, key) => (
                     <div
-                        className="xs:w-full md:w-[500px] lg:w-[680px] xs:max-w-[500px] lg:max-w-[680px] mx-auto bg-white rounded-lg mb-4"
+                        className="2xs:w-full md:w-[500px] lg:w-[680px] xs:max-w-[500px] lg:max-w-[680px] mx-auto bg-white rounded-lg mb-4"
                         key={key}
                     >
                         <Post post={post} setToast={setToast} />
