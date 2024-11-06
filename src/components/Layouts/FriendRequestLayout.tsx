@@ -40,8 +40,8 @@ export const FriendRequestLayout: React.FC<PropsWithChildren> = ({
       </div>
       <div className="w-full">
         <div className="h-[93vh] overflow-y-hidden flex flex-col">
-          <div className="md:grid md:grid-cols-5 gap-1">
-            <div className="shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
+          <div className="md:grid md:grid-cols-5 lg:grid-cols-6 2xl:grid-cols-10 gap-1">
+            <div className="shadow-[0_3px_10px_rgb(0,0,0,0.2)] md:col-span-2 2xl:col-span-2">
               <div className="shadow-l-md md:block flex flex-col">
                 <div className="text-2xl font-bold py-2 px-4 flex flex-row items-center mt-4">
                   <Link to={"/friends"}>
@@ -64,7 +64,7 @@ export const FriendRequestLayout: React.FC<PropsWithChildren> = ({
                 </div>
               </div>
             </div>
-            <div className="h-[93vh] overflow-auto w-full col-span-4">
+            <div className="h-[93vh] overflow-auto w-full md:col-span-3 lg:col-span-4 2xl:col-span-8">
               {children}
             </div>
 

@@ -108,12 +108,15 @@ export const HomeLayout: React.FC<PropsWithChildren> = ({ children }) => {
               </div>
 
               <div className="bg-gray-100 col-span-3 ">{children}</div>
-              <div className="h-full w-[20%] absolute right-1 top-0 2xs:hidden">
+              <div className="h-full w-[20%] absolute right-1 top-0 2xs:hidden xl:block">
                 <div className="max-h-[93vh] overflow-y-auto flex flex-col p-3">
                   <div className="flex flex-row items-center justify-between p-2">
                     <span className="text-lg font-semibold">Người liên hệ</span>
                     <IoSearchOutline size={20} />
                   </div>
+                  {
+                    friends.length < 1 && <div className="p-4">Chưa có bạn bè</div>
+                  }
                   {friends.map((user, key) => (
                     <div
                       className="p-2 hover:bg-gray-100 flex flex-row items-center rounded-lg cursor-pointer"

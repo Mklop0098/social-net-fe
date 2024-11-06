@@ -37,11 +37,11 @@ function SearchFriend() {
 
     return (
         <div>
-            <div className="col-span-4 min-h-[93vh] bg-gray-100 flex flex-col">
+            <div className="min-h-[93vh] bg-gray-100 flex flex-col">
                 {
                     requests.length > 0 ? <div className="w-full h-full pt-8 px-8">
                         <span className="text-xl font-semibold">Lời mời kết bạn</span>
-                        <div className="grid lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 xs:grid-cols-2 md:grid-cols-3 gap-4 mt-6">
+                        <div className="grid lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-7 xs:grid-cols-2 md:grid-cols-2 2md:grid-cols-2 gap-4 mt-6">
                             {
                                 requests.map((user, key) => (
                                     <FriendBox key={key} user={user} state={'Xác nhận'} upFunction={handleAddFriend} dowmFunction={() => { }} />
