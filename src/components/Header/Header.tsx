@@ -277,7 +277,7 @@ const Header: React.FC<HeaderProps> = ({ defaultStatus = '' }) => {
     }, [])
 
     return (
-        <div className="header-wrapper md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 mx-4 shadow-sm bg-white 2xs:h-[8rem] md:h-[4rem]">
+        <div className="header-wrapper md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 px-4 shadow-sm bg-white 2xs:h-[8rem] md:h-[4rem]">
             <div className="flex flex-row items-center">
                 <Link to={"/"}>
                     <div className="w-12 h-12 bg-[--primary-color] rounded-full mr-4"></div>

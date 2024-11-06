@@ -67,9 +67,9 @@ function HomeFriendsPage() {
     }
 
     return (
-        <div className="grid md:grid-cols-5 xs:grid-cols-1 gap-1 bg-white">
-            <div className="shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
-                <div className="shadow-l-md xs:hidden md:block flex flex-col bg-white">
+        <div className="md:grid md:grid-cols-5 lg:grid-cols-4 xl:grid-cols-7 gap-1 bg-white h-[93vh]">
+            <div className="col-span-2 lg:col-span-1 xl:col-span-2 2xl:col-span-1 shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
+                <div className="shadow-l-md md:block flex flex-col bg-white">
                     <div className="text-2xl font-bold py-2 px-4">Bạn bè</div>
                     <Link to={'/friends'}>
                         <div className="grid grid-cols-9 py-2 hover:bg-gray-200 py-2 px-4 mx-2 rounded-lg cursor-pointer">
@@ -112,10 +112,10 @@ function HomeFriendsPage() {
 
                 </div>
             </div>
-            <div className="col-span-4 min-h-[93vh] bg-gray-100 flex flex-col">
+            <div className="col-span-3 xl:col-span-5 2xl:col-span-6 md:overflow-y-auto max-h-[93vh] bg-gray-100 flex flex-col pb-4">
                 {requests.length > 0 && <div className="w-full h-full pt-8 px-8">
                     <span className="text-xl font-semibold">Lời mời kết bạn</span>
-                    <div className="grid lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 xs:grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
+                    <div className="grid lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 xs:grid-cols-2 md:grid-cols-2 gap-4 mt-6">
                         {
                             requests.map((user, key) => (
                                 <FriendBox key={key} user={user} state={'Xác nhận'} upFunction={handleAddFriend} dowmFunction={() => { }} />
@@ -125,7 +125,7 @@ function HomeFriendsPage() {
                 </div>}
                 {getUserList().length > 0 && <div className="w-full h-full pt-8 px-8">
                     <span className="text-xl font-semibold">Những người bạn có thể biết</span>
-                    <div className="grid lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 xs:grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
+                    <div className="grid lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 xs:grid-cols-2 md:grid-cols-2 gap-4 mt-6">
                         {
                             getUserList().map((user, key) => (
                                 <FriendBox key={key} user={user} upFunction={handleSendRequest} dowmFunction={() => { }} />

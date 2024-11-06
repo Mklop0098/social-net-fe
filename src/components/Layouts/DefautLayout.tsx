@@ -13,12 +13,12 @@ export const DefautLayout: React.FC<PropsWithChildren> = ({ children }) => {
   }, []);
 
   return (
-    <div className="h-[100vh] flex flex-col relative">
+    <div className="h-[100vh] flex flex-col relative overflow-y-auto">
       <div className="sticky top-0 w-full z-50">
         <Header defaultStatus="newFeed" />
       </div>
-      <div className="w-full">
-        <div className="h-[93vh] overflow-y-auto flex flex-col ">
+      <div className="w-full md:fixed md:top-[64px]">
+        <div className="flex flex-col">
           {children}
         </div>
       </div>
